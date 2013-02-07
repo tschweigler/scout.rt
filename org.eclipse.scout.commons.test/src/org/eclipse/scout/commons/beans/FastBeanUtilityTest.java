@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -23,6 +24,8 @@ import org.junit.Test;
  * @author imo
  * @since 3.9.0
  */
+//TODO: JBR Ignore until Bug400240 is solved
+@Ignore
 public class FastBeanUtilityTest {
 
   public abstract static class AbstractSimple<ID> {

@@ -29,8 +29,8 @@ import java.util.Set;
 import org.eclipse.scout.commons.annotations.IOrdered;
 import org.eclipse.scout.commons.annotations.Order;
 import org.eclipse.scout.commons.annotations.Replace;
-import org.eclipse.scout.commons.testressources.A;
-import org.eclipse.scout.commons.testressources.AbstractC;
+import org.eclipse.scout.commons.fixture.A;
+import org.eclipse.scout.commons.fixture.AbstractC;
 import org.junit.Test;
 
 /**

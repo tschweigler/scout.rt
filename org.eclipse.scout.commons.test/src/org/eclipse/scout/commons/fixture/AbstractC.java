@@ -8,7 +8,7 @@
  * Contributors:
  *     BSI Business Systems Integration AG - initial API and implementation
  ******************************************************************************/
-package org.eclipse.scout.commons.testressources;
+package org.eclipse.scout.commons.fixture;
 
 public abstract class AbstractC {
 

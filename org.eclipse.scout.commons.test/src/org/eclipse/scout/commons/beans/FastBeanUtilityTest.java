@@ -15,18 +15,26 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * JUnit tests for {@link FastBeanUtility}
  * 
- * @author imo
  * @since 3.9.0
  */
-//TODO: JBR Ignore until Bug400240 is solved
-@Ignore
 public class FastBeanUtilityTest {
+
+  public static class MyBean {
+    public Long getId() {
+      return null;
+    }
+
+    private void myMethod() {
+    }
+
+    public void setId(Long id) {
+    }
+  }
 
   public abstract static class AbstractSimple<ID> {
   }
@@ -85,6 +93,22 @@ public class FastBeanUtilityTest {
     @Override
     public void setId(Long id) {
     }
+  }
+
+  /**
+   * Test for Bug 400240
+   */
+  @Test
+  public void testDeclaredPublicMethods() {
+    Method[] methods = FastBeanUtility.getDeclaredPublicMethods(MyBean.class);
+    Assert.assertEquals("length", 2, methods.length);
+
+    ArrayList<String> methodNames = new ArrayList<String>();
+    for (Method method : methods) {
+      methodNames.add(method.getName());
+    }
+    Assert.assertEquals("contains getId()", true, methodNames.contains("getId"));
+    Assert.assertEquals("contains setId()", true, methodNames.contains("setId"));
   }
 
   @Test

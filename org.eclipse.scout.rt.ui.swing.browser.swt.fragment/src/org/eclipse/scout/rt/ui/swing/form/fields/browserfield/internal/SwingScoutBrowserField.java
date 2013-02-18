@@ -24,6 +24,7 @@ import org.eclipse.scout.rt.shared.services.common.file.RemoteFile;
 import org.eclipse.scout.rt.ui.swing.LogicalGridLayout;
 import org.eclipse.scout.rt.ui.swing.SwingUtility;
 import org.eclipse.scout.rt.ui.swing.ext.JPanelEx;
+import org.eclipse.scout.rt.ui.swing.ext.JStatusLabelEx;
 import org.eclipse.scout.rt.ui.swing.form.fields.SwingScoutValueFieldComposite;
 import org.eclipse.scout.rt.ui.swing.form.fields.browserfield.ISwingScoutBrowserField;
 import org.eclipse.swt.SWT;
@@ -66,11 +67,14 @@ public class SwingScoutBrowserField extends SwingScoutValueFieldComposite<IBrows
   protected void initializeSwing() {
     JPanelEx container = new JPanelEx();
     container.setOpaque(false);
+    JStatusLabelEx label = getSwingEnvironment().createStatusLabel(getScoutObject());
+    container.add(label);
     JPanelEx wordComponent = new JPanelEx();
     m_canvas = new P_CanvasEx();
     wordComponent.add(m_canvas);
     container.add(wordComponent);
     setSwingContainer(container);
+    setSwingLabel(label);
     setSwingField(wordComponent);
     getSwingContainer().setLayout(new LogicalGridLayout(getSwingEnvironment(), 1, 0));
   }

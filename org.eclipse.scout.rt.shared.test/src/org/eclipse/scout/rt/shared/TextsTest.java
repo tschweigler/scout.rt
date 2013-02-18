@@ -23,7 +23,6 @@ public class TextsTest {
 
   @Test
   public void testGet() {
-    Assert.assertEquals("Info", TEXTS.get("Info"));
     Assert.assertEquals("{undefined text anyKey}", TEXTS.get("anyKey"));
   }
 
@@ -31,6 +30,5 @@ public class TextsTest {
   public void testGetTextMap() {
     Map<String, String> textMap = ScoutTexts.getInstance().getTextMap(Locale.ENGLISH);
     Assert.assertNotNull(textMap);
-    Assert.assertFalse(textMap.isEmpty());
   }
 }

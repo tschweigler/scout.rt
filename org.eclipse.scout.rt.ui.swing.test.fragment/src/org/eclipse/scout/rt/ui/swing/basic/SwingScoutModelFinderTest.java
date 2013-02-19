@@ -22,6 +22,8 @@ import org.eclipse.scout.commons.exception.ProcessingException;
 import org.eclipse.scout.commons.logger.IScoutLogger;
 import org.eclipse.scout.commons.logger.ScoutLogManager;
 import org.eclipse.scout.rt.client.IClientSession;
+import org.eclipse.scout.rt.client.services.common.icon.IconSpec;
+import org.eclipse.scout.rt.client.ui.IIconLocator;
 import org.eclipse.scout.rt.client.ui.action.menu.AbstractMenu;
 import org.eclipse.scout.rt.client.ui.basic.table.AbstractTable;
 import org.eclipse.scout.rt.client.ui.basic.table.ITableRow;
@@ -71,10 +73,14 @@ import org.junit.Test;
  */
 public class SwingScoutModelFinderTest {
   private static final IScoutLogger LOG = ScoutLogManager.getLogger(SwingScoutModelFinderTest.class);
+  private static final IIconLocator NULL_ICON_LOCATOR = new P_NullIconLocator();
 
   @Test
   public void test() throws InterruptedException, InvocationTargetException {
     final IClientSession clientSession = EasyMock.createNiceMock(IClientSession.class);
+    clientSession.getIconLocator();
+    EasyMock.expectLastCall().andReturn(NULL_ICON_LOCATOR).anyTimes();
+    EasyMock.replay(clientSession);
 
     SwingUtilities.invokeAndWait(new Runnable() {
       final ISwingEnvironment env = new AbstractSwingApplication() {
@@ -408,5 +414,13 @@ public class SwingScoutModelFinderTest {
   }
 
   public static class PageWithNode extends AbstractPageWithNodes {
+  }
+
+  public static class P_NullIconLocator implements IIconLocator {
+
+    @Override
+    public IconSpec getIconSpec(String name) {
+      return null;
+    }
   }
 }

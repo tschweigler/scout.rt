@@ -14,6 +14,7 @@ import java.util.Collection;
 
 import org.eclipse.scout.commons.annotations.Order;
 import org.eclipse.scout.commons.exception.ProcessingException;
+import org.eclipse.scout.rt.client.testenvironment.TestEnvironmentClientSession;
 import org.eclipse.scout.rt.client.ui.basic.table.AbstractTable;
 import org.eclipse.scout.rt.client.ui.basic.table.ITable;
 import org.eclipse.scout.rt.client.ui.basic.table.ITableRow;
@@ -39,7 +40,7 @@ public class ColumnAutoResizeTest {
 
   @Test
   public void testReloadPage_multipleSummaryColumns() throws Exception {
-    IDesktop desktop = new P_Desktop(); //TODO: here was IDesktop desktop = ClientSession.get().getDesktop();
+    IDesktop desktop = TestEnvironmentClientSession.get().getDesktop();
     desktop.setAvailableOutlines(new IOutline[]{new PageWithTableOutline()});
     desktop.setOutline(PageWithTableOutline.class);
     IOutline outline = desktop.getOutline();

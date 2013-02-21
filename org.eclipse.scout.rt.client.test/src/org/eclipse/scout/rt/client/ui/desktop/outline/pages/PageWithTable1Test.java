@@ -8,7 +8,7 @@
  * Contributors:
  *     BSI Business Systems Integration AG - initial API and implementation
  ******************************************************************************/
-package org.eclipse.scout.rt.client.ui.basic.table.columns;
+package org.eclipse.scout.rt.client.ui.desktop.outline.pages;
 
 import java.util.Collection;
 
@@ -16,15 +16,11 @@ import org.eclipse.scout.commons.annotations.Order;
 import org.eclipse.scout.commons.exception.ProcessingException;
 import org.eclipse.scout.rt.client.testenvironment.TestEnvironmentClientSession;
 import org.eclipse.scout.rt.client.ui.basic.table.AbstractTable;
-import org.eclipse.scout.rt.client.ui.basic.table.ITable;
 import org.eclipse.scout.rt.client.ui.basic.table.ITableRow;
-import org.eclipse.scout.rt.client.ui.desktop.AbstractDesktop;
+import org.eclipse.scout.rt.client.ui.basic.table.columns.AbstractStringColumn;
 import org.eclipse.scout.rt.client.ui.desktop.IDesktop;
 import org.eclipse.scout.rt.client.ui.desktop.outline.AbstractOutline;
 import org.eclipse.scout.rt.client.ui.desktop.outline.IOutline;
-import org.eclipse.scout.rt.client.ui.desktop.outline.pages.AbstractPageWithNodes;
-import org.eclipse.scout.rt.client.ui.desktop.outline.pages.AbstractPageWithTable;
-import org.eclipse.scout.rt.client.ui.desktop.outline.pages.IPage;
 import org.eclipse.scout.rt.shared.services.common.jdbc.SearchFilter;
 import org.eclipse.scout.testing.client.runner.ScoutClientTestRunner;
 import org.junit.Assert;
@@ -32,31 +28,31 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * bsi ticket #92'479: [SWT] AutoResize Spalten im Outline
- * Tests auto resize feature
+ * Test the reload of a page when multiple summary columns are present.
+ * Should not produce an error.
  */
 @RunWith(ScoutClientTestRunner.class)
-public class ColumnAutoResizeTest {
+public class PageWithTable1Test {
 
   @Test
   public void testReloadPage_multipleSummaryColumns() throws Exception {
     IDesktop desktop = TestEnvironmentClientSession.get().getDesktop();
+    Assert.assertNotNull(desktop);
+
     desktop.setAvailableOutlines(new IOutline[]{new PageWithTableOutline()});
     desktop.setOutline(PageWithTableOutline.class);
+
     IOutline outline = desktop.getOutline();
+    Assert.assertNotNull(outline);
+    Assert.assertSame(PageWithTableOutline.class, outline.getClass());
 
     IPage page = outline.getActivePage();
     Assert.assertNotNull(page);
-    Assert.assertTrue(page instanceof AbstractPageWithTable);
-    ITable table = ((AbstractPageWithTable) page).getTable();
-    Assert.assertTrue(table instanceof ColumnAutoResizeTest.PageWithTable.TestTable);
-    ColumnAutoResizeTest.PageWithTable.TestTable testTable = (ColumnAutoResizeTest.PageWithTable.TestTable) table;
-    IColumn col1 = testTable.getColumns()[0];
-    int width1 = col1.getWidth();
-    // when page is reloaded, the column width shall not be different afterwards
+    Assert.assertSame(PageWithTable.class, page.getClass());
+
     page.reloadPage();
-    int width2 = col1.getWidth();
-    Assert.assertTrue(width1 == width2);
+    page.reloadPage();
+    page.reloadPage();
   }
 
   public static class PageWithTableOutline extends AbstractOutline {
@@ -66,7 +62,7 @@ public class ColumnAutoResizeTest {
     }
   }
 
-  public static class PageWithTable extends AbstractPageWithTable<PageWithTable.TestTable> {
+  public static class PageWithTable extends AbstractPageWithTable<PageWithTable.Table> {
 
     @Override
     protected Object[][] execLoadTableData(SearchFilter filter) throws ProcessingException {
@@ -78,28 +74,13 @@ public class ColumnAutoResizeTest {
       return new PageWithNode();
     }
 
-    public class TestTable extends AbstractTable {
-
-      public FirstColumn getFirstColumn() {
-        return getColumnSet().getColumnByClass(FirstColumn.class);
-      }
-
-      public SecondColumn getSecondColumn() {
-        return getColumnSet().getColumnByClass(SecondColumn.class);
-      }
-
+    public class Table extends AbstractTable {
       @Order(10)
       public class FirstColumn extends AbstractStringColumn {
         @Override
         protected boolean getConfiguredSummary() {
           return true;
         }
-
-        @Override
-        protected int getConfiguredWidth() {
-          return 100;
-        }
-
       }
 
       @Order(20)
@@ -108,18 +89,11 @@ public class ColumnAutoResizeTest {
         protected boolean getConfiguredSummary() {
           return true;
         }
-
-        @Override
-        protected int getConfiguredWidth() {
-          return super.getConfiguredWidth();
-        }
       }
     }
   }
 
   public static class PageWithNode extends AbstractPageWithNodes {
-  }
 
-  public static class P_Desktop extends AbstractDesktop {
   }
 }

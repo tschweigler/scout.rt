@@ -43,6 +43,7 @@ public class PageWithTable3Test {
     desktop.setOutline(outline);
     PageWithTable page = (PageWithTable) desktop.getOutline().getActivePage();
     PageWithTable.Table table = page.getTable();
+    table.resetDisplayableColumns();
     //
     //load table with configured sort columns
     Assert.assertArrayEquals(new Integer[]{7, 6, 5, 4, 3, 2, 1, 0}, table.getValueColumn().getValues());
@@ -90,14 +91,15 @@ public class PageWithTable3Test {
     @Override
     protected Object[][] execLoadTableData(SearchFilter filter) throws ProcessingException {
       return new Object[][]{
-          new Object[]{0, 0, 0, 0},
           new Object[]{1, 0, 0, 1},
-          new Object[]{2, 0, 1, 0},
           new Object[]{3, 0, 1, 1},
-          new Object[]{4, 1, 0, 0},
           new Object[]{5, 1, 0, 1},
-          new Object[]{6, 1, 1, 0},
-          new Object[]{7, 1, 1, 1},};
+          new Object[]{7, 1, 1, 1},
+          new Object[]{0, 0, 0, 0},
+          new Object[]{2, 0, 1, 0},
+          new Object[]{4, 1, 0, 0},
+          new Object[]{6, 1, 1, 0}
+      };
     }
 
     public class Table extends AbstractTable {

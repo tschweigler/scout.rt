@@ -32,6 +32,7 @@ import org.eclipse.scout.service.SERVICES;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.osgi.framework.ServiceRegistration;
 
@@ -40,6 +41,7 @@ import org.osgi.framework.ServiceRegistration;
  * <p>
  * No exception should appear in the log
  */
+@Ignore
 public class CancelTransactionTest {
     private Handler m_handler;
     private List<ServiceRegistration> m_reg;

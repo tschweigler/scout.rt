@@ -1,7 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Test
+Bundle-Name: Scout Server Test
 Bundle-SymbolicName: org.eclipse.scout.rt.server.test
-Bundle-Version: 1.0.0.qualifier
-Fragment-Host: org.eclipse.scout.rt.server;bundle-version="3.9.0"
+Bundle-Vendor: Eclipse Scout Project
+Fragment-Host: org.eclipse.scout.rt.client;bundle-version="3.9.0"
+Bundle-Version: 3.9.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

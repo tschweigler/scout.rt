@@ -15,11 +15,13 @@ import org.eclipse.scout.rt.server.services.common.jdbc.style.OracleSqlStyle;
 import org.eclipse.scout.rt.shared.data.form.AbstractFormData;
 import org.eclipse.scout.rt.shared.data.form.fields.AbstractValueFieldData;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Test bean array and form data array binds, requiring a server for database stuff
  */
+@Ignore
 public class SelectIntoArrayTest extends Assert {
 
   @Test

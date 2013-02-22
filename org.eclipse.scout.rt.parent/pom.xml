@@ -81,6 +81,7 @@
         <module>../org.eclipse.scout.rt.client.test</module>
         <module>../org.eclipse.scout.rt.client.testenvironment</module>
         <module>../org.eclipse.scout.rt.server.test</module>
+        <module>../org.eclipse.scout.rt.server.testenvironment</module>
         <module>../org.eclipse.scout.rt.ui.swing.test.fragment</module>
         <module>../org.eclipse.scout.rt.testing.shared</module>
         <module>../org.eclipse.scout.rt.testing.client</module>

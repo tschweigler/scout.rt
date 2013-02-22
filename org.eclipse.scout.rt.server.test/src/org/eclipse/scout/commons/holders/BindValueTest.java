@@ -19,12 +19,14 @@ import org.eclipse.scout.commons.holders.fixture.SqlServiceMock;
 import org.eclipse.scout.commons.holders.fixture.VerboseMock;
 import org.eclipse.scout.rt.server.services.common.jdbc.style.OracleSqlStyle;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Test for bind (see {@link NVPair}), requiring a server for database stuff
  * bsi ticket 99833
  */
+@Ignore
 public class BindValueTest {
   protected SqlServiceMock sqlService = new SqlServiceMock();
 

@@ -16,23 +16,28 @@ import org.eclipse.scout.commons.logger.ScoutLogManager;
 import org.eclipse.scout.rt.server.AbstractServerSession;
 import org.eclipse.scout.rt.server.ThreadContext;
 
+/**
+ * {@link org.eclipse.scout.rt.server.IServerSession} for Server Test Environment
+ * 
+ * @author jbr
+ */
 public class TestEnvironmentServerSession extends AbstractServerSession {
-	private static IScoutLogger logger = ScoutLogManager
-			.getLogger(TestEnvironmentServerSession.class);
+  private static IScoutLogger logger = ScoutLogManager
+      .getLogger(TestEnvironmentServerSession.class);
 
-	public TestEnvironmentServerSession() {
-		super(true);
-	}
+  public TestEnvironmentServerSession() {
+    super(true);
+  }
 
-	/**
-	 * @return session in current ThreadContext
-	 */
-	public static TestEnvironmentServerSession get() {
-		return (TestEnvironmentServerSession) ThreadContext.getServerSession();
-	}
+  /**
+   * @return session in current ThreadContext
+   */
+  public static TestEnvironmentServerSession get() {
+    return (TestEnvironmentServerSession) ThreadContext.getServerSession();
+  }
 
-	@Override
-	protected void execLoadSession() throws ProcessingException {
-		logger.info("created a new session for " + getUserId());
-	}
+  @Override
+  protected void execLoadSession() throws ProcessingException {
+    logger.info("created a new session for " + getUserId());
+  }
 }

@@ -12,18 +12,15 @@ package org.eclipse.scout.rt.client.ui;
 
 import java.awt.Rectangle;
 import java.util.List;
-import java.util.Locale;
 import java.util.StringTokenizer;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.scout.commons.LocaleThreadLocal;
 import org.eclipse.scout.commons.StringUtility;
 import org.eclipse.scout.commons.TypeCastUtility;
 import org.eclipse.scout.commons.logger.IScoutLogger;
 import org.eclipse.scout.commons.logger.ScoutLogManager;
 import org.eclipse.scout.commons.serialization.SerializationUtility;
 import org.eclipse.scout.rt.client.ClientAsyncJob;
-import org.eclipse.scout.rt.client.ClientJob;
 import org.eclipse.scout.rt.client.ClientSessionThreadLocal;
 import org.eclipse.scout.rt.client.IClientSession;
 import org.eclipse.scout.rt.client.ui.basic.table.ITable;
@@ -32,14 +29,11 @@ import org.eclipse.scout.rt.client.ui.form.IForm;
 import org.eclipse.scout.rt.client.ui.form.fields.splitbox.ISplitBox;
 import org.eclipse.scout.rt.shared.data.basic.BoundsSpec;
 import org.eclipse.scout.rt.shared.services.common.prefs.IUserPreferencesStorageService;
-import org.eclipse.scout.rt.shared.ui.IUiDeviceType;
-import org.eclipse.scout.rt.shared.ui.IUiLayer;
 import org.eclipse.scout.rt.shared.ui.UiDeviceType;
 import org.eclipse.scout.rt.shared.ui.UiLayer;
 import org.eclipse.scout.rt.shared.ui.UserAgent;
 import org.eclipse.scout.rt.shared.ui.UserAgentUtility;
 import org.eclipse.scout.service.SERVICES;
-import org.osgi.framework.Bundle;
 import org.osgi.service.prefs.Preferences;
 
 /**
@@ -48,8 +42,8 @@ import org.osgi.service.prefs.Preferences;
  * <p>
  * Warning: Only use this class within a ClientJob with an {@link IClientSession}.
  * <p>
- * Calling from outside a {@link IClientSession} {@link ClientJob} will produce a warning. In release 3.9 (TODO) will
- * produce an error.
+ * Calling from outside a {@link IClientSession} {@link org.eclipse.scout.rt.client.ClientJob ClientJob} will produce a
+ * warning. In release 3.9 (TODO) will produce an error.
  */
 public class ClientUIPreferences {
   private static final IScoutLogger LOG = ScoutLogManager.getLogger(ClientUIPreferences.class);
@@ -59,8 +53,8 @@ public class ClientUIPreferences {
    *         <p>
    *         Warning: Only use this class within a ClientJob with an {@link IClientSession}.
    *         <p>
-   *         Calling from outside a {@link IClientSession} {@link ClientJob} will produce a warning. Starting with
-   *         release 3.9 it will fail with an error.
+   *         Calling from outside a {@link IClientSession} {@link org.eclipse.scout.rt.client.ClientJob ClientJob} will
+   *         produce a warning. Starting with release 3.9 it will fail with an error.
    */
   public static ClientUIPreferences getInstance() {
     return new ClientUIPreferences(ClientSessionThreadLocal.get());
@@ -87,32 +81,8 @@ public class ClientUIPreferences {
   private static final String DESKTOP_COLUMN_SPLITS = "desktop.columnSplits";
   private static final String FORM_BOUNDS = "form.bounds.";
 
-  /**
-   * @deprecated to be removed in release 3.9.0
-   */
-  @Deprecated
-  private static final String NLS_LOCALE_ISO = "nls_locale_iso";
-  /**
-   * @deprecated to be removed in release 3.9.0
-   */
-  @Deprecated
-  private static final String NLS_LOCALE_LANGUAGE = "locale.language";
-  /**
-   * @deprecated to be removed in release 3.9.0
-   */
-  @Deprecated
-  private static final String NLS_LOCALE_COUNTRY = "locale.country";
-
   private final IClientSession m_session;
   private Preferences m_env;
-
-  /**
-   * @deprecated use {@link #getInstance()}
-   */
-  @Deprecated
-  public ClientUIPreferences() {
-    this(ClientSessionThreadLocal.get());
-  }
 
   private ClientUIPreferences(IClientSession session) {
     m_session = session;
@@ -123,8 +93,9 @@ public class ClientUIPreferences {
   }
 
   /**
-   * Since this property depends on the user agent it is saved separately for each combination of {@link IUiLayer} and
-   * {@link IUiDeviceType}.
+   * Since this property depends on the user agent it is saved separately for each combination of
+   * {@link org.eclipse.scout.rt.shared.ui.IUiLayer IUiLayer} and {@link org.eclipse.scout.rt.shared.ui.IUiDeviceType
+   * IUiDeviceType}.
    */
   public Rectangle getFormBounds(IForm form) {
     String key = form.computeCacheBoundsKey();
@@ -158,8 +129,9 @@ public class ClientUIPreferences {
   }
 
   /**
-   * Since this property depends on the user agent it is saved separately for each combination of {@link IUiLayer} and
-   * {@link IUiDeviceType}.
+   * Since this property depends on the user agent it is saved separately for each combination of
+   * {@link org.eclipse.scout.rt.shared.ui.IUiLayer IUiLayer} and {@link org.eclipse.scout.rt.shared.ui.IUiDeviceType
+   * IUiDeviceType}.
    */
   public void setFormBounds(IForm form, Rectangle bounds) {
     String key = form.computeCacheBoundsKey();
@@ -219,8 +191,9 @@ public class ClientUIPreferences {
   }
 
   /**
-   * Since this property depends on the user agent it is saved separately for each combination of {@link IUiLayer} and
-   * {@link IUiDeviceType}.
+   * Since this property depends on the user agent it is saved separately for each combination of
+   * {@link org.eclipse.scout.rt.shared.ui.IUiLayer IUiLayer} and {@link org.eclipse.scout.rt.shared.ui.IUiDeviceType
+   * IUiDeviceType}.
    * 
    * @since 3.8.0
    */
@@ -241,8 +214,9 @@ public class ClientUIPreferences {
   }
 
   /**
-   * Since this property depends on the user agent it is saved separately for each combination of {@link IUiLayer} and
-   * {@link IUiDeviceType}.
+   * Since this property depends on the user agent it is saved separately for each combination of
+   * {@link org.eclipse.scout.rt.shared.ui.IUiLayer IUiLayer} and {@link org.eclipse.scout.rt.shared.ui.IUiDeviceType
+   * IUiDeviceType}.
    * 
    * @since 3.8.0
    */
@@ -263,16 +237,6 @@ public class ClientUIPreferences {
       key += "#" + context;
     }
     return key;
-  }
-
-  /**
-   * TODO 3.9 remove
-   * 
-   * @deprecated use {@link #getTableCustomizerData(String)} instead. This method will be removed in 3.9.
-   */
-  @Deprecated
-  public Object getTableCustomizerData(String customizerKey, Bundle loaderBundle) {
-    return getTableCustomizerData(customizerKey);
   }
 
   public Object getTableCustomizerData(String customizerKey) {
@@ -502,8 +466,9 @@ public class ClientUIPreferences {
   }
 
   /**
-   * Since this property depends on the user agent it is saved separately for each combination of {@link IUiLayer} and
-   * {@link IUiDeviceType}.
+   * Since this property depends on the user agent it is saved separately for each combination of
+   * {@link org.eclipse.scout.rt.shared.ui.IUiLayer IUiLayer} and {@link org.eclipse.scout.rt.shared.ui.IUiDeviceType
+   * IUiDeviceType}.
    */
   public int getTableColumnWidth(IColumn col, int defaultWidth) {
     String keySuffix = getColumnKey(col);
@@ -753,55 +718,6 @@ public class ClientUIPreferences {
       return splits;
     }
     return null;
-  }
-
-  /**
-   * @deprecated use {@link LocaleThreadLocal#get()} or {@link Locale#getDefault()}
-   */
-  @Deprecated
-  public Locale getLocale() {
-    // >> legacy support. To be removed in release 3.9.0.
-    String strLegacy = m_env.get(NLS_LOCALE_ISO, null);
-    if (strLegacy != null) {
-      m_env.remove(NLS_LOCALE_ISO); // remove legacy entry
-      m_env.put(NLS_LOCALE_LANGUAGE, strLegacy);
-      flush();
-    }
-    // << legacy support. To be removed in release 3.9.0.
-
-    String strLanguage = m_env.get(NLS_LOCALE_LANGUAGE, null);
-    String strCountry = m_env.get(NLS_LOCALE_COUNTRY, null);
-    if (strLanguage != null && strCountry != null) {
-      return new Locale(strLanguage, strCountry);
-    }
-    else if (strLanguage != null) {
-      return new Locale(strLanguage, ClientUIPreferences.getHostLocale().getCountry());
-    }
-    return null;
-  }
-
-  /**
-   * @deprecated use {@link LocaleThreadLocal#set(Locale)} or {@link Locale#setDefault(Locale)}
-   */
-  @Deprecated
-  public void setLocale(Locale locale) {
-    if (locale != null) {
-      m_env.put(NLS_LOCALE_LANGUAGE, locale.getLanguage());
-      m_env.put(NLS_LOCALE_COUNTRY, locale.getCountry());
-    }
-    else {
-      m_env.remove(NLS_LOCALE_LANGUAGE);
-      m_env.remove(NLS_LOCALE_COUNTRY);
-    }
-    flush();
-  }
-
-  /**
-   * @deprecated to be removed in release 3.9.0
-   */
-  @Deprecated
-  public static Locale getHostLocale() {
-    return Locale.getDefault();
   }
 
   public void setDesktopColumnSplits(int[][] splits) {

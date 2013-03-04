@@ -10,9 +10,6 @@
  ******************************************************************************/
 package org.eclipse.scout.rt.client.services.common.session.internal;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.security.auth.Subject;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -31,9 +28,6 @@ import org.osgi.framework.Bundle;
 @Priority(-1)
 public class ClientSessionRegistryService extends AbstractService implements IClientSessionRegistryService {
   private static final IScoutLogger LOG = ScoutLogManager.getLogger(ClientSessionRegistryService.class);
-
-  private final Map<String, IClientSession> m_cache = new HashMap<String, IClientSession>();
-  private final Object m_cacheLock = new Object();
 
   @Override
   public <T extends IClientSession> T newClientSession(Class<T> clazz, UserAgent userAgent) {
@@ -95,61 +89,6 @@ public class ClientSessionRegistryService extends AbstractService implements ICl
     }
 
     return Platform.getBundle(symbolicName);
-  }
-
-  @SuppressWarnings({"deprecation", "unchecked"})
-  @Override
-  public <T extends IClientSession> T getClientSession(Class<T> clazz) {
-    final Bundle bundle = getDefiningBundle(clazz);
-    if (bundle == null) {
-      return null;
-    }
-
-    synchronized (m_cacheLock) {
-      IClientSession clientSession = m_cache.get(bundle.getSymbolicName());
-      if (clientSession == null || !clientSession.isActive()) {
-        clientSession = createAndStartClientSession(clazz, bundle, UserAgent.createDefault());
-        m_cache.put(bundle.getSymbolicName(), clientSession);
-      }
-      return (T) clientSession;
-    }
-  }
-
-  /**
-   * Compared to {@link #createAndStartClientSession(Class, Bundle, Subject, String, UserAgent)} this method starts the
-   * session in a separate thread.
-   * 
-   * @deprecated Will be removed in 3.9.0
-   */
-  @SuppressWarnings("unchecked")
-  @Deprecated
-  private <T extends IClientSession> T createAndStartClientSession(Class<T> clazz, final Bundle bundle, UserAgent userAgent) {
-    IClientSession clientSession;
-    try {
-      clientSession = clazz.newInstance();
-      clientSession.setUserAgent(userAgent);
-      ClientSyncJob job = new ClientSyncJob("Session startup", clientSession) {
-        @Override
-        protected void runVoid(IProgressMonitor monitor) throws Throwable {
-          getCurrentSession().startSession(bundle);
-        }
-      };
-      job.schedule();
-      job.join();
-      job.throwOnError();
-
-      return (T) clientSession;
-    }
-    catch (Throwable t) {
-      LOG.error("could not load session for " + bundle.getSymbolicName(), t);
-      return null;
-    }
-  }
-
-  @SuppressWarnings("deprecation")
-  @Override
-  public <T extends IClientSession> T newClientSession(Class<T> clazz, Subject subject, String virtualSessionId) {
-    return newClientSession(clazz, subject, virtualSessionId, UserAgent.createDefault());
   }
 
 }

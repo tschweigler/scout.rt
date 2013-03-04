@@ -20,7 +20,6 @@ import org.eclipse.scout.rt.shared.servicetunnel.IServiceTunnelContentHandler;
 import org.eclipse.scout.rt.shared.servicetunnel.ServiceTunnelRequest;
 import org.eclipse.scout.rt.shared.servicetunnel.ServiceTunnelResponse;
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 
 /**
  * Calls the /process servlet. Requires the config.ini variable <code>server.url</code>
@@ -28,9 +27,11 @@ import org.osgi.framework.BundleContext;
 public class ServiceTunnelServletCall extends Thread {
   private ServiceTunnelRequest m_req;
   private ServiceTunnelResponse m_res;
+  private String m_serverUrl;
 
-  public ServiceTunnelServletCall(ServiceTunnelRequest req) {
+  public ServiceTunnelServletCall(ServiceTunnelRequest req, String serverUrl) {
     m_req = req;
+    m_serverUrl = serverUrl;
   }
 
   public ServiceTunnelResponse getServiceTunnelResponse() {
@@ -40,10 +41,10 @@ public class ServiceTunnelServletCall extends Thread {
   @Override
   public void run() {
     try {
-      BundleContext ctx = Activator.getDefault().getBundle().getBundleContext();
-      URL url = new URL(ctx.getProperty("server.url") + "/process");
+      URL url = new URL(m_serverUrl + "/process");
       IServiceTunnelContentHandler contentHandler = new DefaultServiceTunnelContentHandler();
-      contentHandler.initialize(new Bundle[]{ctx.getBundle()}, null);
+      Bundle bundle = Activator.getDefault().getBundle();
+      contentHandler.initialize(new Bundle[]{bundle}, null);
       //
       HttpURLConnection conn = (HttpURLConnection) url.openConnection();
       conn.setRequestProperty("Authorization", "Basic " + Base64Utility.encode("admin:manager".getBytes()));

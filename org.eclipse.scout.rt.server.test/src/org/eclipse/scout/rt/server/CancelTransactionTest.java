@@ -32,7 +32,6 @@ import org.eclipse.scout.service.SERVICES;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.osgi.framework.ServiceRegistration;
 
@@ -41,8 +40,8 @@ import org.osgi.framework.ServiceRegistration;
  * <p>
  * No exception should appear in the log
  */
-@Ignore
 public class CancelTransactionTest {
+  private static final String SERVER_URL = "http://localhost:8080";
   private Handler m_handler;
   private List<ServiceRegistration> m_reg;
   private int m_errorOrWarningCount;
@@ -86,26 +85,22 @@ public class CancelTransactionTest {
     // check basic functionality
     ServiceTunnelRequest req0 = new ServiceTunnelRequest("9.9.9", IPingService.class.getName(), "ping", new Class[]{String.class}, new Object[]{"hello"});
     req0.setVirtualSessionId(virtualSessionId);
-    ServiceTunnelServletCall call0 = new ServiceTunnelServletCall(req0);
+    ServiceTunnelServletCall call0 = new ServiceTunnelServletCall(req0, SERVER_URL);
     call0.start();
     call0.join();
     ServiceTunnelResponse res0 = call0.getServiceTunnelResponse();
-    if (res0.getException() != null) {
-      System.out.println("$$$>>" + res0);
-      res0.getException().printStackTrace();
-    }
     Assert.assertNull(res0.getException());
     Assert.assertEquals("hello", res0.getData());
     // start long running job
     ServiceTunnelRequest req1 = new ServiceTunnelRequest("9.9.9", IBulkOperationService.class.getName(), "updateLargeDataset", null, null);
     req1.setVirtualSessionId(virtualSessionId);
-    ServiceTunnelServletCall call1 = new ServiceTunnelServletCall(req1);
+    ServiceTunnelServletCall call1 = new ServiceTunnelServletCall(req1, SERVER_URL);
     call1.start();
     // cancel job
     Thread.sleep(4000L);
     ServiceTunnelRequest req2 = new ServiceTunnelRequest("9.9.9", IServerProcessingCancelService.class.getName(), "cancel", new Class[]{long.class}, new Object[]{req1.getRequestSequence()});
     req2.setVirtualSessionId(virtualSessionId);
-    ServiceTunnelServletCall call2 = new ServiceTunnelServletCall(req2);
+    ServiceTunnelServletCall call2 = new ServiceTunnelServletCall(req2, SERVER_URL);
     call2.start();
     call2.join();
     ServiceTunnelResponse res2 = call2.getServiceTunnelResponse();

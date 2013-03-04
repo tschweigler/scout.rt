@@ -109,4 +109,14 @@ public class ResultSetMock extends VerboseMock implements InvocationHandler /*, 
   public void clearWarnings() throws SQLException {
   }
 
+  public int getFetchSize() throws SQLException {
+    if (m_resultData != null) {
+      return m_resultData.length;
+    }
+    return 0;
+  }
+
+  public void setFetchSize(int rows) throws SQLException {
+  }
+
 }

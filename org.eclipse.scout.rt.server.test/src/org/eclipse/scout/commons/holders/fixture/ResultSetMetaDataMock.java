@@ -17,7 +17,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
 
-public class ResultSetMetaDataMock implements InvocationHandler/*, java.sql.ResultSetMetaData*/{
+public class ResultSetMetaDataMock implements InvocationHandler /*, java.sql.ResultSetMetaData */{
   private final ResultSetMetaData m_meta;
   private Object[][] m_resultData;
 
@@ -55,4 +55,18 @@ public class ResultSetMetaDataMock implements InvocationHandler/*, java.sql.Resu
     return 0;
   }
 
+  public int getColumnDisplaySize(int column) throws SQLException {
+    int max = 0;
+    if (m_resultData != null) {
+      for (int i = 0; i < m_resultData.length; i++) {
+        if (column < m_resultData[i].length) {
+          Object object = m_resultData[i][column];
+          if (object != null && object.toString().length() > max) {
+            max = object.toString().length();
+          }
+        }
+      }
+    }
+    return max;
+  }
 }

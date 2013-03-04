@@ -19,14 +19,12 @@ import org.eclipse.scout.commons.holders.fixture.SqlServiceMock;
 import org.eclipse.scout.commons.holders.fixture.VerboseMock;
 import org.eclipse.scout.rt.server.services.common.jdbc.style.OracleSqlStyle;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Test for bind (see {@link NVPair}), requiring a server for database stuff
  * bsi ticket 99833
  */
-@Ignore
 public class BindValueTest {
   protected SqlServiceMock sqlService = new SqlServiceMock();
 
@@ -48,6 +46,7 @@ public class BindValueTest {
     m.log(Connection.class, "prepareStatement", "SELECT A FROM T WHERE A = ?");
     m.log(PreparedStatement.class, "setNull", 1, Types.NULL);
     m.log(PreparedStatement.class, "executeQuery");
+    m.log(ResultSet.class, "getFetchSize");
     m.log(ResultSet.class, "next");
     m.log(ResultSet.class, "close");
     String expected = m.getProtocol().toString();
@@ -69,6 +68,7 @@ public class BindValueTest {
     m.log(Connection.class, "prepareStatement", "SELECT A FROM T WHERE A = ?");
     m.log(PreparedStatement.class, "setObject", 1, null, Types.BIGINT);
     m.log(PreparedStatement.class, "executeQuery");
+    m.log(ResultSet.class, "getFetchSize");
     m.log(ResultSet.class, "next");
     m.log(ResultSet.class, "close");
     String expected = m.getProtocol().toString();
@@ -90,6 +90,7 @@ public class BindValueTest {
     m.log(Connection.class, "prepareStatement", "SELECT A FROM T WHERE A = ?");
     m.log(PreparedStatement.class, "setObject", 1, null, Types.BIGINT);
     m.log(PreparedStatement.class, "executeQuery");
+    m.log(ResultSet.class, "getFetchSize");
     m.log(ResultSet.class, "next");
     m.log(ResultSet.class, "close");
     String expected = m.getProtocol().toString();

@@ -43,98 +43,103 @@ import org.osgi.framework.ServiceRegistration;
  */
 @Ignore
 public class CancelTransactionTest {
-    private Handler m_handler;
-    private List<ServiceRegistration> m_reg;
-    private int m_errorOrWarningCount;
+  private Handler m_handler;
+  private List<ServiceRegistration> m_reg;
+  private int m_errorOrWarningCount;
 
-    @Before
-    public void setUp() throws Exception {
-        // register services
-        m_reg = TestingUtility.registerServices(Activator.getDefault().getBundle(), 0, new BulkOperationService());
-        // attach to log
-        Logger log = Logger.getLogger(SERVICES.getService(IExceptionHandlerService.class).getClass().getName());
-        m_handler = new Handler() {
-            @Override
-            public void publish(LogRecord record) {
-                if (record.getLevel().intValue() >= Level.WARNING.intValue()) {
-                    m_errorOrWarningCount++;
-                }
-            }
-
-            @Override
-            public void flush() {
-            }
-
-            @Override
-            public void close() throws SecurityException {
-            }
-        };
-        log.addHandler(m_handler);
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        TestingUtility.unregisterServices(m_reg);
-        Logger log = Logger.getLogger(SERVICES.getService(IExceptionHandlerService.class).getClass().getName());
-        log.removeHandler(m_handler);
-    }
-
-    @Test
-    public void test() throws Exception {
-        String virtualSessionId = "999999";
-        m_errorOrWarningCount = 0;
-        // check basic functionality
-        ServiceTunnelRequest req0 = new ServiceTunnelRequest("9.9.9", IPingService.class.getName(), "ping", new Class[] { String.class }, new Object[] { "hello" });
-        req0.setVirtualSessionId(virtualSessionId);
-        ServiceTunnelServletCall call0 = new ServiceTunnelServletCall(req0);
-        call0.start();
-        call0.join();
-        ServiceTunnelResponse res0 = call0.getServiceTunnelResponse();
-        Assert.assertNull(res0.getException());
-        Assert.assertEquals("hello", res0.getData());
-        // start long running job
-        ServiceTunnelRequest req1 = new ServiceTunnelRequest("9.9.9", IBulkOperationService.class.getName(), "updateLargeDataset", null, null);
-        req1.setVirtualSessionId(virtualSessionId);
-        ServiceTunnelServletCall call1 = new ServiceTunnelServletCall(req1);
-        call1.start();
-        // cancel job
-        Thread.sleep(4000L);
-        ServiceTunnelRequest req2 = new ServiceTunnelRequest("9.9.9", IServerProcessingCancelService.class.getName(), "cancel", new Class[] { long.class }, new Object[] { req1.getRequestSequence() });
-        req2.setVirtualSessionId(virtualSessionId);
-        ServiceTunnelServletCall call2 = new ServiceTunnelServletCall(req2);
-        call2.start();
-        call2.join();
-        ServiceTunnelResponse res2 = call2.getServiceTunnelResponse();
-        Assert.assertNull(res2.getException());
-        Assert.assertEquals(true, res2.getData());
-        // now wait until the long running job returns
-        call1.join();
-        ServiceTunnelResponse res1 = call1.getServiceTunnelResponse();
-        Assert.assertNotNull(res1.getException());
-        Assert.assertNull(res1.getData());
-        Assert.assertEquals("The log must not contain any errors or warings due to cancel", 0, m_errorOrWarningCount);
-    }
-
-    public static interface IBulkOperationService extends IService2 {
-        void updateLargeDataset() throws ProcessingException;
-    }
-
-    public static class BulkOperationService extends AbstractService implements IBulkOperationService {
-        @Override
-        public void updateLargeDataset() throws ProcessingException {
-            System.out.println("bulk started");
-            // takes loooog time
-            while (true) {
-                try {
-                    Thread.sleep(200L);
-                } catch (InterruptedException e) {
-                    // nop
-                }
-                if (ThreadContext.getTransaction().isCancelled()) {
-                    System.out.println("bulk interrupted");
-                    throw new ProcessingException("M-999 - MockCancelTest", new SQLException("M-999 - MockCancelTest"));
-                }
-            }
+  @Before
+  public void setUp() throws Exception {
+    // register services
+    m_reg = TestingUtility.registerServices(Activator.getDefault().getBundle(), 0, new BulkOperationService());
+    // attach to log
+    Logger log = Logger.getLogger(SERVICES.getService(IExceptionHandlerService.class).getClass().getName());
+    m_handler = new Handler() {
+      @Override
+      public void publish(LogRecord record) {
+        if (record.getLevel().intValue() >= Level.WARNING.intValue()) {
+          m_errorOrWarningCount++;
         }
+      }
+
+      @Override
+      public void flush() {
+      }
+
+      @Override
+      public void close() throws SecurityException {
+      }
+    };
+    log.addHandler(m_handler);
+  }
+
+  @After
+  public void tearDown() throws Exception {
+    TestingUtility.unregisterServices(m_reg);
+    Logger log = Logger.getLogger(SERVICES.getService(IExceptionHandlerService.class).getClass().getName());
+    log.removeHandler(m_handler);
+  }
+
+  @Test
+  public void test() throws Exception {
+    String virtualSessionId = "999999";
+    m_errorOrWarningCount = 0;
+    // check basic functionality
+    ServiceTunnelRequest req0 = new ServiceTunnelRequest("9.9.9", IPingService.class.getName(), "ping", new Class[]{String.class}, new Object[]{"hello"});
+    req0.setVirtualSessionId(virtualSessionId);
+    ServiceTunnelServletCall call0 = new ServiceTunnelServletCall(req0);
+    call0.start();
+    call0.join();
+    ServiceTunnelResponse res0 = call0.getServiceTunnelResponse();
+    if (res0.getException() != null) {
+      System.out.println("$$$>>" + res0);
+      res0.getException().printStackTrace();
     }
+    Assert.assertNull(res0.getException());
+    Assert.assertEquals("hello", res0.getData());
+    // start long running job
+    ServiceTunnelRequest req1 = new ServiceTunnelRequest("9.9.9", IBulkOperationService.class.getName(), "updateLargeDataset", null, null);
+    req1.setVirtualSessionId(virtualSessionId);
+    ServiceTunnelServletCall call1 = new ServiceTunnelServletCall(req1);
+    call1.start();
+    // cancel job
+    Thread.sleep(4000L);
+    ServiceTunnelRequest req2 = new ServiceTunnelRequest("9.9.9", IServerProcessingCancelService.class.getName(), "cancel", new Class[]{long.class}, new Object[]{req1.getRequestSequence()});
+    req2.setVirtualSessionId(virtualSessionId);
+    ServiceTunnelServletCall call2 = new ServiceTunnelServletCall(req2);
+    call2.start();
+    call2.join();
+    ServiceTunnelResponse res2 = call2.getServiceTunnelResponse();
+    Assert.assertNull(res2.getException());
+    Assert.assertEquals(true, res2.getData());
+    // now wait until the long running job returns
+    call1.join();
+    ServiceTunnelResponse res1 = call1.getServiceTunnelResponse();
+    Assert.assertNotNull(res1.getException());
+    Assert.assertNull(res1.getData());
+    Assert.assertEquals("The log must not contain any errors or warings due to cancel", 0, m_errorOrWarningCount);
+  }
+
+  public static interface IBulkOperationService extends IService2 {
+    void updateLargeDataset() throws ProcessingException;
+  }
+
+  public static class BulkOperationService extends AbstractService implements IBulkOperationService {
+    @Override
+    public void updateLargeDataset() throws ProcessingException {
+      System.out.println("bulk started");
+      // takes loooog time
+      while (true) {
+        try {
+          Thread.sleep(200L);
+        }
+        catch (InterruptedException e) {
+          // nop
+        }
+        if (ThreadContext.getTransaction().isCancelled()) {
+          System.out.println("bulk interrupted");
+          throw new ProcessingException("M-999 - MockCancelTest", new SQLException("M-999 - MockCancelTest"));
+        }
+      }
+    }
+  }
 }

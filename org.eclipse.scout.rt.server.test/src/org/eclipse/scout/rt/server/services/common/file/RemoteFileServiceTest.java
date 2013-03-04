@@ -28,6 +28,7 @@ import org.eclipse.scout.rt.testing.shared.TestingUtility;
 import org.eclipse.scout.service.SERVICES;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.osgi.framework.ServiceRegistration;
 
@@ -45,6 +46,7 @@ import org.osgi.framework.ServiceRegistration;
  * /internal/public/index_de_CH_V_X_Y.html = "de_CH_V_X_Y"
  * </pre>
  */
+@Ignore
 public class RemoteFileServiceTest {
 
   private File m_fsroot;

@@ -66,11 +66,13 @@ import org.eclipse.scout.rt.ui.swing.basic.SwingScoutModelFinderTest.AllFieldsTe
 import org.eclipse.scout.rt.ui.swing.basic.SwingScoutModelFinderTest.AllFieldsTestForm.MainBox.TreeBoxField;
 import org.eclipse.scout.rt.ui.swing.form.fields.ISwingScoutFormField;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Test for {@link SwingScoutModelFinder}. Tests, if the correct scout model is found for a swing component.
  */
+@Ignore
 public class SwingScoutModelFinderTest {
   private static final IScoutLogger LOG = ScoutLogManager.getLogger(SwingScoutModelFinderTest.class);
   private static final IIconLocator NULL_ICON_LOCATOR = new P_NullIconLocator();

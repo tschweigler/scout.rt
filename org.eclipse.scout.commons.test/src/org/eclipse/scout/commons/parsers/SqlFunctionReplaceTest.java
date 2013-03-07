@@ -22,8 +22,6 @@ import org.junit.Test;
 public class SqlFunctionReplaceTest {
 
   /**
-   * ticket 89'314
-   * <p>
    * sql functions in sql style
    */
   @Test

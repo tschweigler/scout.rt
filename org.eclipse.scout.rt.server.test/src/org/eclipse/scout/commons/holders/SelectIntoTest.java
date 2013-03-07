@@ -18,7 +18,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * bsi ticket 101'836
  * test requiring a server for database stuff
  */
 public class SelectIntoTest extends Assert {

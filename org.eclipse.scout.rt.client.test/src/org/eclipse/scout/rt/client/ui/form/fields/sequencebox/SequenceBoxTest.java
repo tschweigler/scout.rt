@@ -30,8 +30,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * bsi ticket #88'322, #87'709
- * <p>
  * Tests from to check in Sequence Box
  * {@link org.eclipse.scout.rt.client.ui.form.fields.sequencebox.AbstractSequenceBox}
  */

@@ -35,7 +35,7 @@ import org.osgi.framework.ServiceRegistration;
  * {@code SharedContextChangedNotification}s should only be sent if
  * the default offline state matches the offline state of the current thread.
  * 
- * @see <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=379721">Bugzilla ticket 379721</a>
+ * @see <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=379721">Bugzilla 379721</a>
  */
 public class OfflineStateSharedVariableNotificationTest {
 

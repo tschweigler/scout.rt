@@ -32,7 +32,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * bsi ticket #92'479: [SWT] AutoResize Spalten im Outline
  * Tests auto resize feature
  */
 @RunWith(ScoutClientTestRunner.class)

@@ -34,7 +34,6 @@ import org.junit.runner.RunWith;
  * A menu opened in empty space should not consider any selection on a row.
  * Thus the menu should open anyway (not querying the selection status of any row).
  * <p>
- * bsi ticket #100'940
  */
 @RunWith(ScoutClientTestRunner.class)
 public class PageWithTable6Test {

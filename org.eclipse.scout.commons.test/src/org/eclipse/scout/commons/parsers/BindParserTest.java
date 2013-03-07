@@ -21,8 +21,6 @@ import org.junit.Test;
 public class BindParserTest {
 
   /**
-   * Bsi ticket 89794
-   * <p>
    * Column starts with "IN"
    */
   @Test

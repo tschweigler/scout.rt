@@ -30,7 +30,6 @@ import org.junit.runner.RunWith;
 
 /**
  * Handling of table sorting with user sort columns, configured sort columns and ui preferences store columns
- * bsi ticket #99'916
  */
 @RunWith(ScoutClientTestRunner.class)
 public class PageWithTable3Test {

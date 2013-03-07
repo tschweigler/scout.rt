@@ -24,10 +24,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * BSI Ticket #95'042
- * <p>
  * Writing text with newlines into a single line text field must eliminate the newlines
- * </p>
  */
 @RunWith(ScoutClientTestRunner.class)
 public class StringFieldSetMultilineTextTest {

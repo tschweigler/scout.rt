@@ -97,9 +97,6 @@ public class StringUtilityTest extends Assert {
     assertEquals("1, 2", StringUtility.join(", ", new Long[]{Long.valueOf(1), null, Long.valueOf(2)}));
   }
 
-  /**
-   * ticket 88592
-   */
   @Test
   public void testMnemonics() {
     String s = "Button &Test";
@@ -119,9 +116,6 @@ public class StringUtilityTest extends Assert {
   // UTF-8 length is 13 to avoid accidental buffer size matches
   static final String CHARACTERS = "aouäöüàé";
 
-  /**
-   * ticket 90988
-   */
   @Test
   public void testDecompress_umlauts() throws Exception {
 

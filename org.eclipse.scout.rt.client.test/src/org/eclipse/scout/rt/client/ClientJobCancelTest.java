@@ -41,8 +41,6 @@ import org.osgi.framework.ServiceRegistration;
 /**
  * Tests what happens when the user cancels a long running job (system=false) that is caused by a backend service call
  * through the client proxy.
- * <p>
- * bsi ticket #101'303
  */
 public class ClientJobCancelTest {
   private static long pingServiceDelay;

@@ -23,7 +23,6 @@ import org.junit.Test;
 
 /**
  * Test for bind (see {@link NVPair}), requiring a server for database stuff
- * bsi ticket 99833
  */
 public class BindValueTest {
   protected SqlServiceMock sqlService = new SqlServiceMock();

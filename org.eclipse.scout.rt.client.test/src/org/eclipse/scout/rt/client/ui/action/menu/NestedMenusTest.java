@@ -25,8 +25,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * bsi ticket #81'288
- * <p>
  * Accessing a nested menu yields null because child menus are not traversed.
  */
 @RunWith(ScoutClientTestRunner.class)

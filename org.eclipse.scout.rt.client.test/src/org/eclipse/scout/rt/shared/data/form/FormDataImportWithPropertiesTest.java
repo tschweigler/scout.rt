@@ -24,8 +24,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * bsi ticket #98'889
- * <p>
  * Tests the import behavior of properties form a form data into its form. Untouched form data properties are not
  * expected to be imported into the form.
  */

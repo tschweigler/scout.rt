@@ -26,10 +26,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * <h1>Bugzilla 352472 - Possible Deadlock at IForm#waitFor</h1>
- * <p>
- * BSI ticket 102'195 Synchronisations-Problem in ClientJob.waitFor()
- * </p>
+ * Bugzilla 352472 - Possible Deadlock at IForm#waitFor
  */
 @RunWith(ScoutClientTestRunner.class)
 public class FormWaitForTest {

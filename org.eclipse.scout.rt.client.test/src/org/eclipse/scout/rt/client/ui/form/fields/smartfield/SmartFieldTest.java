@@ -33,8 +33,6 @@ import org.junit.runner.RunWith;
 import org.osgi.framework.ServiceRegistration;
 
 /**
- * bsi ticket #85'574
- * <p>
  * Smartfield with rows having tooltip/color/icon. When some rows do not have tooltip/color/icon this info should be
  * taken from the initial values of tooltip/color/icon of the field.
  */

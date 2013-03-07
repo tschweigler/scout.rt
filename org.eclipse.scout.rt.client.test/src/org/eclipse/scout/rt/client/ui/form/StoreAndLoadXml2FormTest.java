@@ -28,8 +28,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * bsi ticket 96'909
- * <p>
  * Load and store of tables containing custom values and classes (classloading issues)
  */
 @RunWith(ScoutClientTestRunner.class)

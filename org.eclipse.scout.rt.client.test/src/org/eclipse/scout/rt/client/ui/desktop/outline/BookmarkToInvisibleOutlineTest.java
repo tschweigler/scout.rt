@@ -29,8 +29,6 @@ import org.junit.runner.RunWith;
 
 /**
  * Tests bookmark activation to invisible outlines
- * <p>
- * bsi ticket #96'627
  */
 @RunWith(ScoutClientTestRunner.class)
 public class BookmarkToInvisibleOutlineTest {

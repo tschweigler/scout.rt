@@ -28,12 +28,6 @@ public class TypeCastUtilityClientTest {
 
   @Test
   public void testGetGenericsParameterClass() {
-    /*
-    Logger.getLogger("").setLevel(Level.FINEST);
-    for (Handler handler : Logger.getLogger("").getHandlers()) {
-      handler.setLevel(Level.FINEST);
-    }
-    */
     Class<?> T;
     //
     T = TypeCastUtility.getGenericsParameterClass(ListBox.class, IHolder.class, 0);

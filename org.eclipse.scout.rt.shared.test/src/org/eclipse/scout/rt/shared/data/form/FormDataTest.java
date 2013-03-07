@@ -10,11 +10,9 @@
  ******************************************************************************/
 package org.eclipse.scout.rt.shared.data.form;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
 import org.eclipse.scout.rt.shared.data.form.fields.AbstractFormFieldData;
 import org.eclipse.scout.rt.shared.data.form.properties.AbstractPropertyData;
+import org.junit.Assert;
 import org.junit.Test;
 
 public class FormDataTest {
@@ -23,15 +21,15 @@ public class FormDataTest {
   public void testGetNestedFieldAndPropertyPackagePrivateClass() throws Exception {
     TestFormData formData = new TestFormData();
     // package private class NonPublicBoxData is not a valid field data
-    assertNull(formData.getNonPublicBoxData());
+    Assert.assertNull(formData.getNonPublicBoxData());
   }
 
   @Test
   public void testGetNestedFieldAndPropertyPublicClass() throws Exception {
     TestFormData formData = new TestFormData();
     // public class PublicBoxData is a valid field Data
-    assertNotNull(formData.getPublicBoxData());
-    assertNotNull(formData.getPublicBoxData().getTestProperty());
+    Assert.assertNotNull(formData.getPublicBoxData());
+    Assert.assertNotNull(formData.getPublicBoxData().getTestProperty());
   }
 
   public static abstract class AbstractTestBoxData extends AbstractFormFieldData {

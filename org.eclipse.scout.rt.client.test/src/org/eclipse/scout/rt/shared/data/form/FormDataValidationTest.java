@@ -78,7 +78,7 @@ public class FormDataValidationTest {
     assertIOFailure("LongArrayValue", new Object[]{1L, 2L, 3L});
   }
 
-  private void assertIOSuccess(String fieldId, Object expectedValue) throws Exception {
+  private static void assertIOSuccess(String fieldId, Object expectedValue) throws Exception {
     MyFormData d1 = new MyFormData();
     AbstractValueFieldData<Object> v1 = (AbstractValueFieldData<Object>) d1.getFieldById(fieldId);
     v1.setValue(expectedValue);
@@ -99,7 +99,7 @@ public class FormDataValidationTest {
     }
   }
 
-  private void assertIOFailure(String fieldId, Object expectedValue) throws Exception {
+  private static void assertIOFailure(String fieldId, Object expectedValue) throws Exception {
     MyFormData d1 = new MyFormData();
     AbstractValueFieldData<Object> v1 = (AbstractValueFieldData<Object>) d1.getFieldById(fieldId);
     v1.setValue(expectedValue);

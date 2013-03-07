@@ -10,10 +10,6 @@
  ******************************************************************************/
 package org.eclipse.scout.rt.server.services.common.file;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.fail;
-
 import java.io.File;
 import java.io.StringWriter;
 import java.util.List;
@@ -27,6 +23,7 @@ import org.eclipse.scout.rt.shared.services.common.file.RemoteFile;
 import org.eclipse.scout.rt.testing.shared.TestingUtility;
 import org.eclipse.scout.service.SERVICES;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -88,7 +85,7 @@ public class RemoteFileServiceTest {
   @Test
   public void test() throws Exception {
     IRemoteFileService svc = SERVICES.getService(IRemoteFileService.class);
-    assertEquals(RemoteFileServiceMock.class, svc.getClass());
+    Assert.assertEquals(RemoteFileServiceMock.class, svc.getClass());
     assertAccessible(svc, new RemoteFile(null, "index.html", 0L), "PUBLIC");
     assertAccessible(svc, new RemoteFile("/", "index.html", 0L), "PUBLIC");
     assertAccessible(svc, new RemoteFile("/abc/..", "index.html", 0L), "PUBLIC");
@@ -111,18 +108,18 @@ public class RemoteFileServiceTest {
     assertNonAccessible(svc, new RemoteFile("", "config.ini", new Locale("de/../../config"), 0L));
   }
 
-  private void assertAccessible(IRemoteFileService svc, RemoteFile spec, String expectedContent) throws Exception {
+  private static void assertAccessible(IRemoteFileService svc, RemoteFile spec, String expectedContent) throws Exception {
     RemoteFile r = svc.getRemoteFile(spec);
     if (expectedContent == null) {
-      assertFalse(r.exists());
+      Assert.assertFalse(r.exists());
       return;
     }
     StringWriter w = new StringWriter();
     r.writeData(w);
-    assertEquals(expectedContent, w.toString());
+    Assert.assertEquals(expectedContent, w.toString());
   }
 
-  private void assertNonAccessible(IRemoteFileService svc, RemoteFile spec) throws Exception {
+  private static void assertNonAccessible(IRemoteFileService svc, RemoteFile spec) throws Exception {
     RemoteFile r;
     try {
       r = svc.getRemoteFile(spec);
@@ -133,7 +130,7 @@ public class RemoteFileServiceTest {
     //should have failed
     StringWriter w = new StringWriter();
     r.writeData(w);
-    fail("accessing " + spec.getDirectory() + spec.getName() + " should fail");
+    Assert.fail("accessing " + spec.getDirectory() + spec.getName() + " should fail");
   }
 
   static class RemoteFileServiceMock extends RemoteFileService {

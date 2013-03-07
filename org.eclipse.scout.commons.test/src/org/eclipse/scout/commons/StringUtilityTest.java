@@ -231,7 +231,7 @@ public class StringUtilityTest extends Assert {
    * @param original
    *          the original String
    */
-  private void assertEqualsAfterEncodeDecode(String original) {
+  private static void assertEqualsAfterEncodeDecode(String original) {
     assertEqualsAfterEncodeDecode(original, false);
   }
 
@@ -243,7 +243,7 @@ public class StringUtilityTest extends Assert {
    * @param replaceSpace
    *          replace all spaces when encoding
    */
-  private void assertEqualsAfterEncodeDecode(String original, boolean replaceSpaces) {
+  private static void assertEqualsAfterEncodeDecode(String original, boolean replaceSpaces) {
     String encoded = StringUtility.htmlEncode(original, replaceSpaces);
     String decoded = StringUtility.htmlDecode(encoded);
     Assert.assertEquals(original, decoded);

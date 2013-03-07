@@ -10,9 +10,6 @@
  ******************************************************************************/
 package org.eclipse.scout.rt.server.services.common.jdbc.builder;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
 import org.eclipse.scout.commons.ClassIdentifier;
 import org.eclipse.scout.commons.StringUtility;
 import org.eclipse.scout.commons.exception.ProcessingException;
@@ -177,27 +174,27 @@ public class FormDataStatementBuilderTest {
   @Test
   public void createSelectStatementStatementNull() throws Exception {
     m_builder.build(m_formData);
-    assertNull(m_builder.createSelectStatement(null));
+    Assert.assertNull(m_builder.createSelectStatement(null));
   }
 
   @Test
   public void createSelectStatementContributionNull() throws Exception {
     m_builder.build(m_formData);
     String actual = m_builder.createSelectStatement(STATEMENT_TEMPLATE);
-    assertEquals("SELECT P.PERSON_NR FROM ORS_PERSON P WHERE 1=1", StringUtility.cleanup(actual));
+    Assert.assertEquals("SELECT P.PERSON_NR FROM ORS_PERSON P WHERE 1=1", StringUtility.cleanup(actual));
     //
     actual = m_builder.createSelectStatement(STATEMENT_TEMPLATE, (EntityContribution[]) null);
-    assertEquals("SELECT P.PERSON_NR FROM ORS_PERSON P WHERE 1=1", StringUtility.cleanup(actual));
+    Assert.assertEquals("SELECT P.PERSON_NR FROM ORS_PERSON P WHERE 1=1", StringUtility.cleanup(actual));
     //
     actual = m_builder.createSelectStatement(STATEMENT_TEMPLATE, (EntityContribution) null);
-    assertEquals("SELECT P.PERSON_NR FROM ORS_PERSON P WHERE 1=1", StringUtility.cleanup(actual));
+    Assert.assertEquals("SELECT P.PERSON_NR FROM ORS_PERSON P WHERE 1=1", StringUtility.cleanup(actual));
   }
 
   @Test
   public void createSelectStatementContributionNullContributions() throws Exception {
     m_builder.build(m_formData);
     String actual = m_builder.createSelectStatement(STATEMENT_TEMPLATE, null, null);
-    assertEquals("SELECT P.PERSON_NR FROM ORS_PERSON P WHERE 1=1", StringUtility.cleanup(actual));
+    Assert.assertEquals("SELECT P.PERSON_NR FROM ORS_PERSON P WHERE 1=1", StringUtility.cleanup(actual));
   }
 
   @Test
@@ -205,7 +202,7 @@ public class FormDataStatementBuilderTest {
     m_builder.build(m_formData);
     m_builder.addWhere(" AND 0=0 ");
     String actual = m_builder.createSelectStatement(STATEMENT_TEMPLATE);
-    assertEquals("SELECT P.PERSON_NR FROM ORS_PERSON P WHERE 1=1 AND 0=0", StringUtility.cleanup(actual));
+    Assert.assertEquals("SELECT P.PERSON_NR FROM ORS_PERSON P WHERE 1=1 AND 0=0", StringUtility.cleanup(actual));
   }
 
   @Test
@@ -217,7 +214,7 @@ public class FormDataStatementBuilderTest {
     contrib.addWhereConstraint("MA.PERSON_NR != P.MAIN_ACCOUNT_NR");
     m_builder.addWhere(" AND 0=0 ");
     String actual = m_builder.createSelectStatement(STATEMENT_TEMPLATE, contrib);
-    assertEquals("SELECT P.PERSON_NR, MA.NAME FROM ORS_PERSON P, ORS_PERSON MA WHERE 1=1 AND MA.PERSON_NR != P.MAIN_ACCOUNT_NR AND 0=0", StringUtility.cleanup(actual));
+    Assert.assertEquals("SELECT P.PERSON_NR, MA.NAME FROM ORS_PERSON P, ORS_PERSON MA WHERE 1=1 AND MA.PERSON_NR != P.MAIN_ACCOUNT_NR AND 0=0", StringUtility.cleanup(actual));
   }
 
   public static class AbstractMasterTemplateFieldData extends AbstractFormFieldData {

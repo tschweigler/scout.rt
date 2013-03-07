@@ -10,13 +10,10 @@
  ******************************************************************************/
 package org.eclipse.scout.rt.shared.data.form;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
-
 import org.eclipse.scout.commons.annotations.Replace;
 import org.eclipse.scout.rt.shared.data.form.fields.AbstractFormFieldData;
 import org.eclipse.scout.rt.shared.data.form.fields.AbstractValueFieldData;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -28,103 +25,103 @@ public class FormDataInjectionTest {
   public void testBaseForm() throws Exception {
     BaseFormData formData = new BaseFormData();
 
-    assertEquals(2, formData.getFields().length);
-    assertNotNull(formData.getName());
-    assertNotNull(formData.getSecond());
+    Assert.assertEquals(2, formData.getFields().length);
+    Assert.assertNotNull(formData.getName());
+    Assert.assertNotNull(formData.getSecond());
   }
 
   @Test
   public void testExtendedForm() throws Exception {
     ExtendedFormData formData = new ExtendedFormData();
 
-    assertEquals(4, formData.getFields().length);
-    assertNotNull(formData.getName());
-    assertNotNull(formData.getSalary());
-    assertNotNull(formData.getSecond());
-    assertNotNull(formData.getAge());
+    Assert.assertEquals(4, formData.getFields().length);
+    Assert.assertNotNull(formData.getName());
+    Assert.assertNotNull(formData.getSalary());
+    Assert.assertNotNull(formData.getSecond());
+    Assert.assertNotNull(formData.getAge());
   }
 
   @Test
   public void testExtendedInjectedField() throws Exception {
     ExtendedInjectedFieldFormData formData = new ExtendedInjectedFieldFormData();
 
-    assertEquals(5, formData.getFields().length);
-    assertNotNull(formData.getName());
-    assertNotNull(formData.getSalary());
-    assertNotNull(formData.getSecond());
-    assertNotNull(formData.getFirstName());
-    assertNotNull(formData.getAge());
+    Assert.assertEquals(5, formData.getFields().length);
+    Assert.assertNotNull(formData.getName());
+    Assert.assertNotNull(formData.getSalary());
+    Assert.assertNotNull(formData.getSecond());
+    Assert.assertNotNull(formData.getFirstName());
+    Assert.assertNotNull(formData.getAge());
   }
 
   @Test
   public void testReplaceField() throws Exception {
     ReplaceFieldFormData formData = new ReplaceFieldFormData();
 
-    assertEquals(2, formData.getFields().length);
-    assertNotNull(formData.getName());
-    assertNotNull(formData.getSecond());
+    Assert.assertEquals(2, formData.getFields().length);
+    Assert.assertNotNull(formData.getName());
+    Assert.assertNotNull(formData.getSecond());
     // getFieldByClass
-    assertSame(formData.getNameEx(), formData.getName());
+    Assert.assertSame(formData.getNameEx(), formData.getName());
 
     // fieldId
-    assertSame(formData.getNameEx(), formData.getFieldById("Name"));
-    assertEquals("Name", formData.getName().getFieldId());
-    assertEquals("Name", formData.getNameEx().getFieldId());
+    Assert.assertSame(formData.getNameEx(), formData.getFieldById("Name"));
+    Assert.assertEquals("Name", formData.getName().getFieldId());
+    Assert.assertEquals("Name", formData.getNameEx().getFieldId());
   }
 
   @Test
   public void testReplace2Field() throws Exception {
     Replace2FieldFormData formData = new Replace2FieldFormData();
 
-    assertEquals(3, formData.getFields().length);
-    assertNotNull(formData.getName());
-    assertNotNull(formData.getSecond());
-    assertNotNull(formData.getInjected());
+    Assert.assertEquals(3, formData.getFields().length);
+    Assert.assertNotNull(formData.getName());
+    Assert.assertNotNull(formData.getSecond());
+    Assert.assertNotNull(formData.getInjected());
 
     // getFieldByClass
-    assertSame(formData.getNameEx2(), formData.getName());
-    assertSame(formData.getNameEx2(), formData.getNameEx());
+    Assert.assertSame(formData.getNameEx2(), formData.getName());
+    Assert.assertSame(formData.getNameEx2(), formData.getNameEx());
 
     // fieldId
-    assertSame(formData.getNameEx2(), formData.getFieldById("Name"));
-    assertEquals("Name", formData.getName().getFieldId());
-    assertEquals("Name", formData.getNameEx().getFieldId());
-    assertEquals("Name", formData.getNameEx2().getFieldId());
+    Assert.assertSame(formData.getNameEx2(), formData.getFieldById("Name"));
+    Assert.assertEquals("Name", formData.getName().getFieldId());
+    Assert.assertEquals("Name", formData.getNameEx().getFieldId());
+    Assert.assertEquals("Name", formData.getNameEx2().getFieldId());
   }
 
   @Test
   public void testReplace3Field() throws Exception {
     Replace3FieldFormData formData = new Replace3FieldFormData();
 
-    assertEquals(3, formData.getFields().length);
-    assertNotNull(formData.getName());
-    assertNotNull(formData.getSecond());
-    assertNotNull(formData.getInjected());
+    Assert.assertEquals(3, formData.getFields().length);
+    Assert.assertNotNull(formData.getName());
+    Assert.assertNotNull(formData.getSecond());
+    Assert.assertNotNull(formData.getInjected());
 
     // getFieldByClass
-    assertSame(formData.getNameEx3(), formData.getName());
-    assertSame(formData.getNameEx3(), formData.getNameEx());
-    assertSame(formData.getNameEx3(), formData.getNameEx2());
+    Assert.assertSame(formData.getNameEx3(), formData.getName());
+    Assert.assertSame(formData.getNameEx3(), formData.getNameEx());
+    Assert.assertSame(formData.getNameEx3(), formData.getNameEx2());
 
     // field Id
-    assertSame(formData.getNameEx3(), formData.getFieldById("Name"));
-    assertEquals("Name", formData.getName().getFieldId());
-    assertEquals("Name", formData.getNameEx().getFieldId());
-    assertEquals("Name", formData.getNameEx2().getFieldId());
+    Assert.assertSame(formData.getNameEx3(), formData.getFieldById("Name"));
+    Assert.assertEquals("Name", formData.getName().getFieldId());
+    Assert.assertEquals("Name", formData.getNameEx().getFieldId());
+    Assert.assertEquals("Name", formData.getNameEx2().getFieldId());
   }
 
   @Test
   public void testGroupBoxEx() throws Exception {
     TemplateExFormData formData = new TemplateExFormData();
 
-    assertEquals(1, formData.getFields().length);
-    assertNotNull(formData.getBox());
-    assertSame(formData.getBoxEx(), formData.getBox());
-    assertSame(formData.getBoxEx(), formData.getFieldById("Box"));
+    Assert.assertEquals(1, formData.getFields().length);
+    Assert.assertNotNull(formData.getBox());
+    Assert.assertSame(formData.getBoxEx(), formData.getBox());
+    Assert.assertSame(formData.getBoxEx(), formData.getFieldById("Box"));
 
-    assertEquals(1, formData.getBox().getFields().length);
-    assertSame(formData.getBoxEx().getNameEx(), formData.getBox().getName());
-    assertSame(formData.getBoxEx().getNameEx(), formData.getBox().getFieldById("Name"));
+    Assert.assertEquals(1, formData.getBox().getFields().length);
+    Assert.assertSame(formData.getBoxEx().getNameEx(), formData.getBox().getName());
+    Assert.assertSame(formData.getBoxEx().getNameEx(), formData.getBox().getFieldById("Name"));
   }
 
   public static class BaseFormData extends AbstractFormData {

@@ -10,11 +10,6 @@
  ******************************************************************************/
 package org.eclipse.scout.rt.server.services.common.jdbc.builder;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import java.util.Arrays;
 
 import org.eclipse.scout.commons.StringUtility;
@@ -33,6 +28,7 @@ import org.eclipse.scout.rt.shared.data.model.DataModelUtility;
 import org.eclipse.scout.rt.shared.data.model.EntityPath;
 import org.eclipse.scout.rt.shared.data.model.IDataModelAttribute;
 import org.eclipse.scout.rt.shared.data.model.IDataModelEntity;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -76,15 +72,15 @@ public class FormDataStatementBuilderWithComposerTest {
     m_builder.getAliasMapper().setNodeAlias(subEntityNode.getParentNode(), "Table", "T");
 
     EntityContribution entityContribution = m_builder.buildComposerEntityNodeContribution(subEntityNode, EntityStrategy.BuildConstraints);
-    assertNotNull(entityContribution);
-    assertTrue(entityContribution.getSelectParts().isEmpty());
-    assertTrue(entityContribution.getFromParts().isEmpty());
-    assertTrue(entityContribution.getGroupByParts().isEmpty());
-    assertTrue(entityContribution.getHavingParts().isEmpty());
-    assertFalse(entityContribution.getWhereParts().isEmpty());
+    Assert.assertNotNull(entityContribution);
+    Assert.assertTrue(entityContribution.getSelectParts().isEmpty());
+    Assert.assertTrue(entityContribution.getFromParts().isEmpty());
+    Assert.assertTrue(entityContribution.getGroupByParts().isEmpty());
+    Assert.assertTrue(entityContribution.getHavingParts().isEmpty());
+    Assert.assertFalse(entityContribution.getWhereParts().isEmpty());
 
-    assertEquals(1, entityContribution.getWhereParts().size());
-    assertEquals("EXISTS ( SELECT 1 FROM TABLE a0001 WHERE a0001.PRIMARY_KEY=T.PRIMARY_KEY AND a0001.SUB_ATTRIBUTE=:__a2 )",
+    Assert.assertEquals(1, entityContribution.getWhereParts().size());
+    Assert.assertEquals("EXISTS ( SELECT 1 FROM TABLE a0001 WHERE a0001.PRIMARY_KEY=T.PRIMARY_KEY AND a0001.SUB_ATTRIBUTE=:__a2 )",
         StringUtility.cleanup(entityContribution.getWhereParts().get(0)));
   }
 
@@ -95,15 +91,15 @@ public class FormDataStatementBuilderWithComposerTest {
     m_builder.getAliasMapper().setNodeAlias(subEntityNode.getParentNode(), "Table", "T");
 
     EntityContribution entityContribution = m_builder.buildComposerEntityNodeContribution(subEntityNode, EntityStrategy.BuildConstraints);
-    assertNotNull(entityContribution);
-    assertTrue(entityContribution.getSelectParts().isEmpty());
-    assertTrue(entityContribution.getFromParts().isEmpty());
-    assertTrue(entityContribution.getGroupByParts().isEmpty());
-    assertTrue(entityContribution.getHavingParts().isEmpty());
-    assertFalse(entityContribution.getWhereParts().isEmpty());
+    Assert.assertNotNull(entityContribution);
+    Assert.assertTrue(entityContribution.getSelectParts().isEmpty());
+    Assert.assertTrue(entityContribution.getFromParts().isEmpty());
+    Assert.assertTrue(entityContribution.getGroupByParts().isEmpty());
+    Assert.assertTrue(entityContribution.getHavingParts().isEmpty());
+    Assert.assertFalse(entityContribution.getWhereParts().isEmpty());
 
-    assertEquals(1, entityContribution.getWhereParts().size());
-    assertEquals("EXISTS ( SELECT 1 FROM TABLE a0001 WHERE a0001.PRIMARY_KEY=T.PRIMARY_KEY GROUP BY T.PRIMARY_KEY HAVING 1=1 AND SUM(a0001.SUB_ATTRIBUTE)=:__a2 )",
+    Assert.assertEquals(1, entityContribution.getWhereParts().size());
+    Assert.assertEquals("EXISTS ( SELECT 1 FROM TABLE a0001 WHERE a0001.PRIMARY_KEY=T.PRIMARY_KEY GROUP BY T.PRIMARY_KEY HAVING 1=1 AND SUM(a0001.SUB_ATTRIBUTE)=:__a2 )",
         StringUtility.cleanup(entityContribution.getWhereParts().get(0)));
   }
 
@@ -113,15 +109,15 @@ public class FormDataStatementBuilderWithComposerTest {
     m_builder.getAliasMapper().setNodeAlias(subAttributeNode.getParentNode(), "Table", "T");
 
     EntityContribution attributeContribution = m_builder.buildComposerAttributeNode(subAttributeNode, AttributeStrategy.BuildConstraintOfAttribute);
-    assertNotNull(attributeContribution);
-    assertTrue(attributeContribution.getSelectParts().isEmpty());
-    assertTrue(attributeContribution.getFromParts().isEmpty());
-    assertTrue(attributeContribution.getGroupByParts().isEmpty());
-    assertTrue(attributeContribution.getHavingParts().isEmpty());
-    assertFalse(attributeContribution.getWhereParts().isEmpty());
+    Assert.assertNotNull(attributeContribution);
+    Assert.assertTrue(attributeContribution.getSelectParts().isEmpty());
+    Assert.assertTrue(attributeContribution.getFromParts().isEmpty());
+    Assert.assertTrue(attributeContribution.getGroupByParts().isEmpty());
+    Assert.assertTrue(attributeContribution.getHavingParts().isEmpty());
+    Assert.assertFalse(attributeContribution.getWhereParts().isEmpty());
 
-    assertEquals(1, attributeContribution.getWhereParts().size());
-    assertEquals("T.SUB_ATTRIBUTE=:__a1", attributeContribution.getWhereParts().get(0));
+    Assert.assertEquals(1, attributeContribution.getWhereParts().size());
+    Assert.assertEquals("T.SUB_ATTRIBUTE=:__a1", attributeContribution.getWhereParts().get(0));
   }
 
   @Test
@@ -130,15 +126,15 @@ public class FormDataStatementBuilderWithComposerTest {
     m_builder.getAliasMapper().setNodeAlias(subAttributeNode.getParentNode(), "Table", "T");
 
     EntityContribution attributeContribution = m_builder.buildComposerAttributeNode(subAttributeNode, AttributeStrategy.BuildConstraintOfAttribute);
-    assertNotNull(attributeContribution);
-    assertTrue(attributeContribution.getSelectParts().isEmpty());
-    assertTrue(attributeContribution.getFromParts().isEmpty());
-    assertTrue(attributeContribution.getGroupByParts().isEmpty());
-    assertFalse(attributeContribution.getHavingParts().isEmpty());
-    assertTrue(attributeContribution.getWhereParts().isEmpty());
+    Assert.assertNotNull(attributeContribution);
+    Assert.assertTrue(attributeContribution.getSelectParts().isEmpty());
+    Assert.assertTrue(attributeContribution.getFromParts().isEmpty());
+    Assert.assertTrue(attributeContribution.getGroupByParts().isEmpty());
+    Assert.assertFalse(attributeContribution.getHavingParts().isEmpty());
+    Assert.assertTrue(attributeContribution.getWhereParts().isEmpty());
 
-    assertEquals(1, attributeContribution.getHavingParts().size());
-    assertEquals("SUM(T.SUB_ATTRIBUTE)=:__a1", attributeContribution.getHavingParts().get(0));
+    Assert.assertEquals(1, attributeContribution.getHavingParts().size());
+    Assert.assertEquals("SUM(T.SUB_ATTRIBUTE)=:__a1", attributeContribution.getHavingParts().get(0));
   }
 
   @Test
@@ -147,15 +143,15 @@ public class FormDataStatementBuilderWithComposerTest {
     m_builder.getAliasMapper().setNodeAlias(subAttributeNode.getParentNode(), "Table", "T");
 
     EntityContribution attributeContribution = m_builder.buildComposerAttributeNode(subAttributeNode, AttributeStrategy.BuildConstraintOfAttributeWithContext);
-    assertNotNull(attributeContribution);
-    assertTrue(attributeContribution.getSelectParts().isEmpty());
-    assertTrue(attributeContribution.getFromParts().isEmpty());
-    assertTrue(attributeContribution.getGroupByParts().isEmpty());
-    assertTrue(attributeContribution.getHavingParts().isEmpty());
-    assertFalse(attributeContribution.getWhereParts().isEmpty());
+    Assert.assertNotNull(attributeContribution);
+    Assert.assertTrue(attributeContribution.getSelectParts().isEmpty());
+    Assert.assertTrue(attributeContribution.getFromParts().isEmpty());
+    Assert.assertTrue(attributeContribution.getGroupByParts().isEmpty());
+    Assert.assertTrue(attributeContribution.getHavingParts().isEmpty());
+    Assert.assertFalse(attributeContribution.getWhereParts().isEmpty());
 
-    assertEquals(1, attributeContribution.getWhereParts().size());
-    assertEquals("T.SUB_ATTRIBUTE=:__a1", attributeContribution.getWhereParts().get(0));
+    Assert.assertEquals(1, attributeContribution.getWhereParts().size());
+    Assert.assertEquals("T.SUB_ATTRIBUTE=:__a1", attributeContribution.getWhereParts().get(0));
   }
 
   @Test
@@ -164,15 +160,15 @@ public class FormDataStatementBuilderWithComposerTest {
     m_builder.getAliasMapper().setNodeAlias(subAttributeNode.getParentNode(), "Table", "T");
 
     EntityContribution attributeContribution = m_builder.buildComposerAttributeNode(subAttributeNode, AttributeStrategy.BuildConstraintOfAttributeWithContext);
-    assertNotNull(attributeContribution);
-    assertTrue(attributeContribution.getSelectParts().isEmpty());
-    assertTrue(attributeContribution.getFromParts().isEmpty());
-    assertTrue(attributeContribution.getGroupByParts().isEmpty());
-    assertTrue(attributeContribution.getHavingParts().isEmpty());
-    assertFalse(attributeContribution.getWhereParts().isEmpty());
+    Assert.assertNotNull(attributeContribution);
+    Assert.assertTrue(attributeContribution.getSelectParts().isEmpty());
+    Assert.assertTrue(attributeContribution.getFromParts().isEmpty());
+    Assert.assertTrue(attributeContribution.getGroupByParts().isEmpty());
+    Assert.assertTrue(attributeContribution.getHavingParts().isEmpty());
+    Assert.assertFalse(attributeContribution.getWhereParts().isEmpty());
 
-    assertEquals(1, attributeContribution.getWhereParts().size());
-    assertEquals("SUM(T.SUB_ATTRIBUTE)=:__a1", attributeContribution.getWhereParts().get(0));
+    Assert.assertEquals(1, attributeContribution.getWhereParts().size());
+    Assert.assertEquals("SUM(T.SUB_ATTRIBUTE)=:__a1", attributeContribution.getWhereParts().get(0));
   }
 
   private ComposerAttributeNodeData prepareComposer(int aggregationType) {

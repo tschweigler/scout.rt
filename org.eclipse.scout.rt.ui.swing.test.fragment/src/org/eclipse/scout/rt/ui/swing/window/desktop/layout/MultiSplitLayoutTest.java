@@ -118,7 +118,7 @@ public class MultiSplitLayoutTest {
     SwingUtilities.invokeAndWait(r);
   }
 
-  private void assertEqualsLenient(int expected, int actual) {
+  private static void assertEqualsLenient(int expected, int actual) {
     int d = Math.abs(expected - actual);
     Assert.assertTrue("difference less than 5", d < 5);
   }

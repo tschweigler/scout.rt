@@ -76,7 +76,7 @@ public class PageWithTable6Test {
     assertRowMenus(table, new String[]{});
   }
 
-  private void assertEmptySpaceMenus(PageWithTable.Table table, String[] expectedMenus) {
+  private static void assertEmptySpaceMenus(PageWithTable.Table table, String[] expectedMenus) {
     ArrayList<String> actualMenus = new ArrayList<String>();
     for (IMenu m : table.getUIFacade().fireEmptySpacePopupFromUI()) {
       if (m.isVisible() && m.isEnabled()) {
@@ -86,7 +86,7 @@ public class PageWithTable6Test {
     Assert.assertArrayEquals(expectedMenus, actualMenus.toArray(new String[0]));
   }
 
-  private void assertRowMenus(PageWithTable.Table table, String[] expectedMenus) {
+  private static void assertRowMenus(PageWithTable.Table table, String[] expectedMenus) {
     ArrayList<String> actualMenus = new ArrayList<String>();
     for (IMenu m : table.getUIFacade().fireRowPopupFromUI()) {
       if (m.isVisible() && m.isEnabled()) {

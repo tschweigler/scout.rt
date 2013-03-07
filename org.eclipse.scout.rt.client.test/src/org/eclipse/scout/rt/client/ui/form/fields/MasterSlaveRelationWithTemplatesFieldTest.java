@@ -10,10 +10,6 @@
  ******************************************************************************/
 package org.eclipse.scout.rt.client.ui.form.fields;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
 import org.eclipse.scout.commons.annotations.Order;
 import org.eclipse.scout.commons.exception.ProcessingException;
 import org.eclipse.scout.rt.client.ui.form.AbstractForm;
@@ -23,6 +19,7 @@ import org.eclipse.scout.rt.client.ui.form.fields.smartfield.AbstractSmartField;
 import org.eclipse.scout.rt.client.ui.form.fields.stringfield.AbstractStringField;
 import org.eclipse.scout.testing.client.form.FormHandler;
 import org.eclipse.scout.testing.client.runner.ScoutClientTestRunner;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -52,8 +49,8 @@ public class MasterSlaveRelationWithTemplatesFieldTest {
     try {
       f.start();
       NonExistingMasterFieldTestForm.MainBox.StringField field = f.getFieldByClass(NonExistingMasterFieldTestForm.MainBox.StringField.class);
-      assertNotNull(field);
-      assertNull(field.getMasterField());
+      Assert.assertNotNull(field);
+      Assert.assertNull(field.getMasterField());
     }
     finally {
       f.doClose();
@@ -61,9 +58,9 @@ public class MasterSlaveRelationWithTemplatesFieldTest {
   }
 
   private void checkMasterSlaveBox(AbstractMasterSlaveBox masterSlaveBox) {
-    assertEquals(false, masterSlaveBox.isMasterChanged());
+    Assert.assertEquals(false, masterSlaveBox.isMasterChanged());
     masterSlaveBox.changeMasterField();
-    assertEquals(true, masterSlaveBox.isMasterChanged());
+    Assert.assertEquals(true, masterSlaveBox.isMasterChanged());
   }
 
   private void checkInnerMasterSlaveBox(AbstractInnerGroupBox innerMasterSlaveBox) {

@@ -67,11 +67,11 @@ public class RemoteServiceAccessTest {
     assertNonAccessible(bo, ISqlService.class, ISqlService.class.getMethod("commit"), AbstractSqlService.class);
   }
 
-  private void assertAccessible(DefaultTransactionDelegateMock bo, Class<?> serviceInterfaceClass, Method serviceOp, Class<?> serviceImplClass) throws Exception {
+  private static void assertAccessible(DefaultTransactionDelegateMock bo, Class<?> serviceInterfaceClass, Method serviceOp, Class<?> serviceImplClass) throws Exception {
     bo.test(serviceInterfaceClass, serviceOp, serviceImplClass);
   }
 
-  private void assertNonAccessible(DefaultTransactionDelegateMock bo, Class<?> serviceInterfaceClass, Method serviceOp, Class<?> serviceImplClass) throws Exception {
+  private static void assertNonAccessible(DefaultTransactionDelegateMock bo, Class<?> serviceInterfaceClass, Method serviceOp, Class<?> serviceImplClass) throws Exception {
     try {
       bo.test(serviceInterfaceClass, serviceOp, serviceImplClass);
     }

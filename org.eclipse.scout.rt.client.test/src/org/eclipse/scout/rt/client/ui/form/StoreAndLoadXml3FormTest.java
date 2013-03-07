@@ -10,8 +10,6 @@
  ******************************************************************************/
 package org.eclipse.scout.rt.client.ui.form;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.ArrayList;
 
 import org.eclipse.scout.commons.StringUtility;
@@ -33,9 +31,9 @@ public class StoreAndLoadXml3FormTest {
   @Test
   public void testXmlFieldIds() throws Exception {
     TestForm f = new TestForm();
-    assertEquals("MainBox", f.getMainBox().getFieldId());
-    assertEquals("customId", f.getText4Field().getFieldId());
-    assertEquals("Text1Field", f.getText1Field().getFieldId());
+    Assert.assertEquals("MainBox", f.getMainBox().getFieldId());
+    Assert.assertEquals("customId", f.getText4Field().getFieldId());
+    Assert.assertEquals("Text1Field", f.getText1Field().getFieldId());
   }
 
   @Test
@@ -72,8 +70,8 @@ public class StoreAndLoadXml3FormTest {
   public void testFormId() throws Exception {
     TestForm f = new TestForm();
     SimpleXmlElement xml = f.storeXML();
-    assertEquals("TestForm", xml.getAttribute("formId"));
-    assertEquals(TestForm.class.getName(), xml.getAttribute("formQname"));
+    Assert.assertEquals("TestForm", xml.getAttribute("formId"));
+    Assert.assertEquals(TestForm.class.getName(), xml.getAttribute("formQname"));
   }
 
   @Test
@@ -147,15 +145,15 @@ public class StoreAndLoadXml3FormTest {
     field.storeXML(xml);
     assertXmlIds(expectedFieldId, field.getClass().getName(), xml);
     ArrayList<SimpleXmlElement> enclosingFieldPath = xml.getChildren("enclosingField");
-    assertEquals(expectedEnclosingFieldPath.length, enclosingFieldPath.size());
+    Assert.assertEquals(expectedEnclosingFieldPath.length, enclosingFieldPath.size());
     for (int i = 0; i < expectedEnclosingFieldPath.length; i++) {
       assertXmlIds(expectedEnclosingFieldPath[i].getXmlFieldId(), expectedEnclosingFieldPath[i].getXmlFieldQname(), enclosingFieldPath.get(i));
     }
   }
 
-  private void assertXmlIds(String expectedXmlFieldId, String expectedFqcn, SimpleXmlElement xml) {
-    assertEquals(expectedXmlFieldId, xml.getAttribute("fieldId"));
-    assertEquals(expectedFqcn, xml.getAttribute("fieldQname"));
+  private static void assertXmlIds(String expectedXmlFieldId, String expectedFqcn, SimpleXmlElement xml) {
+    Assert.assertEquals(expectedXmlFieldId, xml.getAttribute("fieldId"));
+    Assert.assertEquals(expectedFqcn, xml.getAttribute("fieldQname"));
   }
 
   public static class EnclosingField {

@@ -182,7 +182,7 @@ public class SmartFieldTest {
     }
   }
 
-  private void assertFieldStyle(StyleField f, String icon, String tt, String bg, String fg, String font) {
+  private static void assertFieldStyle(StyleField f, String icon, String tt, String bg, String fg, String font) {
     String expectedStyle = tt + ", " + bg + ", " + fg + ", " + (font != null ? FontSpec.parse(font).toPattern() : null);
     String actualStyle = f.getTooltipText() + ", " + f.getBackgroundColor() + ", " + f.getForegroundColor() + ", " + (f.getFont() != null ? f.getFont().toPattern() : null);
     Assert.assertEquals(expectedStyle, actualStyle);

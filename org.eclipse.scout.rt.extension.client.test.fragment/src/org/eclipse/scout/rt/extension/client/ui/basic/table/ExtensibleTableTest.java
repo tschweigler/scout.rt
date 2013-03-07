@@ -10,13 +10,11 @@
  ******************************************************************************/
 package org.eclipse.scout.rt.extension.client.ui.basic.table;
 
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-
 import org.eclipse.scout.commons.annotations.Order;
 import org.eclipse.scout.rt.client.ui.action.menu.AbstractMenu;
 import org.eclipse.scout.rt.client.ui.action.menu.IMenu;
 import org.eclipse.scout.rt.extension.client.Replace;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -28,21 +26,21 @@ public class ExtensibleTableTest {
   @Test
   public void testGetDefaultMenu() {
     P_ExtensibleTableWithDefaultMenu table = new P_ExtensibleTableWithDefaultMenu();
-    assertSame(P_ExtensibleTableWithDefaultMenu.DefaultMenu.class, table.getDefaultMenuInternal());
+    Assert.assertSame(P_ExtensibleTableWithDefaultMenu.DefaultMenu.class, table.getDefaultMenuInternal());
   }
 
   @Test
   public void testGetReplacedDefaultMenu() {
     P_ExtensibleTableWithReplacedDefaultMenu table = new P_ExtensibleTableWithReplacedDefaultMenu();
-    assertSame(P_ExtensibleTableWithDefaultMenu.DefaultMenu.class, table.getConfiguredDefaultMenu());
-    assertSame(P_ExtensibleTableWithReplacedDefaultMenu.ExtendedMenu.class, table.getDefaultMenuInternal());
+    Assert.assertSame(P_ExtensibleTableWithDefaultMenu.DefaultMenu.class, table.getConfiguredDefaultMenu());
+    Assert.assertSame(P_ExtensibleTableWithReplacedDefaultMenu.ExtendedMenu.class, table.getDefaultMenuInternal());
   }
 
   @Test
   public void testGetReplacedDefaultMenuNotExtendingConfiguredDefaultMenu() {
     P_ExtensibleTableWithReplacedDefaultMenuNotExtending table = new P_ExtensibleTableWithReplacedDefaultMenuNotExtending();
-    assertSame(P_ExtensibleTableWithDefaultMenu.DefaultMenu.class, table.getConfiguredDefaultMenu());
-    assertNull(table.getDefaultMenuInternal());
+    Assert.assertSame(P_ExtensibleTableWithDefaultMenu.DefaultMenu.class, table.getConfiguredDefaultMenu());
+    Assert.assertNull(table.getDefaultMenuInternal());
   }
 
   private static class P_ExtensibleTableWithDefaultMenu extends AbstractExtensibleTable {

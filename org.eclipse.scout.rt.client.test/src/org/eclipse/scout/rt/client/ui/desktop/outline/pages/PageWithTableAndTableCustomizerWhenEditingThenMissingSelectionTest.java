@@ -88,7 +88,7 @@ public class PageWithTableAndTableCustomizerWhenEditingThenMissingSelectionTest 
     assertSelection(table, new Integer[]{2});
   }
 
-  private void assertSelection(PageWithTable.Table table, Integer[] expectedIds) {
+  private static void assertSelection(PageWithTable.Table table, Integer[] expectedIds) {
     Assert.assertArrayEquals(expectedIds, table.getIdColumn().getSelectedValues());
   }
 

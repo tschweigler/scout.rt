@@ -60,7 +60,7 @@ public class PageWithTable3Test {
     assertSortState(table, new Integer[]{0, 1, 2, 3, 4, 5, 6, 7}, new Integer[]{0});
   }
 
-  private void assertSortState(PageWithTable.Table table, Integer[] expectedValues, Integer[] expectedExplicitSortIndices) {
+  private static void assertSortState(PageWithTable.Table table, Integer[] expectedValues, Integer[] expectedExplicitSortIndices) {
     /*
     System.out.println("--");
     System.out.println(Arrays.toString(table.getValueColumn().getValues()));

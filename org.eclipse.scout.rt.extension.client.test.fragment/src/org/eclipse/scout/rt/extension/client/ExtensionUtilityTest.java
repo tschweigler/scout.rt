@@ -10,12 +10,6 @@
  ******************************************************************************/
 package org.eclipse.scout.rt.extension.client;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -28,6 +22,7 @@ import org.eclipse.scout.rt.extension.client.EnclosingObjectFixture.InnerClass.I
 import org.eclipse.scout.rt.extension.client.EnclosingObjectFixture.StaticInnerClass.InnerStaticInnerClass;
 import org.eclipse.scout.rt.extension.client.EnclosingObjectFixture.StaticInnerClass.InnerStaticInnerClass.InnerInnerStaticInnerClass;
 import org.eclipse.scout.rt.extension.client.EnclosingObjectFixture.StaticPathInnerClass.InnerStaticPathInnerClass.InnerInnerStaticPathInnerClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -67,69 +62,69 @@ public class ExtensionUtilityTest {
 
     List<IMenu> emptyList = Collections.emptyList();
     ExtensionUtility.removeByType(emptyList);
-    assertTrue(emptyList.isEmpty());
+    Assert.assertTrue(emptyList.isEmpty());
 
     ExtensionUtility.removeByType(emptyList, (Class<?>) null);
-    assertTrue(emptyList.isEmpty());
+    Assert.assertTrue(emptyList.isEmpty());
 
     ExtensionUtility.removeByType(emptyList, (Class<?>[]) null);
-    assertTrue(emptyList.isEmpty());
+    Assert.assertTrue(emptyList.isEmpty());
 
     ExtensionUtility.removeByType(emptyList, IMenu.class);
-    assertTrue(emptyList.isEmpty());
+    Assert.assertTrue(emptyList.isEmpty());
   }
 
   @Test
   public void testRemoveByType() throws Exception {
     // only m_a is removed, m_aExt is still in the list
     ExtensionUtility.removeByType(m_instanceList, P_A.class);
-    assertTrue(m_instanceList.contains(m_aExt));
-    assertEquals(Arrays.asList(m_aExt, m_b, m_c), m_instanceList);
+    Assert.assertTrue(m_instanceList.contains(m_aExt));
+    Assert.assertEquals(Arrays.asList(m_aExt, m_b, m_c), m_instanceList);
 
     // no effects when removing types that are not part of the list
     ExtensionUtility.removeByType(m_instanceList, P_A.class);
-    assertEquals(Arrays.asList(m_aExt, m_b, m_c), m_instanceList);
+    Assert.assertEquals(Arrays.asList(m_aExt, m_b, m_c), m_instanceList);
 
     // remove more than one object
     ExtensionUtility.removeByType(m_instanceList, P_C.class, P_AExt.class);
-    assertEquals(Collections.singletonList(m_b), m_instanceList);
+    Assert.assertEquals(Collections.singletonList(m_b), m_instanceList);
   }
 
   @Test
   public void testProcessReplaceAnnotationsNullAndEmpty() {
     // no exceptions
     Map<Object, Object> replacementMap = ExtensionUtility.processReplaceAnnotations(null);
-    assertNotNull(replacementMap);
-    assertTrue(replacementMap.isEmpty());
+    Assert.assertNotNull(replacementMap);
+    Assert.assertTrue(replacementMap.isEmpty());
     //
     replacementMap = ExtensionUtility.processReplaceAnnotations(Collections.emptyList());
-    assertNotNull(replacementMap);
-    assertTrue(replacementMap.isEmpty());
+    Assert.assertNotNull(replacementMap);
+    Assert.assertTrue(replacementMap.isEmpty());
   }
 
   @Test
   public void testProcessReplaceAnnotationsNoRemoveAnnotation() {
     List<Object> list = Arrays.asList(m_a, m_b, m_c);
     Map<Object, Object> replacementMap = ExtensionUtility.processReplaceAnnotations(list);
-    assertEquals(Arrays.asList(m_a, m_b, m_c), list);
-    assertNotNull(replacementMap);
-    assertTrue(replacementMap.isEmpty());
+    Assert.assertEquals(Arrays.asList(m_a, m_b, m_c), list);
+    Assert.assertNotNull(replacementMap);
+    Assert.assertTrue(replacementMap.isEmpty());
   }
 
   @Test
   public void testProcessReplaceAnnotationsSuperclass() {
     // m_a is removed
     Map<Object, Object> replacementMap = ExtensionUtility.processReplaceAnnotations(m_instanceList);
-    assertEquals(Arrays.asList(m_aExt, m_b, m_c), m_instanceList);
-    assertNotNull(replacementMap);
-    assertEquals(1, replacementMap.size());
-    assertSame(m_aExt, replacementMap.get(m_a));
+    Assert.assertEquals(Arrays.asList(m_aExt, m_b, m_c), m_instanceList);
+    Assert.assertNotNull(replacementMap);
+    Assert.assertEquals(1, replacementMap.size());
+    Assert.assertSame(m_aExt, replacementMap.get(m_a));
 
     // no effect when processing the list a second time
     replacementMap = ExtensionUtility.processReplaceAnnotations(m_instanceList);
-    assertEquals(Arrays.asList(m_aExt, m_b, m_c), m_instanceList);
-    assertNotNull(replacementMap);
-    assertTrue(replacementMap.isEmpty());
+    Assert.assertEquals(Arrays.asList(m_aExt, m_b, m_c), m_instanceList);
+    Assert.assertNotNull(replacementMap);
+    Assert.assertTrue(replacementMap.isEmpty());
   }
 
   @Test
@@ -140,10 +135,10 @@ public class ExtensionUtilityTest {
     list.add(m_c);
     list.add(m_d);
     Map<Object, Object> replacementMap = ExtensionUtility.processReplaceAnnotations(list);
-    assertEquals(Arrays.asList(m_a, m_c, m_d), list);
-    assertNotNull(replacementMap);
-    assertEquals(1, replacementMap.size());
-    assertSame(m_d, replacementMap.get(m_b));
+    Assert.assertEquals(Arrays.asList(m_a, m_c, m_d), list);
+    Assert.assertNotNull(replacementMap);
+    Assert.assertEquals(1, replacementMap.size());
+    Assert.assertSame(m_d, replacementMap.get(m_b));
   }
 
   @Test
@@ -154,10 +149,10 @@ public class ExtensionUtilityTest {
     list.add(f);
     list.add(e1);
     Map<Object, Object> replacementMap = ExtensionUtility.processReplaceAnnotations(list);
-    assertEquals(Arrays.asList(f), list);
-    assertNotNull(replacementMap);
-    assertEquals(1, replacementMap.size());
-    assertSame(f, replacementMap.get(e1));
+    Assert.assertEquals(Arrays.asList(f), list);
+    Assert.assertNotNull(replacementMap);
+    Assert.assertEquals(1, replacementMap.size());
+    Assert.assertSame(f, replacementMap.get(e1));
   }
 
   @Test
@@ -170,10 +165,10 @@ public class ExtensionUtilityTest {
     list.add(f);
     list.add(e1);
     Map<Object, Object> replacementMap = ExtensionUtility.processReplaceAnnotations(list);
-    assertEquals(Arrays.asList(f, e1), list);
-    assertNotNull(replacementMap);
-    assertEquals(1, replacementMap.size());
-    assertSame(f, replacementMap.get(e2));
+    Assert.assertEquals(Arrays.asList(f, e1), list);
+    Assert.assertNotNull(replacementMap);
+    Assert.assertEquals(1, replacementMap.size());
+    Assert.assertSame(f, replacementMap.get(e2));
   }
 
   @Test
@@ -182,69 +177,69 @@ public class ExtensionUtilityTest {
     List<Object> list = new ArrayList<Object>();
     list.add(g);
     Map<Object, Object> replacementMap = ExtensionUtility.processReplaceAnnotations(list);
-    assertEquals(Arrays.asList(g), list);
-    assertNotNull(replacementMap);
-    assertTrue(replacementMap.isEmpty());
+    Assert.assertEquals(Arrays.asList(g), list);
+    Assert.assertNotNull(replacementMap);
+    Assert.assertTrue(replacementMap.isEmpty());
   }
 
   @Test
   public void testGetEnclosingObject() {
-    assertNull(ExtensionUtility.getEnclosingObject(null));
-    assertNull(ExtensionUtility.getEnclosingObject(Long.valueOf(42)));
-    assertNull(ExtensionUtility.getEnclosingObject(new EnclosingObjectFixture()));
+    Assert.assertNull(ExtensionUtility.getEnclosingObject(null));
+    Assert.assertNull(ExtensionUtility.getEnclosingObject(Long.valueOf(42)));
+    Assert.assertNull(ExtensionUtility.getEnclosingObject(new EnclosingObjectFixture()));
     //
     // static inner class
     EnclosingObjectFixture.StaticInnerClass staticInner = new EnclosingObjectFixture.StaticInnerClass();
-    assertNull(ExtensionUtility.getEnclosingObject(staticInner));
+    Assert.assertNull(ExtensionUtility.getEnclosingObject(staticInner));
     //
     InnerStaticInnerClass innerStaticInner = staticInner.createInner();
-    assertSame(staticInner, ExtensionUtility.getEnclosingObject(innerStaticInner));
+    Assert.assertSame(staticInner, ExtensionUtility.getEnclosingObject(innerStaticInner));
     //
     InnerInnerStaticInnerClass innerInnerStaticInner = innerStaticInner.createInner();
-    assertSame(innerStaticInner, ExtensionUtility.getEnclosingObject(innerInnerStaticInner));
+    Assert.assertSame(innerStaticInner, ExtensionUtility.getEnclosingObject(innerInnerStaticInner));
     //
-    assertSame(innerInnerStaticInner, ExtensionUtility.getEnclosingObject(innerInnerStaticInner.createInner()));
+    Assert.assertSame(innerInnerStaticInner, ExtensionUtility.getEnclosingObject(innerInnerStaticInner.createInner()));
     //
     // statci path inner class
-    assertNull(ExtensionUtility.getEnclosingObject(new EnclosingObjectFixture.StaticPathInnerClass()));
-    assertNull(ExtensionUtility.getEnclosingObject(new EnclosingObjectFixture.StaticPathInnerClass.InnerStaticPathInnerClass()));
+    Assert.assertNull(ExtensionUtility.getEnclosingObject(new EnclosingObjectFixture.StaticPathInnerClass()));
+    Assert.assertNull(ExtensionUtility.getEnclosingObject(new EnclosingObjectFixture.StaticPathInnerClass.InnerStaticPathInnerClass()));
     //
     InnerInnerStaticPathInnerClass innerInnerStaticPathInner = new InnerInnerStaticPathInnerClass();
-    assertNull(ExtensionUtility.getEnclosingObject(innerInnerStaticPathInner));
+    Assert.assertNull(ExtensionUtility.getEnclosingObject(innerInnerStaticPathInner));
     //
-    assertSame(innerInnerStaticPathInner, ExtensionUtility.getEnclosingObject(innerInnerStaticPathInner.createInner()));
+    Assert.assertSame(innerInnerStaticPathInner, ExtensionUtility.getEnclosingObject(innerInnerStaticPathInner.createInner()));
     //
     // inner class
     EnclosingObjectFixture primary = new EnclosingObjectFixture();
     EnclosingObjectFixture.InnerClass inner = primary.createInner();
-    assertSame(primary, ExtensionUtility.getEnclosingObject(inner));
+    Assert.assertSame(primary, ExtensionUtility.getEnclosingObject(inner));
     //
     InnerInnerClass innerInner = inner.createInner();
-    assertSame(inner, ExtensionUtility.getEnclosingObject(innerInner));
+    Assert.assertSame(inner, ExtensionUtility.getEnclosingObject(innerInner));
     //
     InnerInnerInnerClass innerInnerInner = innerInner.createInner();
-    assertSame(innerInner, ExtensionUtility.getEnclosingObject(innerInnerInner));
+    Assert.assertSame(innerInner, ExtensionUtility.getEnclosingObject(innerInnerInner));
     //
-    assertSame(innerInnerInner, ExtensionUtility.getEnclosingObject(innerInnerInner.createInner()));
+    Assert.assertSame(innerInnerInner, ExtensionUtility.getEnclosingObject(innerInnerInner.createInner()));
   }
 
   @Test
   public void testGetEnclosingObjectByType() {
-    assertNull(ExtensionUtility.getEnclosingObject(null, null));
-    assertNull(ExtensionUtility.getEnclosingObject(Long.valueOf(42), null));
-    assertNull(ExtensionUtility.getEnclosingObject(new EnclosingObjectFixture(), null));
+    Assert.assertNull(ExtensionUtility.getEnclosingObject(null, null));
+    Assert.assertNull(ExtensionUtility.getEnclosingObject(Long.valueOf(42), null));
+    Assert.assertNull(ExtensionUtility.getEnclosingObject(new EnclosingObjectFixture(), null));
     //
     // static inner class
     EnclosingObjectFixture.StaticInnerClass staticInner = new EnclosingObjectFixture.StaticInnerClass();
-    assertNull(ExtensionUtility.getEnclosingObject(staticInner, EnclosingObjectFixture.StaticInnerClass.class));
+    Assert.assertNull(ExtensionUtility.getEnclosingObject(staticInner, EnclosingObjectFixture.StaticInnerClass.class));
     //
     InnerStaticInnerClass innerStaticInner = staticInner.createInner();
-    assertSame(staticInner, ExtensionUtility.getEnclosingObject(innerStaticInner, EnclosingObjectFixture.StaticInnerClass.class));
+    Assert.assertSame(staticInner, ExtensionUtility.getEnclosingObject(innerStaticInner, EnclosingObjectFixture.StaticInnerClass.class));
     //
     InnerInnerStaticInnerClass innerInnerStaticInner = innerStaticInner.createInner();
-    assertSame(staticInner, ExtensionUtility.getEnclosingObject(innerInnerStaticInner, EnclosingObjectFixture.StaticInnerClass.class));
+    Assert.assertSame(staticInner, ExtensionUtility.getEnclosingObject(innerInnerStaticInner, EnclosingObjectFixture.StaticInnerClass.class));
     //
-    assertSame(staticInner, ExtensionUtility.getEnclosingObject(innerInnerStaticInner.createInner(), EnclosingObjectFixture.StaticInnerClass.class));
+    Assert.assertSame(staticInner, ExtensionUtility.getEnclosingObject(innerInnerStaticInner.createInner(), EnclosingObjectFixture.StaticInnerClass.class));
   }
 
   private static class P_A {

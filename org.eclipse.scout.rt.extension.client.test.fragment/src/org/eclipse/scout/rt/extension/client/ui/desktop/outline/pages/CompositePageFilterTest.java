@@ -10,11 +10,9 @@
  ******************************************************************************/
 package org.eclipse.scout.rt.extension.client.ui.desktop.outline.pages;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import org.eclipse.scout.rt.client.ui.desktop.outline.IOutline;
 import org.eclipse.scout.rt.client.ui.desktop.outline.pages.IPage;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -50,44 +48,44 @@ public class CompositePageFilterTest {
   public void testAddRemoveFilter() {
     CompositePageFilter filter = new CompositePageFilter();
     assertAccept(filter);
-    assertTrue(filter.isEmpty());
+    Assert.assertTrue(filter.isEmpty());
     //
     P_AcceptingFilter acceptFilter = new P_AcceptingFilter();
     filter.addFilter(acceptFilter);
     assertAccept(filter);
-    assertFalse(filter.isEmpty());
+    Assert.assertFalse(filter.isEmpty());
     //
     P_RejectingFilter rejectFilter = new P_RejectingFilter();
     filter.addFilter(rejectFilter);
     assertReject(filter);
-    assertFalse(filter.isEmpty());
+    Assert.assertFalse(filter.isEmpty());
     //
     filter.removeFilter(rejectFilter);
     assertAccept(filter);
-    assertFalse(filter.isEmpty());
+    Assert.assertFalse(filter.isEmpty());
     //
     filter.addFilterAtBegin(rejectFilter);
     assertReject(filter);
-    assertFalse(filter.isEmpty());
+    Assert.assertFalse(filter.isEmpty());
     //
     filter.removeFilter(rejectFilter);
     assertAccept(filter);
-    assertFalse(filter.isEmpty());
+    Assert.assertFalse(filter.isEmpty());
     //
     filter.removeFilter(acceptFilter);
     assertAccept(filter);
-    assertTrue(filter.isEmpty());
+    Assert.assertTrue(filter.isEmpty());
   }
 
   /*
    * test support
    */
-  private void assertAccept(CompositePageFilter filter) {
-    assertTrue(filter.accept(null, null, null));
+  private static void assertAccept(CompositePageFilter filter) {
+    Assert.assertTrue(filter.accept(null, null, null));
   }
 
-  private void assertReject(CompositePageFilter filter) {
-    assertFalse(filter.accept(null, null, null));
+  private static void assertReject(CompositePageFilter filter) {
+    Assert.assertFalse(filter.accept(null, null, null));
   }
 
   public static class P_AcceptingFilter implements IPageExtensionFilter {

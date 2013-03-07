@@ -123,7 +123,7 @@ public class PlaceholderExceptionTest {
     assertEqualExceptionAndCause(e, t);
   }
 
-  private void assertEqualExceptionAndCause(Throwable expected, Throwable actual) {
+  private static void assertEqualExceptionAndCause(Throwable expected, Throwable actual) {
     Assert.assertTrue((expected == null && actual == null) || (expected != null && actual != null));
     if (expected != null && actual != null) {
       Assert.assertNotSame(expected, actual);

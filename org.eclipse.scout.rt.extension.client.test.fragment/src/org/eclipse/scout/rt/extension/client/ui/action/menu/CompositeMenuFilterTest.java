@@ -1,9 +1,7 @@
 package org.eclipse.scout.rt.extension.client.ui.action.menu;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import org.eclipse.scout.rt.client.ui.action.menu.IMenu;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -39,44 +37,44 @@ public class CompositeMenuFilterTest {
   public void testAddRemoveFilter() {
     CompositeMenuFilter filter = new CompositeMenuFilter();
     assertAccept(filter);
-    assertTrue(filter.isEmpty());
+    Assert.assertTrue(filter.isEmpty());
     //
     P_AcceptingFilter acceptFilter = new P_AcceptingFilter();
     filter.addFilter(acceptFilter);
     assertAccept(filter);
-    assertFalse(filter.isEmpty());
+    Assert.assertFalse(filter.isEmpty());
     //
     P_RejectingFilter rejectFilter = new P_RejectingFilter();
     filter.addFilter(rejectFilter);
     assertReject(filter);
-    assertFalse(filter.isEmpty());
+    Assert.assertFalse(filter.isEmpty());
     //
     filter.removeFilter(rejectFilter);
     assertAccept(filter);
-    assertFalse(filter.isEmpty());
+    Assert.assertFalse(filter.isEmpty());
     //
     filter.addFilterAtBegin(rejectFilter);
     assertReject(filter);
-    assertFalse(filter.isEmpty());
+    Assert.assertFalse(filter.isEmpty());
     //
     filter.removeFilter(rejectFilter);
     assertAccept(filter);
-    assertFalse(filter.isEmpty());
+    Assert.assertFalse(filter.isEmpty());
     //
     filter.removeFilter(acceptFilter);
     assertAccept(filter);
-    assertTrue(filter.isEmpty());
+    Assert.assertTrue(filter.isEmpty());
   }
 
   /*
    * test support
    */
-  private void assertAccept(CompositeMenuFilter filter) {
-    assertTrue(filter.accept(null, null, null));
+  private static void assertAccept(CompositeMenuFilter filter) {
+    Assert.assertTrue(filter.accept(null, null, null));
   }
 
-  private void assertReject(CompositeMenuFilter filter) {
-    assertFalse(filter.accept(null, null, null));
+  private static void assertReject(CompositeMenuFilter filter) {
+    Assert.assertFalse(filter.accept(null, null, null));
   }
 
   public static class P_AcceptingFilter implements IMenuExtensionFilter {

@@ -1,0 +1,6 @@
+h1. README
+
+Fork from the Eclipse RT repository: "org.eclipse.scout.rt.git":http://git.eclipse.org/c/scout/org.eclipse.scout.rt.git/
+
+The code of the "testing refactoring operation":http://wiki.eclipse.org/Scout/Concepts/Test is developped on the "master_testing":https://github.com/BSI-Business-Systems-Integration-AG/scout.rt/tree/master_testing branch.
+

@@ -10,13 +10,6 @@
  ******************************************************************************/
 package org.eclipse.scout.rt.extension.client.ui.action.menu;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -34,6 +27,7 @@ import org.eclipse.scout.rt.client.ui.form.fields.smartfield.AbstractSmartField;
 import org.eclipse.scout.rt.extension.client.IWrappedObject;
 import org.eclipse.scout.rt.extension.client.ui.action.menu.internal.MenuAnchorFilter;
 import org.eclipse.scout.rt.extension.client.ui.action.menu.internal.MenuContributionExtension;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -55,26 +49,26 @@ public class MenuExtensionUtilityTest {
 
   @Test
   public void testGetAnchorType() {
-    assertNull(MenuExtensionUtility.getAnchorType(null));
-    assertNull(MenuExtensionUtility.getAnchorType("string is an unsupported anchor type"));
+    Assert.assertNull(MenuExtensionUtility.getAnchorType(null));
+    Assert.assertNull(MenuExtensionUtility.getAnchorType("string is an unsupported anchor type"));
     //
-    assertSame(IPage.class, MenuExtensionUtility.getAnchorType(
+    Assert.assertSame(IPage.class, MenuExtensionUtility.getAnchorType(
         new AbstractPageWithNodes() {
         }));
     //
-    assertSame(IFormField.class, MenuExtensionUtility.getAnchorType(
+    Assert.assertSame(IFormField.class, MenuExtensionUtility.getAnchorType(
         new AbstractSmartField<Long>() {
         }));
     //
-    assertSame(IFormField.class, MenuExtensionUtility.getAnchorType(
+    Assert.assertSame(IFormField.class, MenuExtensionUtility.getAnchorType(
         new AbstractButton() {
         }));
     //
-    assertSame(IMenu.class, MenuExtensionUtility.getAnchorType(
+    Assert.assertSame(IMenu.class, MenuExtensionUtility.getAnchorType(
         new AbstractMenu() {
         }));
     //
-    assertSame(IMenu.class, MenuExtensionUtility.getAnchorType(
+    Assert.assertSame(IMenu.class, MenuExtensionUtility.getAnchorType(
         new AbstractExtensibleMenu() {
         }));
   }
@@ -87,25 +81,25 @@ public class MenuExtensionUtilityTest {
     List<IMenu> menuList = new ArrayList<IMenu>();
     //
     MenuExtensionUtility.contributeMenus(anchor, container, null, menuList, false);
-    assertTrue(menuList.isEmpty());
+    Assert.assertTrue(menuList.isEmpty());
     //
     MenuExtensionUtility.contributeMenus(anchor, container, Collections.<MenuContributionExtension> emptyList(), menuList, false);
-    assertTrue(menuList.isEmpty());
+    Assert.assertTrue(menuList.isEmpty());
     //
     menuList.add(m_a);
     menuList.add(m_b);
     menuList.add(m_c);
     MenuExtensionUtility.contributeMenus(anchor, container, Collections.<MenuContributionExtension> emptyList(), menuList, false);
-    assertEquals(Arrays.asList(m_a, m_b, m_c), menuList);
+    Assert.assertEquals(Arrays.asList(m_a, m_b, m_c), menuList);
     //
     List<MenuContributionExtension> menuExtensions = new ArrayList<MenuContributionExtension>();
     menuExtensions.add(new MenuContributionExtension(P_ADynamicMenu.class, new MenuAnchorFilter(P_AnchorNodePage.class), 15d));
     MenuExtensionUtility.contributeMenus(anchor, container, menuExtensions, menuList, false);
-    assertEquals(4, menuList.size());
-    assertSame(m_a, menuList.get(0));
-    assertTrue(menuList.get(1) instanceof P_ADynamicMenu);
-    assertSame(m_b, menuList.get(2));
-    assertSame(m_c, menuList.get(3));
+    Assert.assertEquals(4, menuList.size());
+    Assert.assertSame(m_a, menuList.get(0));
+    Assert.assertTrue(menuList.get(1) instanceof P_ADynamicMenu);
+    Assert.assertSame(m_b, menuList.get(2));
+    Assert.assertSame(m_c, menuList.get(3));
     //
     menuList.clear();
     menuList.add(m_a);
@@ -114,12 +108,12 @@ public class MenuExtensionUtilityTest {
     menuExtensions.add(0, new MenuContributionExtension(P_BDynamicMenu.class, new MenuAnchorFilter(P_AnchorNodePage.class), 100d));
     menuExtensions.add(new MenuContributionExtension(P_CDynamicMenu.class, new MenuAnchorFilter(P_OtherNodePage.class), 15d));
     MenuExtensionUtility.contributeMenus(anchor, container, menuExtensions, menuList, false);
-    assertEquals(5, menuList.size());
-    assertSame(m_a, menuList.get(0));
-    assertTrue(menuList.get(1) instanceof P_ADynamicMenu);
-    assertSame(m_b, menuList.get(2));
-    assertSame(m_c, menuList.get(3));
-    assertTrue(menuList.get(4) instanceof P_BDynamicMenu);
+    Assert.assertEquals(5, menuList.size());
+    Assert.assertSame(m_a, menuList.get(0));
+    Assert.assertTrue(menuList.get(1) instanceof P_ADynamicMenu);
+    Assert.assertSame(m_b, menuList.get(2));
+    Assert.assertSame(m_c, menuList.get(3));
+    Assert.assertTrue(menuList.get(4) instanceof P_BDynamicMenu);
   }
 
   @Test
@@ -135,21 +129,21 @@ public class MenuExtensionUtilityTest {
     List<MenuContributionExtension> menuExtensions = new ArrayList<MenuContributionExtension>();
     menuExtensions.add(new MenuContributionExtension(P_ADynamicMenu.class, new MenuAnchorFilter(P_AnchorNodePage.class), 15d));
     MenuExtensionUtility.contributeMenus(anchor, container, menuExtensions, menuList, true);
-    assertEquals(4, menuList.size());
-    assertSame(m_a, menuList.get(0));
+    Assert.assertEquals(4, menuList.size());
+    Assert.assertSame(m_a, menuList.get(0));
     //
     IMenu dynamicMenu = menuList.get(1);
-    assertTrue(dynamicMenu instanceof IMenu);
-    assertTrue(dynamicMenu instanceof IWrappedObject);
-    assertTrue(dynamicMenu instanceof IOrdered);
-    assertFalse(dynamicMenu instanceof P_ADynamicMenu);
+    Assert.assertTrue(dynamicMenu instanceof IMenu);
+    Assert.assertTrue(dynamicMenu instanceof IWrappedObject);
+    Assert.assertTrue(dynamicMenu instanceof IOrdered);
+    Assert.assertFalse(dynamicMenu instanceof P_ADynamicMenu);
     @SuppressWarnings("unchecked")
     IMenu wrappedMeny = ((IWrappedObject<IMenu>) dynamicMenu).getWrappedObject();
-    assertNotNull(wrappedMeny);
-    assertTrue(wrappedMeny instanceof P_ADynamicMenu);
+    Assert.assertNotNull(wrappedMeny);
+    Assert.assertTrue(wrappedMeny instanceof P_ADynamicMenu);
     //
-    assertSame(m_b, menuList.get(2));
-    assertSame(m_c, menuList.get(3));
+    Assert.assertSame(m_b, menuList.get(2));
+    Assert.assertSame(m_c, menuList.get(3));
   }
 
   @Order(10)

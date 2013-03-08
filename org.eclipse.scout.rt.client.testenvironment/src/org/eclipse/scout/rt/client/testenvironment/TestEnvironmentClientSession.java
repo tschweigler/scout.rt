@@ -19,8 +19,8 @@ import org.eclipse.scout.rt.client.testenvironment.ui.desktop.TestEnvironmentDes
 
 /**
  * {@link IClientSession} for Client Test Environment
+ * 
  * @author jbr
- *
  */
 public class TestEnvironmentClientSession extends AbstractClientSession {
 

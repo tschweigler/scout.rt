@@ -13,6 +13,6 @@ package org.eclipse.scout.commons.exception.fixture;
 import org.eclipse.scout.commons.exception.ProcessingException;
 
 public class CustomProcessingException extends ProcessingException {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
 }

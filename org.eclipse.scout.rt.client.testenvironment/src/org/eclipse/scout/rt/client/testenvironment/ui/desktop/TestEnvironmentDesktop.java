@@ -28,228 +28,227 @@ import org.eclipse.scout.rt.shared.TEXTS;
  * {@link IDesktop} for Client Test Environment
  * 
  * @author jbr
- * 
  */
 public class TestEnvironmentDesktop extends AbstractDesktop implements IDesktop {
-	public static ArrayList<String> protocol = new ArrayList<String>();
+  public static ArrayList<String> protocol = new ArrayList<String>();
 
-	public TestEnvironmentDesktop() {
-	}
+  public TestEnvironmentDesktop() {
+  }
 
-	public ArrayList<String> getProtocol() {
-		return protocol;
-	}
+  public ArrayList<String> getProtocol() {
+    return protocol;
+  }
 
-	/**
-	 * do NOT change the title of the app
-	 */
-	@Override
-	public String getConfiguredTitle() {
-		return "Test Application";
-	}
+  /**
+   * do NOT change the title of the app
+   */
+  @Override
+  public String getConfiguredTitle() {
+    return "Test Application";
+  }
 
-	@Override
-	protected void execOpened() throws ProcessingException {
-		// outline form
-		DefaultOutlineTreeForm treeForm = new DefaultOutlineTreeForm();
-		// TODO: was treeForm.setIconId(Icons.EclipseScout);
-		treeForm.startView();
-		// outline table
-		DefaultOutlineTableForm tableForm = new DefaultOutlineTableForm();
-		// TODO: was tableForm.setIconId(Icons.EclipseScout);
-		tableForm.startView();
-	}
+  @Override
+  protected void execOpened() throws ProcessingException {
+    // outline form
+    DefaultOutlineTreeForm treeForm = new DefaultOutlineTreeForm();
+    // TODO: was treeForm.setIconId(Icons.EclipseScout);
+    treeForm.startView();
+    // outline table
+    DefaultOutlineTableForm tableForm = new DefaultOutlineTableForm();
+    // TODO: was tableForm.setIconId(Icons.EclipseScout);
+    tableForm.startView();
+  }
 
-	@Order(10.0)
-	public class FileMenu extends AbstractMenu {
+  @Order(10.0)
+  public class FileMenu extends AbstractMenu {
 
-		@Override
-		public String getConfiguredText() {
-			return TEXTS.get("FileMenu");
-		}
+    @Override
+    public String getConfiguredText() {
+      return TEXTS.get("FileMenu");
+    }
 
-		@Order(100.0)
-		public class ExitMenu extends AbstractMenu {
+    @Order(100.0)
+    public class ExitMenu extends AbstractMenu {
 
-			@Override
-			public String getConfiguredText() {
-				return TEXTS.get("ExitMenu");
-			}
+      @Override
+      public String getConfiguredText() {
+        return TEXTS.get("ExitMenu");
+      }
 
-			@Override
-			public void execAction() throws ProcessingException {
-				ClientSyncJob.getCurrentSession(
-						TestEnvironmentClientSession.class).stopSession();
-			}
-		}
-	}
+      @Override
+      public void execAction() throws ProcessingException {
+        ClientSyncJob.getCurrentSession(
+            TestEnvironmentClientSession.class).stopSession();
+      }
+    }
+  }
 
-	@Order(40.0)
-	public class F1Key extends AbstractKeyStroke {
+  @Order(40.0)
+  public class F1Key extends AbstractKeyStroke {
 
-		@Override
-		protected void execAction() throws ProcessingException {
-			protocol.add("Action on " + getKeyStroke());
-		}
+    @Override
+    protected void execAction() throws ProcessingException {
+      protocol.add("Action on " + getKeyStroke());
+    }
 
-		@Override
-		protected String getConfiguredKeyStroke() {
-			return "f1";
-		}
-	}
+    @Override
+    protected String getConfiguredKeyStroke() {
+      return "f1";
+    }
+  }
 
-	@Order(50.0)
-	public class F2Key extends AbstractKeyStroke {
+  @Order(50.0)
+  public class F2Key extends AbstractKeyStroke {
 
-		@Override
-		protected void execAction() throws ProcessingException {
-			protocol.add("Action on " + getKeyStroke());
-		}
+    @Override
+    protected void execAction() throws ProcessingException {
+      protocol.add("Action on " + getKeyStroke());
+    }
 
-		@Override
-		protected String getConfiguredKeyStroke() {
-			return "f2";
-		}
-	}
+    @Override
+    protected String getConfiguredKeyStroke() {
+      return "f2";
+    }
+  }
 
-	@Order(60.0)
-	public class F3Key extends AbstractKeyStroke {
+  @Order(60.0)
+  public class F3Key extends AbstractKeyStroke {
 
-		@Override
-		protected void execAction() throws ProcessingException {
-			protocol.add("Action on " + getKeyStroke());
-		}
+    @Override
+    protected void execAction() throws ProcessingException {
+      protocol.add("Action on " + getKeyStroke());
+    }
 
-		@Override
-		protected String getConfiguredKeyStroke() {
-			return "f3";
-		}
-	}
+    @Override
+    protected String getConfiguredKeyStroke() {
+      return "f3";
+    }
+  }
 
-	@Order(70.0)
-	public class F4Key extends AbstractKeyStroke {
+  @Order(70.0)
+  public class F4Key extends AbstractKeyStroke {
 
-		@Override
-		protected void execAction() throws ProcessingException {
-			protocol.add("Action on " + getKeyStroke());
-		}
+    @Override
+    protected void execAction() throws ProcessingException {
+      protocol.add("Action on " + getKeyStroke());
+    }
 
-		@Override
-		protected String getConfiguredKeyStroke() {
-			return "f4";
-		}
-	}
+    @Override
+    protected String getConfiguredKeyStroke() {
+      return "f4";
+    }
+  }
 
-	@Order(80.0)
-	public class F5Key extends AbstractKeyStroke {
+  @Order(80.0)
+  public class F5Key extends AbstractKeyStroke {
 
-		@Override
-		protected void execAction() throws ProcessingException {
-			protocol.add("Action on " + getKeyStroke());
-		}
+    @Override
+    protected void execAction() throws ProcessingException {
+      protocol.add("Action on " + getKeyStroke());
+    }
 
-		@Override
-		protected String getConfiguredKeyStroke() {
-			return "f5";
-		}
-	}
+    @Override
+    protected String getConfiguredKeyStroke() {
+      return "f5";
+    }
+  }
 
-	@Order(90.0)
-	public class F6Key extends AbstractKeyStroke {
+  @Order(90.0)
+  public class F6Key extends AbstractKeyStroke {
 
-		@Override
-		protected void execAction() throws ProcessingException {
-			protocol.add("Action on " + getKeyStroke());
-		}
+    @Override
+    protected void execAction() throws ProcessingException {
+      protocol.add("Action on " + getKeyStroke());
+    }
 
-		@Override
-		protected String getConfiguredKeyStroke() {
-			return "f6";
-		}
-	}
+    @Override
+    protected String getConfiguredKeyStroke() {
+      return "f6";
+    }
+  }
 
-	@Order(100.0)
-	public class F7Key extends AbstractKeyStroke {
+  @Order(100.0)
+  public class F7Key extends AbstractKeyStroke {
 
-		@Override
-		protected void execAction() throws ProcessingException {
-			protocol.add("Action on " + getKeyStroke());
-		}
+    @Override
+    protected void execAction() throws ProcessingException {
+      protocol.add("Action on " + getKeyStroke());
+    }
 
-		@Override
-		protected String getConfiguredKeyStroke() {
-			return "f7";
-		}
-	}
+    @Override
+    protected String getConfiguredKeyStroke() {
+      return "f7";
+    }
+  }
 
-	@Order(110.0)
-	public class F8Key extends AbstractKeyStroke {
+  @Order(110.0)
+  public class F8Key extends AbstractKeyStroke {
 
-		@Override
-		protected void execAction() throws ProcessingException {
-			protocol.add("Action on " + getKeyStroke());
-		}
+    @Override
+    protected void execAction() throws ProcessingException {
+      protocol.add("Action on " + getKeyStroke());
+    }
 
-		@Override
-		protected String getConfiguredKeyStroke() {
-			return "f8";
-		}
-	}
+    @Override
+    protected String getConfiguredKeyStroke() {
+      return "f8";
+    }
+  }
 
-	@Order(120.0)
-	public class F9Key extends AbstractKeyStroke {
+  @Order(120.0)
+  public class F9Key extends AbstractKeyStroke {
 
-		@Override
-		protected void execAction() throws ProcessingException {
-			protocol.add("Action on " + getKeyStroke());
-		}
+    @Override
+    protected void execAction() throws ProcessingException {
+      protocol.add("Action on " + getKeyStroke());
+    }
 
-		@Override
-		protected String getConfiguredKeyStroke() {
-			return "f9";
-		}
-	}
+    @Override
+    protected String getConfiguredKeyStroke() {
+      return "f9";
+    }
+  }
 
-	@Order(130.0)
-	public class F10Key extends AbstractKeyStroke {
+  @Order(130.0)
+  public class F10Key extends AbstractKeyStroke {
 
-		@Override
-		protected void execAction() throws ProcessingException {
-			protocol.add("Action on " + getKeyStroke());
-		}
+    @Override
+    protected void execAction() throws ProcessingException {
+      protocol.add("Action on " + getKeyStroke());
+    }
 
-		@Override
-		protected String getConfiguredKeyStroke() {
-			return "f10";
-		}
-	}
+    @Override
+    protected String getConfiguredKeyStroke() {
+      return "f10";
+    }
+  }
 
-	@Order(140.0)
-	public class F11Key extends AbstractKeyStroke {
+  @Order(140.0)
+  public class F11Key extends AbstractKeyStroke {
 
-		@Override
-		protected void execAction() throws ProcessingException {
-			protocol.add("Action on " + getKeyStroke());
-		}
+    @Override
+    protected void execAction() throws ProcessingException {
+      protocol.add("Action on " + getKeyStroke());
+    }
 
-		@Override
-		protected String getConfiguredKeyStroke() {
-			return "f11";
-		}
-	}
+    @Override
+    protected String getConfiguredKeyStroke() {
+      return "f11";
+    }
+  }
 
-	@Order(150.0)
-	public class F12Key extends AbstractKeyStroke {
+  @Order(150.0)
+  public class F12Key extends AbstractKeyStroke {
 
-		@Override
-		protected void execAction() throws ProcessingException {
-			protocol.add("Action on " + getKeyStroke());
-		}
+    @Override
+    protected void execAction() throws ProcessingException {
+      protocol.add("Action on " + getKeyStroke());
+    }
 
-		@Override
-		protected String getConfiguredKeyStroke() {
-			return "f12";
-		}
-	}
+    @Override
+    protected String getConfiguredKeyStroke() {
+      return "f12";
+    }
+  }
 
 }

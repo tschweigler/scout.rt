@@ -21,6 +21,6 @@
     <relativePath>../org.eclipse.scout.rt.parent</relativePath>
   </parent>
 
-  <artifactId>org.eclipse.scout.rt.extension.client.test.fragment</artifactId>
+  <artifactId>org.eclipse.scout.rt.extension.client.test</artifactId>
   <packaging>eclipse-test-plugin</packaging>
 </project>

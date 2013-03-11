@@ -10,8 +10,6 @@
  ******************************************************************************/
 package org.eclipse.scout.rt.extension.client.ui.desktop.outline.pages.fixture.remove;
 
-
-
 /**
  * @since 3.9.0
  */

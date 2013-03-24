@@ -69,7 +69,7 @@ import org.eclipse.scout.rt.ui.swing.icons.CheckboxIcon;
 /**
  * Uses {@link Robot}
  */
-public class SwingMock implements IGuiMock {
+public class SwingMock implements IGuiMock, org.eclipse.scout.testing.client.IGuiMock {
   private static final IScoutLogger LOG = ScoutLogManager.getLogger(SwingMock.class);
 
   static interface MockRunnable<T> {

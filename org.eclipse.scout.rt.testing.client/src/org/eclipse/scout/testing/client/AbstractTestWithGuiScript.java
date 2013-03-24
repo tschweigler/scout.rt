@@ -10,10 +10,25 @@
  ******************************************************************************/
 package org.eclipse.scout.testing.client;
 
+import org.eclipse.scout.rt.testing.client.IGuiMock;
+
 /**
  * Deprecated: use {@link org.eclipse.scout.rt.testing.client.AbstractTestWithGuiScript} instead
  * will be removed with the L-Release.
  */
 @Deprecated
 public abstract class AbstractTestWithGuiScript extends org.eclipse.scout.rt.testing.client.AbstractTestWithGuiScript {
+
+  /**
+   * Override this method
+   * <p>
+   * This method runs in the ui thread.
+   */
+  protected void runGui(org.eclipse.scout.testing.client.IGuiMock gui) throws Throwable {
+  }
+
+  @Override
+  protected void runGui(IGuiMock gui) throws Throwable {
+    runGui((org.eclipse.scout.testing.client.IGuiMock) gui);
+  }
 }

@@ -67,7 +67,7 @@ import org.eclipse.ui.PlatformUI;
 /**
  * Uses awt {@link Robot} and not SWTBot since SWTBot is not really a gui emulator.
  */
-public class SwtMock implements IGuiMock {
+public class SwtMock implements IGuiMock, org.eclipse.scout.testing.client.IGuiMock {
   private static final IScoutLogger LOG = ScoutLogManager.getLogger(SwtMock.class);
 
   static interface MockRunnable<T> extends WaitCondition<T> {

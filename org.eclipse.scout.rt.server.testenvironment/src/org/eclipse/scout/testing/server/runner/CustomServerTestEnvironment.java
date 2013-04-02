@@ -10,9 +10,12 @@
  ******************************************************************************/
 package org.eclipse.scout.testing.server.runner;
 
+import org.eclipse.scout.rt.server.testenvironment.Activator;
+import org.eclipse.scout.rt.server.testenvironment.AllAccessControlService;
 import org.eclipse.scout.rt.server.testenvironment.TestEnvironmentServerSession;
 import org.eclipse.scout.rt.testing.server.runner.IServerTestEnvironment;
 import org.eclipse.scout.rt.testing.server.runner.ScoutServerTestRunner;
+import org.eclipse.scout.rt.testing.shared.TestingUtility;
 
 /**
  * Injection of Test Environment settings
@@ -25,6 +28,7 @@ public class CustomServerTestEnvironment implements IServerTestEnvironment {
   public void setupGlobalEnvironment() {
     ScoutServerTestRunner.setDefaultServerSessionClass(TestEnvironmentServerSession.class);
     ScoutServerTestRunner.setDefaultPrincipalName("admin");
+    TestingUtility.registerServices(Activator.getDefault().getBundle(), 100, new AllAccessControlService());
   }
 
   @Override

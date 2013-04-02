@@ -16,10 +16,11 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import org.eclipse.scout.rt.testing.commons.ScoutAssert;
-import org.junit.Ignore;
+import org.eclipse.scout.rt.testing.server.runner.ScoutServerTestRunner;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
-@Ignore
+@RunWith(ScoutServerTestRunner.class)
 public class HttpKeepAliveTest {
 
   static ArrayList<String> protocol = new ArrayList<String>();

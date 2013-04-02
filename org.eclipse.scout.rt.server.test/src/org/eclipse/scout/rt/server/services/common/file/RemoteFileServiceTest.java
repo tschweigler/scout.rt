@@ -20,14 +20,12 @@ import org.eclipse.scout.commons.exception.ProcessingException;
 import org.eclipse.scout.rt.server.internal.Activator;
 import org.eclipse.scout.rt.shared.services.common.file.IRemoteFileService;
 import org.eclipse.scout.rt.shared.services.common.file.RemoteFile;
-import org.eclipse.scout.rt.testing.server.runner.ScoutServerTestRunner;
 import org.eclipse.scout.rt.testing.shared.TestingUtility;
 import org.eclipse.scout.service.SERVICES;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.osgi.framework.ServiceRegistration;
 
 /**
@@ -44,7 +42,7 @@ import org.osgi.framework.ServiceRegistration;
  * /internal/public/index_de_CH_V_X_Y.html = "de_CH_V_X_Y"
  * </pre>
  */
-@RunWith(ScoutServerTestRunner.class)
+//@RunWith(ScoutServerTestRunner.class)
 public class RemoteFileServiceTest {
 
   private File m_fsroot;
@@ -117,7 +115,7 @@ public class RemoteFileServiceTest {
     }
     StringWriter w = new StringWriter();
     r.writeData(w);
-    Assert.assertEquals(expectedContent, w.toString());
+    Assert.assertEquals("expected content", expectedContent, w.toString());
   }
 
   private static void assertNonAccessible(IRemoteFileService svc, RemoteFile spec) throws Exception {

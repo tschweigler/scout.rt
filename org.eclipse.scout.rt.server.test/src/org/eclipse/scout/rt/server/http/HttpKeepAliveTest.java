@@ -15,6 +15,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
+import org.eclipse.scout.rt.server.http.fixture.HttpServer;
 import org.eclipse.scout.rt.testing.commons.ScoutAssert;
 import org.eclipse.scout.rt.testing.server.runner.ScoutServerTestRunner;
 import org.junit.Test;

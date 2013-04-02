@@ -8,7 +8,7 @@
  * Contributors:
  *     BSI Business Systems Integration AG - initial API and implementation
  ******************************************************************************/
-package org.eclipse.scout.rt.server.http;
+package org.eclipse.scout.rt.server.http.fixture;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

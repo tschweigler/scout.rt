@@ -24,6 +24,7 @@ public class CustomServerTestEnvironment implements IServerTestEnvironment {
   @Override
   public void setupGlobalEnvironment() {
     ScoutServerTestRunner.setDefaultServerSessionClass(TestEnvironmentServerSession.class);
+    ScoutServerTestRunner.setDefaultPrincipalName("admin");
   }
 
   @Override

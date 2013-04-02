@@ -8,9 +8,30 @@
  * Contributors:
  *     BSI Business Systems Integration AG - initial API and implementation
  ******************************************************************************/
-package org.eclipse.scout.rt.client.ui.basic.activitymap;
+package org.eclipse.scout.rt.client.ui.basic.table.columns;
 
-public interface IActivityCellObserver<RI, AI> {
+import java.text.NumberFormat;
 
-  void cellChanged(ActivityCell<RI, AI> cell, int bitPos);
+/**
+ *
+ */
+public interface INumberColumn<T extends Number> extends IColumn<T> {
+
+  void setFormat(String s);
+
+  String getFormat();
+
+  void setGroupingUsed(boolean b);
+
+  boolean isGroupingUsed();
+
+  void setMinValue(T value);
+
+  T getMinValue();
+
+  void setMaxValue(T value);
+
+  T getMaxValue();
+
+  NumberFormat getNumberFormat();
 }

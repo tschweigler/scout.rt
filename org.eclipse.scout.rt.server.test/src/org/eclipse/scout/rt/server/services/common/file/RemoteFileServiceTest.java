@@ -25,6 +25,7 @@ import org.eclipse.scout.service.SERVICES;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.osgi.framework.ServiceRegistration;
 
@@ -43,6 +44,7 @@ import org.osgi.framework.ServiceRegistration;
  * </pre>
  */
 //@RunWith(ScoutServerTestRunner.class)
+@Ignore
 public class RemoteFileServiceTest {
 
   private File m_fsroot;

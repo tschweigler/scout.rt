@@ -18,10 +18,12 @@ import java.util.ArrayList;
 import org.eclipse.scout.rt.server.http.fixture.HttpServer;
 import org.eclipse.scout.rt.testing.commons.ScoutAssert;
 import org.eclipse.scout.rt.testing.server.runner.ScoutServerTestRunner;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(ScoutServerTestRunner.class)
+@Ignore
 public class HttpKeepAliveTest {
 
   static ArrayList<String> protocol = new ArrayList<String>();

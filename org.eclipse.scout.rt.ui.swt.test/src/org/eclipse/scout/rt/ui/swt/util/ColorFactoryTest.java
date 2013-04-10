@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Display;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -23,6 +24,7 @@ import org.junit.Test;
  * 
  * @since 3.9.0
  */
+@Ignore
 public class ColorFactoryTest {
 
   private ColorFactory m_colorFactory;

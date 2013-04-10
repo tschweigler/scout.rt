@@ -16,7 +16,6 @@ import org.eclipse.scout.commons.CompareUtility;
 import org.eclipse.scout.commons.exception.ProcessingException;
 import org.eclipse.scout.commons.osgi.BundleClassDescriptor;
 import org.eclipse.scout.rt.server.internal.Activator;
-import org.eclipse.scout.rt.server.services.common.code.CodeService;
 import org.eclipse.scout.rt.server.services.common.code.fixture.TestCodeType1;
 import org.eclipse.scout.rt.server.services.common.code.fixture.TestCodeType2;
 import org.eclipse.scout.rt.shared.services.common.code.ICodeService;
@@ -58,16 +57,16 @@ public class CodeServiceTest {
       }
       //
       if (testCodeType1Expected) {
-//        assertTrue("TestCodeType1 class not found (expected: found)", testCodeType1Found);
+        Assert.assertTrue("TestCodeType1 class not found (expected: found)", testCodeType1Found);
       }
       else {
-//        assertFalse("TestCodeType1 class found (expected: not found)", testCodeType1Found);
+        Assert.assertFalse("TestCodeType1 class found (expected: not found)", testCodeType1Found);
       }
       if (testCodeType2Expected) {
-//        assertTrue("TestCodeType2 class not found (expected: found)", testCodeType2Found);
+        Assert.assertTrue("TestCodeType2 class not found (expected: found)", testCodeType2Found);
       }
       else {
-//        assertFalse("TestCodeType2 class found (expected: not found)", testCodeType2Found);
+        Assert.assertFalse("TestCodeType2 class found (expected: not found)", testCodeType2Found);
       }
     }
     finally {

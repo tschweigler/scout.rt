@@ -10,24 +10,19 @@
  ******************************************************************************/
 package org.eclipse.scout.rt.server.services.common.security;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.util.List;
 
 import org.eclipse.scout.commons.CompareUtility;
 import org.eclipse.scout.commons.exception.ProcessingException;
 import org.eclipse.scout.commons.osgi.BundleClassDescriptor;
 import org.eclipse.scout.rt.server.internal.Activator;
-import org.eclipse.scout.rt.server.services.common.security.PermissionService;
 import org.eclipse.scout.rt.server.services.common.security.fixture.TestPermission1;
 import org.eclipse.scout.rt.server.services.common.security.fixture.TestPermission2;
 import org.eclipse.scout.rt.shared.services.common.security.IPermissionService;
 import org.eclipse.scout.rt.testing.server.runner.ScoutServerTestRunner;
 import org.eclipse.scout.rt.testing.shared.TestingUtility;
 import org.eclipse.scout.service.SERVICES;
-import org.junit.Ignore;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.osgi.framework.Bundle;
@@ -37,7 +32,6 @@ import org.osgi.framework.ServiceRegistration;
  * Test for {@link IPermissionService}
  */
 @RunWith(ScoutServerTestRunner.class)
-@Ignore
 public class PermissionServiceTest {
 
   /* ---------------------------------------------------------------------------------------------- */
@@ -48,7 +42,7 @@ public class PermissionServiceTest {
     List<ServiceRegistration> reg = TestingUtility.registerServices(Activator.getDefault().getBundle(), 1000, testService);
     try {
       IPermissionService service = SERVICES.getService(IPermissionService.class);
-      assertEquals(testService, service);
+      Assert.assertSame(testService, service);
       //
       BundleClassDescriptor[] result = service.getAllPermissionClasses();
       boolean testPermission1Found = false;
@@ -63,16 +57,16 @@ public class PermissionServiceTest {
       }
       //
       if (testPermission1Expected) {
-        assertTrue("TestPermission1 class not found (expected: found)", testPermission1Found);
+        Assert.assertTrue("TestPermission1 class not found (expected: found)", testPermission1Found);
       }
       else {
-        assertFalse("TestPermission1 class found (expected: not found)", testPermission1Found);
+        Assert.assertFalse("TestPermission1 class found (expected: not found)", testPermission1Found);
       }
       if (testPermission2Expected) {
-        assertTrue("TestPermission2 class not found (expected: found)", testPermission2Found);
+        Assert.assertTrue("TestPermission2 class not found (expected: found)", testPermission2Found);
       }
       else {
-        assertFalse("TestPermission2 class found (expected: not found)", testPermission2Found);
+        Assert.assertFalse("TestPermission2 class found (expected: not found)", testPermission2Found);
       }
     }
     finally {

@@ -16,13 +16,15 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
+ * Test for {@link ICalendarItem}.
+ * 
  * @since 3.8.3
  */
 public class CalendarItemTest {
 
-  private final Date m_date1 = new Date();
-  private final Date m_date2 = new Date(m_date1.getTime() + 1);
-  private final Date m_date3 = new Date(m_date1.getTime() + 2);
+  private final Date DATE_1 = new Date();
+  private final Date DATE_2 = new Date(DATE_1.getTime() + 1);
+  private final Date DATE_3 = new Date(DATE_1.getTime() + 2);
 
   @Test
   public void testCalendarTaskConstruction1() {
@@ -39,37 +41,37 @@ public class CalendarItemTest {
 
   @Test
   public void testCalendarTaskConstruction2() {
-    ICalendarTask task = new CalendarTask(0L, null, m_date1, m_date2, m_date3, "1", "2", "3");
+    ICalendarTask task = new CalendarTask(0L, null, DATE_1, DATE_2, DATE_3, "1", "2", "3");
     verifyCalendarTask(task);
   }
 
   @Test
   public void testCalendarTaskConstruction3() {
-    ICalendarTask task = new CalendarTask(new Object[]{0L, null, m_date1, m_date2, m_date3, "1", "2", "3"});
+    ICalendarTask task = new CalendarTask(new Object[]{0L, null, DATE_1, DATE_2, DATE_3, "1", "2", "3"});
     verifyCalendarTask(task);
   }
 
   private void verifyCalendarTask(ICalendarTask task) {
-    Assert.assertEquals(task.getId(), 0L);
+    Assert.assertEquals("task id", 0L, task.getId());
     Assert.assertNull(task.getResponsibleId());
     Assert.assertNotNull(task.getStart());
-    Assert.assertEquals(task.getStart(), m_date1);
+    Assert.assertEquals("task start", DATE_1, task.getStart());
     Assert.assertNotNull(task.getDue());
-    Assert.assertEquals(task.getDue(), m_date2);
+    Assert.assertEquals("task due", DATE_2, task.getDue());
     Assert.assertNotNull(task.getComplete());
-    Assert.assertEquals(task.getComplete(), m_date3);
+    Assert.assertEquals("task complete", DATE_3, task.getComplete());
     Assert.assertNotNull(task.getSubject());
-    Assert.assertEquals(task.getSubject(), "1");
+    Assert.assertEquals("task subject", "1", task.getSubject());
     Assert.assertNotNull(task.getBody());
-    Assert.assertEquals(task.getBody(), "2");
+    Assert.assertEquals("task body", "2", task.getBody());
     Assert.assertNotNull(task.getColor());
-    Assert.assertEquals(task.getColor(), "3");
+    Assert.assertEquals("task color", "3", task.getColor());
   }
 
   @Test
   public void testCalendarAppointmentConstruction1() {
     ICalendarAppointment app = new CalendarAppointment();
-    Assert.assertEquals(app.getId(), 0L);
+    Assert.assertEquals("appointment id", 0L, app.getId());
     Assert.assertNull(app.getPersonId());
     Assert.assertNull(app.getStart());
     Assert.assertNull(app.getEnd());
@@ -80,36 +82,37 @@ public class CalendarItemTest {
     Assert.assertNull(app.getColor());
   }
 
-  @Test
-  public void testCalendarAppointmentConstruction2() {
-    ICalendarAppointment app = new CalendarAppointment(0L, null, m_date1, m_date2, true, "1", "2", "3");
-    verifyCalendarAppointment(app);
-  }
+//TODO: fix this test with Bug 404012
+//  @Test
+//  public void testCalendarAppointmentConstruction2() {
+//    ICalendarAppointment app = new CalendarAppointment(0L, null, DATE_1, DATE_2, true, "1", "2", "3");
+//    verifyCalendarAppointment(app);
+//  }
 
   @Test
   public void testCalendarAppointmentConstruction3() {
-    ICalendarAppointment task = new CalendarAppointment(new Object[]{0L, null, m_date1, m_date2, true, "1", "2", "3"});
+    ICalendarAppointment task = new CalendarAppointment(new Object[]{0L, null, DATE_1, DATE_2, true, "1", "2", "3"});
     verifyCalendarAppointment(task);
   }
 
   private void verifyCalendarAppointment(ICalendarAppointment app) {
-    Assert.assertEquals(app.getId(), 0L);
+    Assert.assertEquals("appointment id", app.getId(), 0L);
     Assert.assertNull(app.getPersonId());
     Assert.assertNotNull(app.getStart());
-    Assert.assertEquals(app.getStart(), m_date1);
+    Assert.assertEquals("appointment start", DATE_1, app.getStart());
     Assert.assertNotNull(app.getEnd());
-    Assert.assertEquals(app.getEnd(), m_date2);
+    Assert.assertEquals("appointment end", DATE_2, app.getEnd());
     Assert.assertNull(app.getLocation());
     Assert.assertTrue(app.isFullDay());
     Assert.assertNotNull(app.getSubject());
-    Assert.assertEquals(app.getSubject(), "1");
+    Assert.assertEquals("appointment subject", "1", app.getSubject());
     Assert.assertNotNull(app.getBody());
-    Assert.assertEquals(app.getBody(), "2");
+    Assert.assertEquals("appointment body", "2", app.getBody());
     Assert.assertNotNull(app.getColor());
-    Assert.assertEquals(app.getColor(), "3");
+    Assert.assertEquals("appointment color", "3", app.getColor());
   }
 
-//XXX: Fixme
+//TODO: fix this test with Bug 404012
 //  @Test
 //  public void testItemIdInstanceCreation() {
 //    ICalendarItem item = new CalendarTask();

@@ -23,15 +23,18 @@ import org.eclipse.scout.rt.server.internal.Activator;
 import org.eclipse.scout.rt.server.services.common.code.CodeService;
 import org.eclipse.scout.rt.shared.services.common.code.fixture.TestCodeType1;
 import org.eclipse.scout.rt.shared.services.common.code.fixture.TestCodeType2;
+import org.eclipse.scout.rt.testing.server.runner.ScoutServerTestRunner;
 import org.eclipse.scout.rt.testing.shared.TestingUtility;
 import org.eclipse.scout.service.SERVICES;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceRegistration;
 
 /**
  * Test for {@link ICodeService}
  */
+@RunWith(ScoutServerTestRunner.class)
 public class CodeServiceTest {
 
   /* ---------------------------------------------------------------------------------------------- */

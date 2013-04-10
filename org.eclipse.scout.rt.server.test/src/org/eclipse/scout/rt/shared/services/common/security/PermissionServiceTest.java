@@ -26,6 +26,7 @@ import org.eclipse.scout.rt.shared.services.common.security.fixture.TestPermissi
 import org.eclipse.scout.rt.testing.server.runner.ScoutServerTestRunner;
 import org.eclipse.scout.rt.testing.shared.TestingUtility;
 import org.eclipse.scout.service.SERVICES;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.osgi.framework.Bundle;
@@ -35,6 +36,7 @@ import org.osgi.framework.ServiceRegistration;
  * Test for {@link IPermissionService}
  */
 @RunWith(ScoutServerTestRunner.class)
+@Ignore
 public class PermissionServiceTest {
 
   /* ---------------------------------------------------------------------------------------------- */

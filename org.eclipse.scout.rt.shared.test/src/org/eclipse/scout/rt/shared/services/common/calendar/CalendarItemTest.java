@@ -22,9 +22,9 @@ import org.junit.Test;
  */
 public class CalendarItemTest {
 
-  private final Date DATE_1 = new Date();
-  private final Date DATE_2 = new Date(DATE_1.getTime() + 1);
-  private final Date DATE_3 = new Date(DATE_1.getTime() + 2);
+  private static final Date DATE_1 = new Date();
+  private static final Date DATE_2 = new Date(DATE_1.getTime() + 1);
+  private static final Date DATE_3 = new Date(DATE_1.getTime() + 2);
 
   @Test
   public void testCalendarTaskConstruction1() {

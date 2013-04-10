@@ -8,14 +8,14 @@
  * Contributors:
  *     BSI Business Systems Integration AG - initial API and implementation
  ******************************************************************************/
-package org.eclipse.scout.rt.shared.services.common.code.fixture;
+package org.eclipse.scout.rt.server.services.common.code.fixture;
 
 import org.eclipse.scout.rt.shared.services.common.code.AbstractCodeType;
 
-public class TestCodeType2 extends AbstractCodeType<String> {
+public class TestCodeType1 extends AbstractCodeType<String> {
   private static final long serialVersionUID = 1L;
 
-  public static final String ID = "TestCodeType2";
+  public static final String ID = "TestCodeType1";
 
   @Override
   public String getId() {

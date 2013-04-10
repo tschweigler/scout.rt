@@ -8,7 +8,7 @@
  * Contributors:
  *     BSI Business Systems Integration AG - initial API and implementation
  ******************************************************************************/
-package org.eclipse.scout.rt.shared.services.common.security;
+package org.eclipse.scout.rt.server.services.common.security;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -21,8 +21,9 @@ import org.eclipse.scout.commons.exception.ProcessingException;
 import org.eclipse.scout.commons.osgi.BundleClassDescriptor;
 import org.eclipse.scout.rt.server.internal.Activator;
 import org.eclipse.scout.rt.server.services.common.security.PermissionService;
-import org.eclipse.scout.rt.shared.services.common.security.fixture.TestPermission1;
-import org.eclipse.scout.rt.shared.services.common.security.fixture.TestPermission2;
+import org.eclipse.scout.rt.server.services.common.security.fixture.TestPermission1;
+import org.eclipse.scout.rt.server.services.common.security.fixture.TestPermission2;
+import org.eclipse.scout.rt.shared.services.common.security.IPermissionService;
 import org.eclipse.scout.rt.testing.server.runner.ScoutServerTestRunner;
 import org.eclipse.scout.rt.testing.shared.TestingUtility;
 import org.eclipse.scout.service.SERVICES;

@@ -8,14 +8,17 @@
  * Contributors:
  *     BSI Business Systems Integration AG - initial API and implementation
  ******************************************************************************/
-package org.eclipse.scout.rt.shared.services.common.security.fixture;
+package org.eclipse.scout.rt.server.services.common.code.fixture;
 
-import java.security.BasicPermission;
+import org.eclipse.scout.rt.shared.services.common.code.AbstractCodeType;
 
-public class TestPermission1 extends BasicPermission {
+public class TestCodeType2 extends AbstractCodeType<String> {
   private static final long serialVersionUID = 1L;
 
-  public TestPermission1() {
-    super("test.permission.1");
+  public static final String ID = "TestCodeType2";
+
+  @Override
+  public String getId() {
+    return ID;
   }
 }

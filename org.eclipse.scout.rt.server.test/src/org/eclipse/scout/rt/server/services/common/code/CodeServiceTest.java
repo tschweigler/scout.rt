@@ -8,7 +8,7 @@
  * Contributors:
  *     BSI Business Systems Integration AG - initial API and implementation
  ******************************************************************************/
-package org.eclipse.scout.rt.shared.services.common.code;
+package org.eclipse.scout.rt.server.services.common.code;
 
 import java.util.List;
 
@@ -17,8 +17,9 @@ import org.eclipse.scout.commons.exception.ProcessingException;
 import org.eclipse.scout.commons.osgi.BundleClassDescriptor;
 import org.eclipse.scout.rt.server.internal.Activator;
 import org.eclipse.scout.rt.server.services.common.code.CodeService;
-import org.eclipse.scout.rt.shared.services.common.code.fixture.TestCodeType1;
-import org.eclipse.scout.rt.shared.services.common.code.fixture.TestCodeType2;
+import org.eclipse.scout.rt.server.services.common.code.fixture.TestCodeType1;
+import org.eclipse.scout.rt.server.services.common.code.fixture.TestCodeType2;
+import org.eclipse.scout.rt.shared.services.common.code.ICodeService;
 import org.eclipse.scout.rt.testing.server.runner.ScoutServerTestRunner;
 import org.eclipse.scout.rt.testing.shared.TestingUtility;
 import org.eclipse.scout.service.SERVICES;

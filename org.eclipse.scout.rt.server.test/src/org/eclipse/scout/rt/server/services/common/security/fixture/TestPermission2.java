@@ -8,7 +8,7 @@
  * Contributors:
  *     BSI Business Systems Integration AG - initial API and implementation
  ******************************************************************************/
-package org.eclipse.scout.rt.shared.services.common.security.fixture;
+package org.eclipse.scout.rt.server.services.common.security.fixture;
 
 import java.security.BasicPermission;
 

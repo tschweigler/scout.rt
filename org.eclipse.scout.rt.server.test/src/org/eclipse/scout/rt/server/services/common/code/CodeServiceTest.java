@@ -108,30 +108,6 @@ public class CodeServiceTest {
     @Override
     public void initializeService(ServiceRegistration registration) {
     }
-
-    @Override
-    public BundleClassDescriptor[] getAllCodeTypeClasses(String classPrefix) {
-      BundleClassDescriptor[] allCodeTypeClasses = super.getAllCodeTypeClasses(classPrefix);
-      System.err.println("{allCodeTypeClasses}>>> length" + allCodeTypeClasses.length);
-      for (BundleClassDescriptor ct : allCodeTypeClasses) {
-        System.err.println("{allCodeTypeClasses}>>>" + ct.getClassName());
-      }
-      return allCodeTypeClasses;
-    }
-
-    @Override
-    protected boolean acceptBundle(Bundle bundle, String classPrefix) {
-//      boolean acceptBundle = super.acceptBundle(bundle, classPrefix);
-//      System.err.println("{acceptBundle}>>>bundle: " + bundle);
-//      System.err.println("{acceptBundle}>>>bundle Location: " + bundle.getLocation());
-//      System.err.println("{acceptBundle}>>>classPrefix: " + classPrefix);
-//      System.err.println("{acceptBundle}>>>result: " + acceptBundle);
-      if ("org.eclipse.scout.rt.server".equals(bundle.getSymbolicName())) {
-        System.err.println("{acceptBundle}>>>bundle accepted: " + "org.eclipse.scout.rt.server");
-        return true;
-      }
-      return false;
-    }
   }
 
   static class CodeService_Default_Mock extends AbstractCodeServiceMock {

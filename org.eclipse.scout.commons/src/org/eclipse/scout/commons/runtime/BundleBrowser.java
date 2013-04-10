@@ -73,32 +73,19 @@ public class BundleBrowser {
       m_prefix = "/bin/";
       m_doubleCheckPrefix = true;
       Enumeration<String> en = getResourcesEnumeration(m_bundle, m_prefix + path);
-      if (en != null) {
-        System.err.println("{BundleBrowser.getClasses}>>>match with prefix:" + m_prefix);
-      }
       if (en == null) {
         m_prefix = "/classes/";
         en = getResourcesEnumeration(m_bundle, m_prefix + path);
-        if (en != null) {
-          System.err.println("{BundleBrowser.getClasses}>>>match with prefix:" + m_prefix);
-        }
       }
       if (en == null) {
         m_prefix = "/target/classes/";
         en = getResourcesEnumeration(m_bundle, m_prefix + path);
-        if (en != null) {
-          System.err.println("{BundleBrowser.getClasses}>>>match with prefix:" + m_prefix);
-        }
       }
       if (en == null) {
         m_prefix = "/";
         en = getResourcesEnumeration(m_bundle, m_prefix + path);
-        if (en != null) {
-          System.err.println("{BundleBrowser.getClasses}>>>match with prefix:" + m_prefix);
-        }
       }
       m_prefixLen = m_prefix.length();
-      System.err.println("{BundleBrowser.getClasses}>>>final prefix:" + m_prefix);
       visit(en);
     }
     return m_set.toArray(new String[m_set.size()]);

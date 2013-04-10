@@ -159,9 +159,7 @@ public class CodeService extends AbstractService implements ICodeService {
           continue;
         }
         // filter
-        System.err.println("{getAllCodeTypeClasses:classNames.length}>>>" + classNames.length);
         for (String className : classNames) {
-          System.err.println("{getAllCodeTypeClasses:classNames}>>>" + className);
           // fast pre-check
           if (acceptClassName(bundle, className)) {
             try {

@@ -32,8 +32,7 @@ import org.junit.Test;
 /**
  * JUnit test for {@link MultiSplitLayout}
  */
-@Ignore
-public class MultiSplitLayoutTest {
+public class MultiSplitLayoutUiTest {
   private JFrame frame;
   private JDesktopPane desktop;
   private JInternalFrame viewN;

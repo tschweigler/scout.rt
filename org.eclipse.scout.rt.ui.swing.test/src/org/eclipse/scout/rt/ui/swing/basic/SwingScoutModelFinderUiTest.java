@@ -52,18 +52,18 @@ import org.eclipse.scout.rt.shared.services.common.jdbc.SearchFilter;
 import org.eclipse.scout.rt.shared.services.lookup.LookupRow;
 import org.eclipse.scout.rt.ui.swing.AbstractSwingApplication;
 import org.eclipse.scout.rt.ui.swing.ISwingEnvironment;
-import org.eclipse.scout.rt.ui.swing.basic.SwingScoutModelFinderTest.AllFieldsTestForm.MainBox.CancelButton;
-import org.eclipse.scout.rt.ui.swing.basic.SwingScoutModelFinderTest.AllFieldsTestForm.MainBox.DateField;
-import org.eclipse.scout.rt.ui.swing.basic.SwingScoutModelFinderTest.AllFieldsTestForm.MainBox.GroupBox;
-import org.eclipse.scout.rt.ui.swing.basic.SwingScoutModelFinderTest.AllFieldsTestForm.MainBox.GroupBox.ListBoxField;
-import org.eclipse.scout.rt.ui.swing.basic.SwingScoutModelFinderTest.AllFieldsTestForm.MainBox.GroupBox.NestedGroupBox;
-import org.eclipse.scout.rt.ui.swing.basic.SwingScoutModelFinderTest.AllFieldsTestForm.MainBox.GroupBox.NestedGroupBox.TestButton;
-import org.eclipse.scout.rt.ui.swing.basic.SwingScoutModelFinderTest.AllFieldsTestForm.MainBox.LabelField;
-import org.eclipse.scout.rt.ui.swing.basic.SwingScoutModelFinderTest.AllFieldsTestForm.MainBox.OkButton;
-import org.eclipse.scout.rt.ui.swing.basic.SwingScoutModelFinderTest.AllFieldsTestForm.MainBox.SmartField;
-import org.eclipse.scout.rt.ui.swing.basic.SwingScoutModelFinderTest.AllFieldsTestForm.MainBox.StringField;
-import org.eclipse.scout.rt.ui.swing.basic.SwingScoutModelFinderTest.AllFieldsTestForm.MainBox.StringField2;
-import org.eclipse.scout.rt.ui.swing.basic.SwingScoutModelFinderTest.AllFieldsTestForm.MainBox.TreeBoxField;
+import org.eclipse.scout.rt.ui.swing.basic.SwingScoutModelFinderUiTest.AllFieldsTestForm.MainBox.CancelButton;
+import org.eclipse.scout.rt.ui.swing.basic.SwingScoutModelFinderUiTest.AllFieldsTestForm.MainBox.DateField;
+import org.eclipse.scout.rt.ui.swing.basic.SwingScoutModelFinderUiTest.AllFieldsTestForm.MainBox.GroupBox;
+import org.eclipse.scout.rt.ui.swing.basic.SwingScoutModelFinderUiTest.AllFieldsTestForm.MainBox.GroupBox.ListBoxField;
+import org.eclipse.scout.rt.ui.swing.basic.SwingScoutModelFinderUiTest.AllFieldsTestForm.MainBox.GroupBox.NestedGroupBox;
+import org.eclipse.scout.rt.ui.swing.basic.SwingScoutModelFinderUiTest.AllFieldsTestForm.MainBox.GroupBox.NestedGroupBox.TestButton;
+import org.eclipse.scout.rt.ui.swing.basic.SwingScoutModelFinderUiTest.AllFieldsTestForm.MainBox.LabelField;
+import org.eclipse.scout.rt.ui.swing.basic.SwingScoutModelFinderUiTest.AllFieldsTestForm.MainBox.OkButton;
+import org.eclipse.scout.rt.ui.swing.basic.SwingScoutModelFinderUiTest.AllFieldsTestForm.MainBox.SmartField;
+import org.eclipse.scout.rt.ui.swing.basic.SwingScoutModelFinderUiTest.AllFieldsTestForm.MainBox.StringField;
+import org.eclipse.scout.rt.ui.swing.basic.SwingScoutModelFinderUiTest.AllFieldsTestForm.MainBox.StringField2;
+import org.eclipse.scout.rt.ui.swing.basic.SwingScoutModelFinderUiTest.AllFieldsTestForm.MainBox.TreeBoxField;
 import org.eclipse.scout.rt.ui.swing.form.fields.ISwingScoutFormField;
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -72,9 +72,8 @@ import org.junit.Test;
 /**
  * Test for {@link SwingScoutModelFinder}. Tests, if the correct scout model is found for a swing component.
  */
-@Ignore
-public class SwingScoutModelFinderTest {
-  private static final IScoutLogger LOG = ScoutLogManager.getLogger(SwingScoutModelFinderTest.class);
+public class SwingScoutModelFinderUiTest {
+  private static final IScoutLogger LOG = ScoutLogManager.getLogger(SwingScoutModelFinderUiTest.class);
   private static final IIconLocator NULL_ICON_LOCATOR = new P_NullIconLocator();
 
   @Test

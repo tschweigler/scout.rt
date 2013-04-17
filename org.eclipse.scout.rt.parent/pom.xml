@@ -93,6 +93,7 @@
         <module>../org.eclipse.scout.rt.testing.common.ant.optional.junit.fragment</module>
         <module>../org.eclipse.scout.rt.testing.commons</module>
         <module>../org.eclipse.scout.rt.testing.server</module>
+        <module>../org.eclipse.scout.rt.testing.server.test</module>
         <module>../org.eclipse.scout.rt.testing.shared</module>
         <module>../org.eclipse.scout.rt.testing.ui.rap</module>
         <module>../org.eclipse.scout.rt.testing.ui.swing</module>

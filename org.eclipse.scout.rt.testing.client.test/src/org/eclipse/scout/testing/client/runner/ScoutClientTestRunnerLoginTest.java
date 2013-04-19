@@ -21,7 +21,6 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -30,8 +29,6 @@ import org.junit.runner.RunWith;
  */
 @RunWith(ScoutClientTestRunner.class)
 @ClientTest(runAs = "test", sessionProvider = LoginTestSessionProvider.class, forceNewSession = true)
-//TODO: http://www.eclipse.org/forums/index.php/t/476973/
-@Ignore
 public class ScoutClientTestRunnerLoginTest {
 
   private static IClientSession s_beforeClassClientSession;

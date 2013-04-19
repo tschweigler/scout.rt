@@ -18,7 +18,6 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -32,8 +31,6 @@ import org.junit.runner.RunWith;
  * </ul>
  */
 @RunWith(ScoutServerTestRunner.class)
-// TODO: http://www.eclipse.org/forums/index.php/t/476973/
-@Ignore
 public class ScoutServerTestRunnerTransactionBehaviorTest {
 
   // before and after class transactions

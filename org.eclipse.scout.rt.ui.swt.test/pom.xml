@@ -23,7 +23,7 @@
 
     <profiles>
     <profile>
-      <id>skip.ui.test</id>
+      <id>skip-uitest</id>
       <activation>
          <activeByDefault>true</activeByDefault>
       </activation>
@@ -48,29 +48,12 @@
     </profile>
 
     <profile>
-      <id>include.ui.test</id>
+      <id>include-uitest</id>
       <activation>
          <activeByDefault>false</activeByDefault>
       </activation>
-
-      <build>
-        <pluginManagement>
-          <plugins>
-            <plugin>
-              <groupId>org.eclipse.tycho</groupId>
-              <artifactId>tycho-surefire-plugin</artifactId>
-              <version>${tycho.version}</version>
-              <configuration>
-                <!-- Convention: tests requiring an UI layer use the suffix *UiTest, they are included with this profile.-->
-                <includes>
-                  <include>**/*UiTest.java</include>
-                </includes>
-              </configuration>
-            </plugin>
-          </plugins>
-        </pluginManagement>
-      </build>
+      <!-- Activate this profile to run all tests, it will deactivate "skip-uitest".-->
     </profile>
-  </profiles>
 
+  </profiles>
 </project>

@@ -13,11 +13,11 @@ package org.eclipse.scout.rt.ui.swt.ext.table.internal;
 import java.lang.reflect.Field;
 import java.util.HashSet;
 
-import org.eclipse.scout.rt.client.services.common.icon.IconSpec;
-import org.eclipse.scout.rt.client.ui.IIconLocator;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.scout.rt.ui.swt.Activator;
-import org.eclipse.scout.rt.ui.swt.util.SwtIconLocator;
+import org.eclipse.scout.rt.ui.swt.util.ISwtIconLocator;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -39,12 +39,22 @@ public class TableMultilineListenerUiTest {
     Field field = Activator.class.getDeclaredField("m_iconLocator");
     field.setAccessible(true);
 //    s_initialValue = field.get(Activator.getDefault().getClass());
-    field.set(Activator.getDefault(), new SwtIconLocator(new IIconLocator() {
+    field.set(Activator.getDefault(), new ISwtIconLocator() {
+
       @Override
-      public IconSpec getIconSpec(String name) {
+      public ImageDescriptor getImageDescriptor(String name) {
         return null;
       }
-    }));
+
+      @Override
+      public Image getIcon(String name) {
+        return null;
+      }
+
+      @Override
+      public void dispose() {
+      }
+    });
   }
 
   @AfterClass

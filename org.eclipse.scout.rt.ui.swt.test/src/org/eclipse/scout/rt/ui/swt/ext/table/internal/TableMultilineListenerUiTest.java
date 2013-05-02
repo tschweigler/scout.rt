@@ -15,15 +15,12 @@ import java.util.HashSet;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Rectangle;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Test for {@link TableMultilineListener}
  */
-//@RunWith(ScoutClientTestRunner.class)
-@Ignore
-public class TableMultilineListenerTest {
+public class TableMultilineListenerUiTest {
 
   private static final String test3Lines = "1\n2\n3";
 

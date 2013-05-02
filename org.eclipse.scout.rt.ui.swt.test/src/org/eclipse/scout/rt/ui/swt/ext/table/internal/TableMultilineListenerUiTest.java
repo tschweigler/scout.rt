@@ -10,11 +10,18 @@
  ******************************************************************************/
 package org.eclipse.scout.rt.ui.swt.ext.table.internal;
 
+import java.lang.reflect.Field;
 import java.util.HashSet;
 
+import org.eclipse.scout.rt.client.services.common.icon.IconSpec;
+import org.eclipse.scout.rt.client.ui.IIconLocator;
+import org.eclipse.scout.rt.ui.swt.Activator;
+import org.eclipse.scout.rt.ui.swt.util.SwtIconLocator;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Rectangle;
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -23,6 +30,29 @@ import org.junit.Test;
 public class TableMultilineListenerUiTest {
 
   private static final String test3Lines = "1\n2\n3";
+  private static Object s_initialValue;
+
+  @BeforeClass
+  public static void before() throws Exception {
+    //Bypass the m_iconLocator on the Activator:
+    Field field = Activator.class.getDeclaredField("m_iconLocator");
+    field.setAccessible(true);
+    s_initialValue = field.get(Activator.getDefault().getClass());
+    field.set(Activator.getDefault(), new SwtIconLocator(new IIconLocator() {
+      @Override
+      public IconSpec getIconSpec(String name) {
+        return null;
+      }
+    }));
+  }
+
+  @AfterClass
+  public static void after() throws Exception {
+    //Reset the m_iconLocator to default
+    Field field = Activator.class.getDeclaredField("m_iconLocator");
+    field.setAccessible(true);
+    field.set(Activator.getDefault(), s_initialValue);
+  }
 
   /**
    * Tests trimming row with a row height equal to the text height
@@ -116,8 +146,7 @@ public class TableMultilineListenerUiTest {
   }
 
   /**
-   * Test for @link{org.eclipse.scout.rt.ui.swt.ext.table.internal.TableMultilineListener#softWrapText}
-   * with null text.
+   * Test for @link{org.eclipse.scout.rt.ui.swt.ext.table.internal.TableMultilineListener#softWrapText} with null text.
    */
   @Test
   public void testSoftWrapNullText() {

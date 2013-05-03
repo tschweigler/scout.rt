@@ -45,7 +45,7 @@ public class MailUtilityTest {
    * <p>
    * <b>Note: This test must be run alone in an isolated jre, otherwise it is not correct.</b>
    */
-  //@Test
+  @Test
   public void testJaxWsMimeMessageWithoutSender() throws Exception {
     String mime = "text/plain; charset=utf-8";
     //raw jre, everything fine

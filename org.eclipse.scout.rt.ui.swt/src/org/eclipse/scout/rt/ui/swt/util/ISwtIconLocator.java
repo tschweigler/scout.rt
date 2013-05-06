@@ -20,10 +20,10 @@ import org.eclipse.swt.graphics.Image;
  */
 public interface ISwtIconLocator {
 
-  public abstract ImageDescriptor getImageDescriptor(String name);
+  ImageDescriptor getImageDescriptor(String name);
 
-  public abstract Image getIcon(String name);
+  Image getIcon(String name);
 
-  public abstract void dispose();
+  void dispose();
 
 }

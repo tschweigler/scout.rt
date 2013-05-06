@@ -193,5 +193,4 @@ public class TableMultilineListenerUiTest {
       return line.toCharArray().length * 5;
     }
   }
-
 }

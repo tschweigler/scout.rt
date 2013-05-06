@@ -31,14 +31,11 @@ public class TableMultilineListenerUiTest {
 
   private static final String test3Lines = "1\n2\n3";
 
-//  private static Object s_initialValue;
-
   @BeforeClass
   public static void before() throws Exception {
-    //Bypass the m_iconLocator on the Activator:
+    // Bypass the m_iconLocator on the Activator:
     Field field = Activator.class.getDeclaredField("m_iconLocator");
     field.setAccessible(true);
-//    s_initialValue = field.get(Activator.getDefault().getClass());
     field.set(Activator.getDefault(), new ISwtIconLocator() {
 
       @Override
@@ -59,10 +56,10 @@ public class TableMultilineListenerUiTest {
 
   @AfterClass
   public static void after() throws Exception {
-    //Reset the m_iconLocator to default
-//    Field field = Activator.class.getDeclaredField("m_iconLocator");
-//    field.setAccessible(true);
-//    field.set(Activator.getDefault(), s_initialValue);
+    // Reset the m_iconLocator to default:
+    Field field = Activator.class.getDeclaredField("m_iconLocator");
+    field.setAccessible(true);
+    field.set(Activator.getDefault(), null);
   }
 
   /**

@@ -15,15 +15,13 @@ import org.eclipse.swt.graphics.Image;
 
 /**
  * Interface for Icon handling in SWT.
- * Since 3.9.0
+ * 
+ * @since 3.9.0
  */
 public interface ISwtIconLocator {
 
   public abstract ImageDescriptor getImageDescriptor(String name);
 
-  /**
-   * Find icon in plugin dependency path starting with root bundle {@link Platform#getProduct#getDefiningBundle}
-   */
   public abstract Image getIcon(String name);
 
   public abstract void dispose();

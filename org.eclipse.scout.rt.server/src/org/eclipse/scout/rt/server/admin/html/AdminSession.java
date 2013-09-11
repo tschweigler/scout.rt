@@ -27,6 +27,7 @@ import org.eclipse.scout.rt.server.admin.inspector.ProcessInspector;
 import org.eclipse.scout.rt.shared.OfficialVersion;
 
 public class AdminSession implements Serializable {
+
   private static final long serialVersionUID = 1L;
   private TopView m_topView;
   private Map<String, AbstractHtmlAction> m_actionMap;

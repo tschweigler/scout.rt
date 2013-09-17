@@ -18,7 +18,7 @@ import org.eclipse.scout.rt.server.admin.html.widget.table.HtmlComponent;
 
 public class DefaultView implements IView, Serializable {
   private static final long serialVersionUID = 1L;
-  private transient AdminSession m_as;
+  private AdminSession m_as;
 
   public DefaultView(AdminSession as) {
     m_as = as;

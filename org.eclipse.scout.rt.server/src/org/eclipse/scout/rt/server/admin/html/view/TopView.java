@@ -94,6 +94,8 @@ public class TopView extends DefaultView implements Serializable {
           final IView finalV = v;
           p.startLinkAction(
               new AbstractHtmlAction("tab." + v.getClass().getSimpleName()) {
+                private static final long serialVersionUID = 1L;
+
                 @Override
                 public void run() {
                   m_activeView = finalV;

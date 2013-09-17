@@ -31,6 +31,7 @@ import org.eclipse.scout.rt.server.admin.inspector.info.CallInfo;
 import org.eclipse.scout.rt.server.transaction.ITransactionMember;
 
 public class CallsView extends DefaultView {
+  private static final long serialVersionUID = 1L;
   private CallInspector m_selectedCall;
 
   public CallsView(AdminSession as) {
@@ -56,6 +57,8 @@ public class CallsView extends DefaultView {
   public void produceBody(HtmlComponent p) {
     final SessionInspector session = getAdminSession().getTopView().getSessionsView().getSelectedSession();
     p.linkAction("Clear calls", new AbstractHtmlAction("clearCalls") {
+      private static final long serialVersionUID = 1L;
+
       @Override
       public void run() {
         session.clearCallInspectors();
@@ -124,6 +127,8 @@ public class CallsView extends DefaultView {
       p.focusAnchor();
     }
     p.startLinkAction(new AbstractHtmlAction("selectCall." + callKey) {
+      private static final long serialVersionUID = 1L;
+
       @Override
       public void run() {
         m_selectedCall = call;

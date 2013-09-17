@@ -32,6 +32,7 @@ import org.eclipse.scout.rt.shared.services.common.security.ACCESS;
 
 public class GeneralView extends DefaultView {
 
+  private static final long serialVersionUID = 1L;
   private static final IScoutLogger LOG = ScoutLogManager.getLogger(GeneralView.class);
 
   public GeneralView(AdminSession as) {
@@ -130,6 +131,8 @@ public class GeneralView extends DefaultView {
       p.br();
       if (inst.acceptCall(IPingService.class.getName(), "ping")) {
         p.linkAction("IPingService.ping (click to toggle)", new AbstractHtmlAction("IPingService.ignore") {
+          private static final long serialVersionUID = 1L;
+
           @Override
           public void run() {
             inst.getIgnoredCallSet().clear();
@@ -139,6 +142,8 @@ public class GeneralView extends DefaultView {
       }
       else {
         p.startLinkAction(new AbstractHtmlAction("IPingService.accept") {
+          private static final long serialVersionUID = 1L;
+
           @Override
           public void run() {
             inst.getIgnoredCallSet().clear();
@@ -211,6 +216,8 @@ public class GeneralView extends DefaultView {
     }
 
     AbstractHtmlAction action = new AbstractHtmlAction("level=" + logLevel) {
+      private static final long serialVersionUID = 1L;
+
       @Override
       public void run() {
         if (logLevel >= 0 && logLevel <= 5) {
@@ -225,6 +232,7 @@ public class GeneralView extends DefaultView {
   }
 
   private class P_EnableAction extends AbstractHtmlAction {
+    private static final long serialVersionUID = 1L;
     private boolean m_enabled;
 
     public P_EnableAction(boolean b) {
@@ -239,6 +247,7 @@ public class GeneralView extends DefaultView {
   }
 
   private class P_SetTimeoutAction extends AbstractHtmlAction {
+    private static final long serialVersionUID = 1L;
     private long m_minutes;
 
     public P_SetTimeoutAction(long minutes) {

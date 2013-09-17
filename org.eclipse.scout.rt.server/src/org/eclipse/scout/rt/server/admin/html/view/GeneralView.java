@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.eclipse.scout.rt.server.admin.html.view;
 
+import java.io.Serializable;
 import java.security.AccessController;
 import java.security.Principal;
 import java.util.Date;
@@ -179,9 +180,9 @@ public class GeneralView extends DefaultView {
     }
 
     if (globalLogLevel != null) {
-      p.print("Global logging is active [ ");
-      p.linkAction("deactivate", new P_ToggleGlobalLoggingAction(false));
-      p.print(" ]");
+      //p.print("Global logging is active [ ");
+      //p.linkAction("deactivate", new P_ToggleGlobalLoggingAction(false));
+      //p.print(" ]");
 
       addLogLevelRadioEntry(p, IScoutLogger.LEVEL_ERROR, "ERROR");
       addLogLevelRadioEntry(p, IScoutLogger.LEVEL_WARN, "WARNING");
@@ -191,9 +192,9 @@ public class GeneralView extends DefaultView {
       addLogLevelRadioEntry(p, IScoutLogger.LEVEL_OFF, "OFF");
     }
     else {
-      p.print("Global logging is inactive [");
-      p.linkAction("activate", new P_ToggleGlobalLoggingAction(true));
-      p.print(" ]");
+      //p.print("Global logging is inactive [");
+      //p.linkAction("activate", new  P_ToggleGlobalLoggingAction(true));
+      //p.print(" ]");
     }
     p.p();
 
@@ -251,8 +252,9 @@ public class GeneralView extends DefaultView {
     }
   }
 
-  private final class P_ToggleGlobalLoggingAction extends AbstractHtmlAction {
+  private final class P_ToggleGlobalLoggingAction extends AbstractHtmlAction implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     private boolean m_activate;
 
     public P_ToggleGlobalLoggingAction(boolean activate) {

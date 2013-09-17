@@ -26,9 +26,6 @@ import org.eclipse.scout.rt.server.admin.html.AbstractHtmlAction;
 import org.eclipse.scout.rt.server.admin.html.AdminSession;
 import org.eclipse.scout.rt.server.admin.html.widget.table.HtmlComponent;
 import org.eclipse.scout.rt.server.admin.inspector.ProcessInspector;
-import org.eclipse.scout.rt.shared.security.UpdateServiceConfigurationPermission;
-import org.eclipse.scout.rt.shared.services.common.ping.IPingService;
-import org.eclipse.scout.rt.shared.services.common.security.ACCESS;
 
 public class GeneralView extends DefaultView {
 
@@ -47,8 +44,8 @@ public class GeneralView extends DefaultView {
   @Override
   public void produceBody(HtmlComponent p) {
     // menu
-    String monitoringStatusMessage = createMonitoringQuickLink(p);
-    String loggingStatusMessage = createLoggingQuickLink(p);
+    //String monitoringStatusMessage = createMonitoringQuickLink(p);
+    //String loggingStatusMessage = createLoggingQuickLink(p);
 
     // infos
     if (Platform.getProduct() != null) {
@@ -104,110 +101,110 @@ public class GeneralView extends DefaultView {
       p.br();
     }
     p.br();
-    if (monitoringStatusMessage != null) {
-      p.raw(monitoringStatusMessage);
-    }
-    if (loggingStatusMessage != null) {
-      p.raw(loggingStatusMessage);
-    }
+//    if (monitoringStatusMessage != null) {
+//      p.raw(monitoringStatusMessage);
+//    }
+//    if (loggingStatusMessage != null) {
+//      p.raw(loggingStatusMessage);
+//    }
   }
 
-  private String createMonitoringQuickLink(HtmlComponent p) {
-    if (!ACCESS.check(new UpdateServiceConfigurationPermission())) {
-      return null;
-    }
-
-    final ProcessInspector inst = ProcessInspector.getDefault();
-    if (inst.isEnabled()) {
-      p.print("Monitor is active with maximum caching of " + (inst.getTimeout() / 1000 / 60) + " minutes [ ");
-      p.linkAction("cache 2 min", new P_SetTimeoutAction(2));
-      p.print(" | ");
-      p.linkAction("cache 15 min", new P_SetTimeoutAction(15));
-      p.print(" | ");
-      p.linkAction("cache 60 min", new P_SetTimeoutAction(60));
-      p.print(" | ");
-      p.linkAction("deactivate", new P_EnableAction(false));
-      p.print(" ]");
-      p.br();
-      if (inst.acceptCall(IPingService.class.getName(), "ping")) {
-        p.linkAction("IPingService.ping (click to toggle)", new AbstractHtmlAction("IPingService.ignore") {
-          private static final long serialVersionUID = 1L;
-
-          @Override
-          public void run() {
-            inst.getIgnoredCallSet().clear();
-            inst.getIgnoredCallSet().add(".*\\.IPingService\\.ping");
-          }
-        });
-      }
-      else {
-        p.startLinkAction(new AbstractHtmlAction("IPingService.accept") {
-          private static final long serialVersionUID = 1L;
-
-          @Override
-          public void run() {
-            inst.getIgnoredCallSet().clear();
-          }
-        });
-        p.raw("<s>");
-        p.printNoBreak("IPingService.ping");
-        p.raw("</s>");
-        p.printNoBreak(" (click to toggle)");
-        p.endLinkAction();
-      }
-    }
-    else {
-      p.print("Monitor is inactive [ ");
-      p.linkAction("activate", new P_EnableAction(true));
-      p.print(" ]");
-    }
-    p.p();
-
-    if (inst.isEnabled()) {
-      return "<p><b>Note: Session Activity Monitor is enabled; this might affect performance and memory due to higher resource consumption during analysis.</b><p>";
-    }
-    return null;
-  }
-
-  private String createLoggingQuickLink(HtmlComponent p) {
-    if (!ACCESS.check(new UpdateServiceConfigurationPermission())) {
-      return null;
-    }
-
-    Integer globalLogLevel;
-    try {
-      // check whether global log level is supported by installed log manager
-      globalLogLevel = ScoutLogManager.getGlobalLogLevel();
-    }
-    catch (UnsupportedOperationException e) {
-      LOG.info("Use of global log level is not supported", e);
-      return null;
-    }
-
-    if (globalLogLevel != null) {
-      //p.print("Global logging is active [ ");
-      //p.linkAction("deactivate", new P_ToggleGlobalLoggingAction(false));
-      //p.print(" ]");
-
-      addLogLevelRadioEntry(p, IScoutLogger.LEVEL_ERROR, "ERROR");
-      addLogLevelRadioEntry(p, IScoutLogger.LEVEL_WARN, "WARNING");
-      addLogLevelRadioEntry(p, IScoutLogger.LEVEL_INFO, "INFO");
-      addLogLevelRadioEntry(p, IScoutLogger.LEVEL_DEBUG, "DEBUG");
-      addLogLevelRadioEntry(p, IScoutLogger.LEVEL_TRACE, "TRACE");
-      addLogLevelRadioEntry(p, IScoutLogger.LEVEL_OFF, "OFF");
-    }
-    else {
-      //p.print("Global logging is inactive [");
-      //p.linkAction("activate", new  P_ToggleGlobalLoggingAction(true));
-      //p.print(" ]");
-    }
-    p.p();
-
-    if (globalLogLevel != null && globalLogLevel > IScoutLogger.LEVEL_WARN) {
-      return "<p><b>Note: Global logging is active with a level finer than WARNING; this might affect performance due to increased log output.</b><p>";
-    }
-    return null;
-  }
+//  private String createMonitoringQuickLink(HtmlComponent p) {
+//    if (!ACCESS.check(new UpdateServiceConfigurationPermission())) {
+//      return null;
+//    }
+//
+//    final ProcessInspector inst = ProcessInspector.getDefault();
+//    if (inst.isEnabled()) {
+//      p.print("Monitor is active with maximum caching of " + (inst.getTimeout() / 1000 / 60) + " minutes [ ");
+//      p.linkAction("cache 2 min", new P_SetTimeoutAction(2));
+//      p.print(" | ");
+//      p.linkAction("cache 15 min", new P_SetTimeoutAction(15));
+//      p.print(" | ");
+//      p.linkAction("cache 60 min", new P_SetTimeoutAction(60));
+//      p.print(" | ");
+//      p.linkAction("deactivate", new P_EnableAction(false));
+//      p.print(" ]");
+//      p.br();
+//      if (inst.acceptCall(IPingService.class.getName(), "ping")) {
+//        p.linkAction("IPingService.ping (click to toggle)", new AbstractHtmlAction("IPingService.ignore") {
+//          private static final long serialVersionUID = 1L;
+//
+//          @Override
+//          public void run() {
+//            inst.getIgnoredCallSet().clear();
+//            inst.getIgnoredCallSet().add(".*\\.IPingService\\.ping");
+//          }
+//        });
+//      }
+//      else {
+//        p.startLinkAction(new AbstractHtmlAction("IPingService.accept") {
+//          private static final long serialVersionUID = 1L;
+//
+//          @Override
+//          public void run() {
+//            inst.getIgnoredCallSet().clear();
+//          }
+//        });
+//        p.raw("<s>");
+//        p.printNoBreak("IPingService.ping");
+//        p.raw("</s>");
+//        p.printNoBreak(" (click to toggle)");
+//        p.endLinkAction();
+//      }
+//    }
+//    else {
+//      p.print("Monitor is inactive [ ");
+//      p.linkAction("activate", new P_EnableAction(true));
+//      p.print(" ]");
+//    }
+//    p.p();
+//
+//    if (inst.isEnabled()) {
+//      return "<p><b>Note: Session Activity Monitor is enabled; this might affect performance and memory due to higher resource consumption during analysis.</b><p>";
+//    }
+//    return null;
+//  }
+//
+//  private String createLoggingQuickLink(HtmlComponent p) {
+//    if (!ACCESS.check(new UpdateServiceConfigurationPermission())) {
+//      return null;
+//    }
+//
+//    Integer globalLogLevel;
+//    try {
+//      // check whether global log level is supported by installed log manager
+//      globalLogLevel = ScoutLogManager.getGlobalLogLevel();
+//    }
+//    catch (UnsupportedOperationException e) {
+//      LOG.info("Use of global log level is not supported", e);
+//      return null;
+//    }
+//
+//    if (globalLogLevel != null) {
+//      //p.print("Global logging is active [ ");
+//      //p.linkAction("deactivate", new P_ToggleGlobalLoggingAction(false));
+//      //p.print(" ]");
+//
+//      addLogLevelRadioEntry(p, IScoutLogger.LEVEL_ERROR, "ERROR");
+//      addLogLevelRadioEntry(p, IScoutLogger.LEVEL_WARN, "WARNING");
+//      addLogLevelRadioEntry(p, IScoutLogger.LEVEL_INFO, "INFO");
+//      addLogLevelRadioEntry(p, IScoutLogger.LEVEL_DEBUG, "DEBUG");
+//      addLogLevelRadioEntry(p, IScoutLogger.LEVEL_TRACE, "TRACE");
+//      addLogLevelRadioEntry(p, IScoutLogger.LEVEL_OFF, "OFF");
+//    }
+//    else {
+//      //p.print("Global logging is inactive [");
+//      //p.linkAction("activate", new  P_ToggleGlobalLoggingAction(true));
+//      //p.print(" ]");
+//    }
+//    p.p();
+//
+//    if (globalLogLevel != null && globalLogLevel > IScoutLogger.LEVEL_WARN) {
+//      return "<p><b>Note: Global logging is active with a level finer than WARNING; this might affect performance due to increased log output.</b><p>";
+//    }
+//    return null;
+//  }
 
   private void addLogLevelRadioEntry(HtmlComponent p, final int logLevel, String logLevelText) {
     Integer globalLogLevel = ScoutLogManager.getGlobalLogLevel();

@@ -12,7 +12,6 @@ package org.eclipse.scout.rt.server.admin.html.view;
 
 import java.io.Serializable;
 
-import org.eclipse.scout.rt.server.admin.html.AbstractHtmlAction;
 import org.eclipse.scout.rt.server.admin.html.AdminSession;
 import org.eclipse.scout.rt.server.admin.html.IView;
 import org.eclipse.scout.rt.server.admin.html.widget.table.HtmlComponent;
@@ -91,22 +90,22 @@ public class TopView extends DefaultView implements Serializable {
           p.raw("</b>");
         }
         else {
-          final IView finalV = v;
-          p.startLinkAction(
-              new AbstractHtmlAction("tab." + v.getClass().getSimpleName()) {
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                public void run() {
-                  m_activeView = finalV;
-                  if (m_activeView != null) {
-                    m_activeView.activated();
-                  }
-                }
-              }
-              );
-          v.produceTitle(p);
-          p.endLinkAction();
+//          final IView finalV = v;
+//          p.startLinkAction(
+//              new AbstractHtmlAction("tab." + v.getClass().getSimpleName()) {
+//                private static final long serialVersionUID = 1L;
+//
+//                @Override
+//                public void run() {
+//                  m_activeView = finalV;
+//                  if (m_activeView != null) {
+//                    m_activeView.activated();
+//                  }
+//                }
+//              }
+//              );
+//          v.produceTitle(p);
+//          p.endLinkAction();
         }
         p.raw("&nbsp;");
         p.raw("&nbsp;");

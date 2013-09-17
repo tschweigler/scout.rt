@@ -4,18 +4,21 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     BSI Business Systems Integration AG - initial API and implementation
  ******************************************************************************/
 package org.eclipse.scout.rt.server.admin.html.view;
+
+import java.io.Serializable;
 
 import org.eclipse.scout.rt.server.admin.html.AbstractHtmlAction;
 import org.eclipse.scout.rt.server.admin.html.AdminSession;
 import org.eclipse.scout.rt.server.admin.html.IView;
 import org.eclipse.scout.rt.server.admin.html.widget.table.HtmlComponent;
 
-public class TopView extends DefaultView {
+public class TopView extends DefaultView implements Serializable {
+  private static final long serialVersionUID = 1L;
   private MessagesView m_messagesView;
   private GeneralView m_generalView;
   private ServicesView m_servicesView;

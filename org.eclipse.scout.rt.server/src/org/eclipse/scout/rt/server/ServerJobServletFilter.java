@@ -90,7 +90,7 @@ public class ServerJobServletFilter implements Filter {
         try {
           serverSession = SERVICES.getService(IServerSessionRegistryService.class).newServerSession(serverSessionClass, null);
           // store new session
-          req.getSession().setAttribute(IServerSession.class.getName(), serverSession);
+          // req.getSession().setAttribute(IServerSession.class.getName(), serverSession);
         }
         catch (Throwable t) {
           LOG.error("create session " + serverSessionClass, t);

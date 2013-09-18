@@ -10,13 +10,9 @@
  ******************************************************************************/
 package org.eclipse.scout.rt.server;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InterruptedIOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.SocketException;
 import java.security.AccessController;
 import java.util.Locale;
@@ -28,7 +24,6 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -210,10 +205,11 @@ public class ServiceTunnelServlet extends HttpServletEx {
   private IServerSession lookupScoutServerSessionOnHttpSession(HttpServletRequest req, HttpServletResponse res, Subject subject, UserAgent userAgent) throws ProcessingException, ServletException {
     //external request: apply locking, this is the session initialization phase
     synchronized (req.getSession()) {
-      IServerSession serverSession = (IServerSession) req.getSession().getAttribute(IServerSession.class.getName());
+      IServerSession serverSession = null;
+      //IServerSession serverSession = (IServerSession) req.getSession().getAttribute(IServerSession.class.getName());
       if (serverSession == null) {
         serverSession = SERVICES.getService(IServerSessionRegistryService.class).newServerSession(m_serverSessionClass, subject, userAgent);
-        req.getSession().setAttribute(IServerSession.class.getName(), serverSession);
+        //req.getSession().setAttribute(IServerSession.class.getName(), serverSession);
       }
       return serverSession;
     }
@@ -441,26 +437,27 @@ public class ServiceTunnelServlet extends HttpServletEx {
     @Override
     protected IStatus runTransaction(IProgressMonitor monitor) throws Exception {
       // get session
-      HttpSession session = m_request.getSession();
-      String key = AdminSession.class.getName();
+//      HttpSession session = m_request.getSession();
+//      String key = AdminSession.class.getName();
       //AdminSession as = (AdminSession) session.getAttribute(key);
+      AdminSession as;
+//      byte[] bas = (byte[]) session.getAttribute(key);
+//      if (bas != null) {
+//        ByteArrayInputStream bais = new ByteArrayInputStream(bas);
+//        ObjectInputStream ois = new ObjectInputStream(bais);
+//        as = (AdminSession) ois.readObject();
+//      }
+//      else {
+      as = new AdminSession();
 
-      byte[] bas = (byte[]) session.getAttribute(key);
-      ByteArrayInputStream bais = new ByteArrayInputStream(bas);
-      ObjectInputStream ois = new ObjectInputStream(bais);
-      AdminSession as = (AdminSession) ois.readObject();
-
-      if (as == null) {
-        as = new AdminSession();
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(baos);
-        oos.writeObject(as);
-        oos.close();
-        byte[] array = baos.toByteArray();
-
-        session.setAttribute(key, array);
-      }
+//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//        ObjectOutputStream oos = new ObjectOutputStream(baos);
+//        oos.writeObject(as);
+//        oos.close();
+//        byte[] array = baos.toByteArray();
+//
+//        session.setAttribute(key, array);
+//      }
       as.serviceRequest(m_request, m_response);
       return Status.OK_STATUS;
     }

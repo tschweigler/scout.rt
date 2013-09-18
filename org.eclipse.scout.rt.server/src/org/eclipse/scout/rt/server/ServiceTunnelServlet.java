@@ -10,9 +10,13 @@
  ******************************************************************************/
 package org.eclipse.scout.rt.server;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InterruptedIOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.SocketException;
 import java.security.AccessController;
 import java.util.Locale;
@@ -439,10 +443,23 @@ public class ServiceTunnelServlet extends HttpServletEx {
       // get session
       HttpSession session = m_request.getSession();
       String key = AdminSession.class.getName();
-      AdminSession as = (AdminSession) session.getAttribute(key);
+      //AdminSession as = (AdminSession) session.getAttribute(key);
+
+      byte[] bas = (byte[]) session.getAttribute(key);
+      ByteArrayInputStream bais = new ByteArrayInputStream(bas);
+      ObjectInputStream ois = new ObjectInputStream(bais);
+      AdminSession as = (AdminSession) ois.readObject();
+
       if (as == null) {
         as = new AdminSession();
-        session.setAttribute(key, as);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(baos);
+        oos.writeObject(as);
+        oos.close();
+        byte[] array = baos.toByteArray();
+
+        session.setAttribute(key, array);
       }
       as.serviceRequest(m_request, m_response);
       return Status.OK_STATUS;

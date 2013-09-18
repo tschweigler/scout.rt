@@ -135,7 +135,7 @@ public abstract class AbstractChainableSecurityFilter implements Filter {
           subject.getPrincipals().add(pHolder.getPrincipal());
           subject.setReadOnly();
           synchronized (req.getSession()) {
-            req.getSession().setAttribute(PROP_SUBJECT, subject);
+            //req.getSession().setAttribute(PROP_SUBJECT, subject);
           }
           break;
       }
@@ -201,7 +201,7 @@ public abstract class AbstractChainableSecurityFilter implements Filter {
         subject = new Subject();
         subject.getPrincipals().add(principal);
         subject.setReadOnly();
-        req.getSession().setAttribute(PROP_SUBJECT, subject);
+        //req.getSession().setAttribute(PROP_SUBJECT, subject);
       }
     }
     return subject;

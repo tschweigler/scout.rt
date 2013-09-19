@@ -436,28 +436,12 @@ public class ServiceTunnelServlet extends HttpServletEx {
 
     @Override
     protected IStatus runTransaction(IProgressMonitor monitor) throws Exception {
-      // get session
-//      HttpSession session = m_request.getSession();
-//      String key = AdminSession.class.getName();
-      //AdminSession as = (AdminSession) session.getAttribute(key);
-      AdminSession as;
-//      byte[] bas = (byte[]) session.getAttribute(key);
-//      if (bas != null) {
-//        ByteArrayInputStream bais = new ByteArrayInputStream(bas);
-//        ObjectInputStream ois = new ObjectInputStream(bais);
-//        as = (AdminSession) ois.readObject();
-//      }
-//      else {
-      as = new AdminSession();
-
-//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//        ObjectOutputStream oos = new ObjectOutputStream(baos);
-//        oos.writeObject(as);
-//        oos.close();
-//        byte[] array = baos.toByteArray();
-//
-//        session.setAttribute(key, array);
-//      }
+      String key = AdminSession.class.getName();
+      AdminSession as = (AdminSession) SessionHandler.getInstance().loadFromSession(m_request, key);
+      if (as == null) {
+        as = new AdminSession();
+        SessionHandler.getInstance().storeInSession(m_request, key, as);
+      }
       as.serviceRequest(m_request, m_response);
       return Status.OK_STATUS;
     }

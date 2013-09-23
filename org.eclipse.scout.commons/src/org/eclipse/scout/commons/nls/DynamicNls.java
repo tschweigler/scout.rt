@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.eclipse.scout.commons.nls;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -21,8 +22,9 @@ import java.util.ResourceBundle;
 /**
  * Warning: Avoid osgi imports in this class, so it can be used in J2EE
  */
-public class DynamicNls {
+public class DynamicNls implements Serializable {
 
+  private static final long serialVersionUID = -3592561416786739923L;
   private ArrayList<NlsResourceBundleCache> m_resourceBundles;
 
   public DynamicNls() {

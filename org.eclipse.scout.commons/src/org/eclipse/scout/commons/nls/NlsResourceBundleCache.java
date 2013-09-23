@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.eclipse.scout.commons.nls;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -19,7 +20,8 @@ import java.util.ResourceBundle;
  * 
  * @author imo
  */
-public class NlsResourceBundleCache {
+public class NlsResourceBundleCache implements Serializable {
+  private static final long serialVersionUID = -6602842161151788761L;
   private String m_resourceBundleName;
   private Class m_wrapperClass;
   private HashMap<Locale, ResourceBundle> m_resourceBundles;

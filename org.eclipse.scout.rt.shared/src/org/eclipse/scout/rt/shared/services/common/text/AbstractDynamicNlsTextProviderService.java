@@ -19,6 +19,8 @@ import org.osgi.framework.ServiceRegistration;
 
 public abstract class AbstractDynamicNlsTextProviderService extends AbstractService implements ITextProviderService {
 
+  private static final long serialVersionUID = 1574484531946382840L;
+
   /**
    * Gets the base name where the <code>DynamicNls</code> instance searches for .properties files.<br>
    * Examples:<br>

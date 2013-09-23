@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.eclipse.scout.rt.shared;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -28,7 +29,9 @@ import org.eclipse.scout.service.SERVICES;
  * @see ServerJob
  * @see ITextProviderService
  */
-public class ScoutTexts {
+public class ScoutTexts implements Serializable {
+
+  private static final long serialVersionUID = 4554922091838517439L;
 
   /**
    * Jop property name tha can be used when Texts should be used in associated contexts such as swt display, rwt display

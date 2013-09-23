@@ -106,7 +106,7 @@ public class SessionHandler {
     try {
       if (bytes != null) {
         IObjectSerializer objs = SerializationUtility.createObjectSerializer();
-        objs.deserialize(bytes, Object.class);
+        obj = objs.deserialize(bytes, Object.class);
       }
     }
     catch (ClassNotFoundException e) {

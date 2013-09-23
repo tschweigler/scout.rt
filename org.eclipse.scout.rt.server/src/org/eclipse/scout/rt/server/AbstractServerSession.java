@@ -48,8 +48,7 @@ public abstract class AbstractServerSession implements IServerSession, Serializa
   private boolean m_initialized;
   private boolean m_active;
   private Locale m_locale;
-  private final HashMap<String, Object> m_attributes;// transient
-  private transient final Object m_attributesLock; // transient
+  private final HashMap<String, Object> m_attributes; // transient
   private final SharedVariableMap m_sharedVariableMap;
   private boolean m_singleThreadSession;
   private ScoutTexts m_scoutTexts;
@@ -61,7 +60,6 @@ public abstract class AbstractServerSession implements IServerSession, Serializa
 
   public AbstractServerSession(boolean autoInitConfig) {
     m_locale = LocaleThreadLocal.get();
-    m_attributesLock = new Object();
     m_attributes = new HashMap<String, Object>();
     m_sharedVariableMap = new SharedVariableMap();
     if (autoInitConfig) {
@@ -154,14 +152,14 @@ public abstract class AbstractServerSession implements IServerSession, Serializa
 
   @Override
   public Object getData(String key) {
-    synchronized (m_attributesLock) {
+    synchronized (AbstractServerSession.class) {
       return m_attributes.get(key);
     }
   }
 
   @Override
   public void setData(String key, Object value) {
-    synchronized (m_attributesLock) {
+    synchronized (AbstractServerSession.class) {
       m_attributes.put(key, value);
     }
   }

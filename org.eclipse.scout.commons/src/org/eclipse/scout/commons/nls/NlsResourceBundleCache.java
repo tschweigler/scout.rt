@@ -25,12 +25,10 @@ public class NlsResourceBundleCache implements Serializable {
   private String m_resourceBundleName;
   private Class m_wrapperClass;
   private HashMap<Locale, ResourceBundle> m_resourceBundles;
-  private Object m_resourceBundlesLock;
 
   public NlsResourceBundleCache(String resourceBundleName, Class wrapperClass) {
     m_resourceBundleName = resourceBundleName;
     m_wrapperClass = wrapperClass;
-    m_resourceBundlesLock = new Object();
     m_resourceBundles = new HashMap<Locale, ResourceBundle>();
   }
 
@@ -38,7 +36,7 @@ public class NlsResourceBundleCache implements Serializable {
     if (locale == null) {
       throw new IllegalArgumentException("locale must not be null");
     }
-    synchronized (m_resourceBundlesLock) {
+    synchronized (NlsResourceBundleCache.class) {
       // double check with lock
       ResourceBundle r = m_resourceBundles.get(locale);
       if (r == null) {

@@ -48,15 +48,11 @@ public abstract class AbstractServerSession implements IServerSession, Serializa
   private boolean m_initialized;
   private boolean m_active;
   private Locale m_locale;
-  private final HashMap<String, Object> m_attributes; // transient
+  private final HashMap<String, Object> m_attributes;
   private final SharedVariableMap m_sharedVariableMap;
   private boolean m_singleThreadSession;
   private ScoutTexts m_scoutTexts;
   private UserAgent m_userAgent;
-
-  public AbstractServerSession() {
-    this(true);
-  }
 
   public AbstractServerSession(boolean autoInitConfig) {
     m_locale = LocaleThreadLocal.get();

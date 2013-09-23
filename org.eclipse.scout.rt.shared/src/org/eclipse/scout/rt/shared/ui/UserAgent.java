@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.eclipse.scout.rt.shared.ui;
 
+import java.io.Serializable;
+
 import org.eclipse.scout.rt.shared.Activator;
 
 /**
@@ -27,11 +29,19 @@ import org.eclipse.scout.rt.shared.Activator;
  * 
  * @since 3.8.0
  */
-public final class UserAgent {
+public final class UserAgent implements Serializable {
 
+  private static final long serialVersionUID = 6194949468393137650L;
   private String m_uiDeviceId;
   private IUiLayer m_uiLayer;
   private IUiDeviceType m_uiDeviceType;
+
+  public UserAgent() {
+    String osName = Activator.getDefault().getBundle().getBundleContext().getProperty("org.osgi.framework.os.name");
+    m_uiLayer = UiLayer.UNKNOWN;
+    m_uiDeviceType = UiDeviceType.UNKNOWN;
+    m_uiDeviceId = osName;
+  }
 
   private UserAgent(IUiLayer uiLayer, IUiDeviceType uiDeviceType, String uiDeviceId) {
     if (uiLayer == null || uiDeviceType == null || uiDeviceId == null) {

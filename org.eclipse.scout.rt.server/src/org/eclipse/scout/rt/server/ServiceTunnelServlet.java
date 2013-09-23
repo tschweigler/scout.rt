@@ -42,6 +42,7 @@ import org.eclipse.scout.commons.logger.ScoutLogManager;
 import org.eclipse.scout.commons.osgi.BundleInspector;
 import org.eclipse.scout.commons.serialization.SerializationUtility;
 import org.eclipse.scout.http.servletfilter.HttpServletEx;
+import org.eclipse.scout.http.servletfilter.SessionHandler;
 import org.eclipse.scout.http.servletfilter.helper.HttpAuthJaasFilter;
 import org.eclipse.scout.rt.server.admin.html.AdminSession;
 import org.eclipse.scout.rt.server.internal.Activator;
@@ -205,11 +206,10 @@ public class ServiceTunnelServlet extends HttpServletEx {
   private IServerSession lookupScoutServerSessionOnHttpSession(HttpServletRequest req, HttpServletResponse res, Subject subject, UserAgent userAgent) throws ProcessingException, ServletException {
     //external request: apply locking, this is the session initialization phase
     synchronized (req.getSession()) {
-      IServerSession serverSession = null;
-      //IServerSession serverSession = (IServerSession) req.getSession().getAttribute(IServerSession.class.getName());
+      IServerSession serverSession = (IServerSession) SessionHandler.getInstance().getAttribute(req, IServerSession.class.getName());
       if (serverSession == null) {
         serverSession = SERVICES.getService(IServerSessionRegistryService.class).newServerSession(m_serverSessionClass, subject, userAgent);
-        //req.getSession().setAttribute(IServerSession.class.getName(), serverSession);
+        SessionHandler.getInstance().setAttribute(req, IServerSession.class.getName(), serverSession);
       }
       return serverSession;
     }
@@ -437,10 +437,10 @@ public class ServiceTunnelServlet extends HttpServletEx {
     @Override
     protected IStatus runTransaction(IProgressMonitor monitor) throws Exception {
       String key = AdminSession.class.getName();
-      AdminSession as = (AdminSession) SessionHandler.getInstance().loadFromSession(m_request, key);
+      AdminSession as = (AdminSession) SessionHandler.getInstance().getAttribute(m_request, key);
       if (as == null) {
         as = new AdminSession();
-        SessionHandler.getInstance().storeInSession(m_request, key, as);
+        SessionHandler.getInstance().setAttribute(m_request, key, as);
       }
       as.serviceRequest(m_request, m_response);
       return Status.OK_STATUS;

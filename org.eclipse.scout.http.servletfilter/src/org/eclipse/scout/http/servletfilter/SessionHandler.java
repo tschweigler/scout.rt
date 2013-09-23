@@ -8,15 +8,15 @@
  * Contributors:
  *     BSI Business Systems Integration AG - initial API and implementation
  ******************************************************************************/
-package org.eclipse.scout.rt.server;
+package org.eclipse.scout.http.servletfilter;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.eclipse.scout.commons.StringUtility;
+import org.eclipse.scout.commons.serialization.IObjectSerializer;
+import org.eclipse.scout.commons.serialization.SerializationUtility;
 
 /**
  * Kümmert sich um die Speicherung der sessionabhängigen Daten, sodass auch bei mehreren Server-Instanzen alle Daten
@@ -40,17 +40,23 @@ public class SessionHandler {
     return (m_sessionHandler != null) ? m_sessionHandler : new SessionHandler();
   }
 
-  public void storeInSession(HttpServletRequest req, String key, Object value) {
+  public void setAttribute(HttpServletRequest req, String key, Object value) {
+    switch (m_sessionStoreType) {
+      case HTTPSESSION:
+        setHttpAttribute(req, key, value);
+        break;
+      case DATABASE:
 
+    }
   }
 
-  public Object loadFromSession(HttpServletRequest req, String key) {
+  public Object getAttribute(HttpServletRequest req, String key) {
 
     Object value = null;
 
     switch (m_sessionStoreType) {
       case HTTPSESSION:
-        value = loadFromHttpSession(req, key);
+        value = getHttpAttribute(req, key);
         break;
       case DATABASE:
         value = null;
@@ -59,28 +65,37 @@ public class SessionHandler {
     return value;
   }
 
-  private void storeInHttpSession(HttpServletRequest req, String key, Object value) {
-    req.setAttribute(key, serialize(value));
+  private void setHttpAttribute(HttpServletRequest req, String key, Object value) {
+    if (value != null) {
+      req.getSession().setAttribute(key, StringUtility.bytesToHex(serialize(value)));
+    }
   }
 
-  private Object loadFromHttpSession(HttpServletRequest req, String key) {
-    return deserialize((byte[]) req.getAttribute(key));
+  private Object getHttpAttribute(HttpServletRequest req, String key) {
+
+    String hex = (String) req.getSession().getAttribute(key);
+    if (hex != null) {
+      return deserialize(StringUtility.hexToBytes(hex));
+    }
+    else {
+      return null;
+    }
+    //return deserialize(StringUtility.hexToBytes((String) req.getSession().getAttribute(key)));
   }
 
   private byte[] serialize(Object obj) {
 
     byte[] bytes = null;
+
     try {
-      ByteArrayOutputStream baos = new ByteArrayOutputStream();
-      ObjectOutputStream oos = new ObjectOutputStream(baos);
-      oos.writeObject(obj);
-      oos.close();
-      bytes = baos.toByteArray();
+      //long start = new Date().getTime();
+      IObjectSerializer objs = SerializationUtility.createObjectSerializer();
+      bytes = objs.serialize(obj);
+      //System.out.println("Serializationtime [" + obj.getClass().getName() + "]: " + (new Date().getTime() - start));
     }
     catch (IOException e) {
       e.printStackTrace();
     }
-
     return bytes;
   }
 
@@ -90,9 +105,8 @@ public class SessionHandler {
 
     try {
       if (bytes != null) {
-        ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-        ObjectInputStream ois = new ObjectInputStream(bais);
-        obj = ois.readObject();
+        IObjectSerializer objs = SerializationUtility.createObjectSerializer();
+        objs.deserialize(bytes, Object.class);
       }
     }
     catch (ClassNotFoundException e) {

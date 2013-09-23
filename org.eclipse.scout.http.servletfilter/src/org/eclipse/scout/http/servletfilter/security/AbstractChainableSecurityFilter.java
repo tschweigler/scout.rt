@@ -30,6 +30,7 @@ import org.eclipse.scout.commons.logger.IScoutLogger;
 import org.eclipse.scout.commons.logger.ScoutLogManager;
 import org.eclipse.scout.commons.security.SimplePrincipal;
 import org.eclipse.scout.http.servletfilter.FilterConfigInjection;
+import org.eclipse.scout.http.servletfilter.SessionHandler;
 
 /**
  * <h4>AbstractChainableSecurityFilter</h4> The following properties can be set
@@ -135,7 +136,7 @@ public abstract class AbstractChainableSecurityFilter implements Filter {
           subject.getPrincipals().add(pHolder.getPrincipal());
           subject.setReadOnly();
           synchronized (req.getSession()) {
-            //req.getSession().setAttribute(PROP_SUBJECT, subject);
+            SessionHandler.getInstance().setAttribute(req, PROP_SUBJECT, subject);
           }
           break;
       }
@@ -177,7 +178,7 @@ public abstract class AbstractChainableSecurityFilter implements Filter {
   private Subject findSubjectOnSession(HttpServletRequest req, HttpServletResponse resp) {
     Object o = null;
     Subject subject = null;
-    o = req.getSession().getAttribute(PROP_SUBJECT);
+    o = SessionHandler.getInstance().getAttribute(req, PROP_SUBJECT);
 
     if (o instanceof Subject) {
       subject = (Subject) o;
@@ -201,7 +202,7 @@ public abstract class AbstractChainableSecurityFilter implements Filter {
         subject = new Subject();
         subject.getPrincipals().add(principal);
         subject.setReadOnly();
-        //req.getSession().setAttribute(PROP_SUBJECT, subject);
+        SessionHandler.getInstance().setAttribute(req, PROP_SUBJECT, subject);
       }
     }
     return subject;

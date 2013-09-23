@@ -12,6 +12,7 @@ package org.eclipse.scout.rt.server;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
@@ -38,19 +39,25 @@ import org.eclipse.scout.rt.shared.ui.UserAgent;
 import org.eclipse.scout.service.SERVICES;
 import org.osgi.framework.Bundle;
 
-public abstract class AbstractServerSession implements IServerSession {
+public abstract class AbstractServerSession implements IServerSession, Serializable {
+
+  private static final long serialVersionUID = 1L;
   private static final IScoutLogger LOG = ScoutLogManager.getLogger(AbstractServerSession.class);
 
-  private Bundle m_bundle;
+  private transient Bundle m_bundle; // transient
   private boolean m_initialized;
   private boolean m_active;
   private Locale m_locale;
-  private final HashMap<String, Object> m_attributes;
-  private final Object m_attributesLock;
+  private final HashMap<String, Object> m_attributes;// transient
+  private transient final Object m_attributesLock; // transient
   private final SharedVariableMap m_sharedVariableMap;
   private boolean m_singleThreadSession;
-  private ScoutTexts m_scoutTexts;
+  private transient ScoutTexts m_scoutTexts;
   private UserAgent m_userAgent;
+
+  public AbstractServerSession() {
+    this(true);
+  }
 
   public AbstractServerSession(boolean autoInitConfig) {
     m_locale = LocaleThreadLocal.get();

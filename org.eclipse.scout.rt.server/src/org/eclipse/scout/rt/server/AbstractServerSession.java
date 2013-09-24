@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.scout.commons.LocaleThreadLocal;
 import org.eclipse.scout.commons.TypeCastUtility;
 import org.eclipse.scout.commons.annotations.ConfigOperation;
@@ -181,6 +182,11 @@ public abstract class AbstractServerSession implements IServerSession, Serializa
 
   @Override
   public Bundle getBundle() {
+    //TSW: Da die Klasse Bundle nicht serialisiert und damit nicht in der HTTP-Session abgelegt werden kann, muss dieses bei Bedarf nachgeladen werden
+    if (m_bundle == null) {
+      String symbolicName = this.getClass().getPackage().getName();
+      m_bundle = Platform.getBundle(symbolicName);
+    }
     return m_bundle;
   }
 

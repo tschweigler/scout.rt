@@ -34,7 +34,8 @@ public class ScoutTexts implements Serializable {
   private static final long serialVersionUID = 4554922091838517439L;
 
   /**
-   * Jop property name tha can be used when Texts should be used in associated contexts such as swt display, rwt display
+   * Jop property name that can be used when Texts should be used in associated contexts such as swt display, rwt
+   * display
    * etc.
    */
   public static final QualifiedName JOB_PROPERTY_NAME = new QualifiedName(ScoutTexts.class.getName(), "ref");

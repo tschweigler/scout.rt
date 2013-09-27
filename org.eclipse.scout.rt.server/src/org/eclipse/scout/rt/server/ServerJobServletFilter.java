@@ -31,8 +31,8 @@ import org.eclipse.scout.commons.exception.ProcessingException;
 import org.eclipse.scout.commons.logger.IScoutLogger;
 import org.eclipse.scout.commons.logger.ScoutLogManager;
 import org.eclipse.scout.http.servletfilter.FilterConfigInjection;
-import org.eclipse.scout.http.servletfilter.SessionHandler;
 import org.eclipse.scout.rt.server.services.common.session.IServerSessionRegistryService;
+import org.eclipse.scout.rt.server.services.common.session.SessionStore;
 import org.eclipse.scout.rt.shared.services.common.exceptionhandler.IExceptionHandlerService;
 import org.eclipse.scout.service.SERVICES;
 
@@ -71,10 +71,11 @@ public class ServerJobServletFilter implements Filter {
       return;
     }
     // get cached session
-    IServerSession serverSession = (IServerSession) SessionHandler.getInstance().getAttribute(req, IServerSession.class.getName());
+    IServerSession serverSession = (IServerSession) SessionStore.getAttribute(req, IServerSession.class.getName());
+
     // create new session
     synchronized (req.getSession()) {
-      serverSession = (IServerSession) (IServerSession) SessionHandler.getInstance().getAttribute(req, IServerSession.class.getName());
+      serverSession = (IServerSession) (IServerSession) SessionStore.getAttribute(req, IServerSession.class.getName());
       if (serverSession == null) {
         String qname = config.getInitParameter("session");
         Class<? extends IServerSession> serverSessionClass;
@@ -91,7 +92,7 @@ public class ServerJobServletFilter implements Filter {
         try {
           serverSession = SERVICES.getService(IServerSessionRegistryService.class).newServerSession(serverSessionClass, null);
           // store new session
-          SessionHandler.getInstance().setAttribute(req, IServerSession.class.getName(), serverSession);
+          SessionStore.setAttribute(req, IServerSession.class.getName(), serverSession);
         }
         catch (Throwable t) {
           LOG.error("create session " + serverSessionClass, t);

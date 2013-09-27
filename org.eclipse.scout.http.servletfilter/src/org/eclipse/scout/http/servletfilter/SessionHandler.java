@@ -24,7 +24,6 @@ import org.eclipse.scout.commons.serialization.SerializationUtility;
  */
 public class SessionHandler {
 
-  // Könnte auch mit ISessionHandler und den Implementierungen HTTPSessionHandler DBSesionHandler usw gemacht werden (über SessionHandlerFactory?)
   private static SessionHandler m_sessionHandler;
   private SessionStoreType m_sessionStoreType;
 

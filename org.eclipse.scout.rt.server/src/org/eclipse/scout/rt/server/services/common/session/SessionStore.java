@@ -23,7 +23,9 @@ public final class SessionStore {
 
   public static void setAttribute(HttpServletRequest req, String key, Object value) {
     ISessionStoreService service = SERVICES.getService(usedServiceType);
-    service.setAttribute(req, key, value);
+    if (service != null) {
+      service.setAttribute(req, key, value);
+    }
   }
 
   public static Object getAttribute(HttpServletRequest req, String key) {

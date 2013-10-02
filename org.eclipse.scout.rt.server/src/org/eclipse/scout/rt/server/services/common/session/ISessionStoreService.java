@@ -14,9 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.eclipse.scout.service.IService;
 
-/**
- *
- */
 public interface ISessionStoreService extends IService {
 
   public void setAttribute(HttpServletRequest req, String key, Object value);

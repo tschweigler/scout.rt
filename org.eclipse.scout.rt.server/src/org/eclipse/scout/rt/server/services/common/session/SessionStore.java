@@ -27,7 +27,13 @@ public final class SessionStore {
   }
 
   public static Object getAttribute(HttpServletRequest req, String key) {
+
     ISessionStoreService service = SERVICES.getService(usedServiceType);
-    return service.getAttribute(req, key);
+    if (service != null) {
+      return service.getAttribute(req, key);
+    }
+    else {
+      return null;
+    }
   }
 }

@@ -22,6 +22,7 @@ import org.eclipse.scout.commons.serialization.SerializationUtility;
  * Kümmert sich um die Speicherung der sessionabhängigen Daten, sodass auch bei mehreren Server-Instanzen alle Daten
  * konsistet bleiben
  */
+@Deprecated
 public class SessionHandler {
 
   private static SessionHandler m_sessionHandler;

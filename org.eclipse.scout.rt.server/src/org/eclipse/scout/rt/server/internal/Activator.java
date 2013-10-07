@@ -4,7 +4,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     BSI Business Systems Integration AG - initial API and implementation
  ******************************************************************************/
@@ -52,6 +52,8 @@ public class Activator extends Plugin {
   public void start(final BundleContext context) throws Exception {
     super.start(context);
     plugin = this;
+    LOG.warn("Bazinga #01");
+    System.out.println("Bazinga #02");
     m_processInspector = new ProcessInspector();
     // workaround for bug in serverside equinox implementation with servletbridge
     // wait until done and launch product if one exists

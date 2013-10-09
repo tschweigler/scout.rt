@@ -18,7 +18,7 @@ import org.eclipse.scout.rt.shared.ui.UserAgent;
 import org.osgi.framework.Bundle;
 
 /**
- * @since 3.8.0 change-for-maven
+ * @since 3.8.0 change-for-maven 02
  */
 public interface ISession {
 

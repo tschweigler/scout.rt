@@ -23,6 +23,7 @@ import org.eclipse.scout.service.internal.Activator;
 import org.osgi.framework.ServiceRegistration;
 
 /**
+ * Maven Change
  * Convenience {@link IService} implementation with support for config.ini
  * variable injection. see {@link ServiceUtility#injectConfigProperties(IService)}
  */

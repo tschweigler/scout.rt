@@ -42,7 +42,7 @@ import org.osgi.framework.Bundle;
 
 public abstract class AbstractServerSession implements IServerSession, Serializable {
 
-  // Change for maven
+  // Change for maven 02
   private static final long serialVersionUID = 1L;
   private static final IScoutLogger LOG = ScoutLogManager.getLogger(AbstractServerSession.class);
 

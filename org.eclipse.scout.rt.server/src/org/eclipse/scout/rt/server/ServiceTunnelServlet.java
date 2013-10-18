@@ -206,10 +206,10 @@ public class ServiceTunnelServlet extends HttpServletEx {
   private IServerSession lookupScoutServerSessionOnHttpSession(HttpServletRequest req, HttpServletResponse res, Subject subject, UserAgent userAgent) throws ProcessingException, ServletException {
     //external request: apply locking, this is the session initialization phase
     synchronized (req.getSession()) {
-      IServerSession serverSession = (IServerSession) SessionStore.getAttribute(req, IServerSession.class.getName());
+      IServerSession serverSession = (IServerSession) SessionStore.getAttribute(req, res, IServerSession.class.getName());
       if (serverSession == null) {
         serverSession = SERVICES.getService(IServerSessionRegistryService.class).newServerSession(m_serverSessionClass, subject, userAgent);
-        SessionStore.setAttribute(req, IServerSession.class.getName(), serverSession);
+        SessionStore.setAttribute(req, res, IServerSession.class.getName(), serverSession);
       }
       return serverSession;
     }
@@ -437,10 +437,10 @@ public class ServiceTunnelServlet extends HttpServletEx {
     @Override
     protected IStatus runTransaction(IProgressMonitor monitor) throws Exception {
       String key = AdminSession.class.getName();
-      AdminSession as = (AdminSession) SessionStore.getAttribute(m_request, key);
+      AdminSession as = (AdminSession) SessionStore.getAttribute(m_request, m_response, key);
       if (as == null) {
         as = new AdminSession();
-        SessionStore.setAttribute(m_request, key, as);
+        SessionStore.setAttribute(m_request, m_response, key, as);
       }
       as.serviceRequest(m_request, m_response);
       return Status.OK_STATUS;

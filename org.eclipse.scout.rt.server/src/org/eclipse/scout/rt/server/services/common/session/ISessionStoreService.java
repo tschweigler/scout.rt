@@ -11,12 +11,13 @@
 package org.eclipse.scout.rt.server.services.common.session;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.scout.service.IService;
 
 public interface ISessionStoreService extends IService {
 
-  public void setAttribute(HttpServletRequest req, String key, Object value);
+  public void setAttribute(HttpServletRequest req, HttpServletResponse res, String key, Object value);
 
-  public Object getAttribute(HttpServletRequest req, String key);
+  public Object getAttribute(HttpServletRequest req, HttpServletResponse res, String key);
 }

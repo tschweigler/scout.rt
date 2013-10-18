@@ -11,18 +11,19 @@
 package org.eclipse.scout.rt.server.services.common.session;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.scout.service.AbstractService;
 
 public abstract class AbstractSessionStoreService extends AbstractService implements ISessionStoreService {
 
   @Override
-  public void setAttribute(HttpServletRequest req, String key, Object value) {
+  public void setAttribute(HttpServletRequest req, HttpServletResponse res, String key, Object value) {
     req.getSession().setAttribute(key, value);
   }
 
   @Override
-  public Object getAttribute(HttpServletRequest req, String key) {
+  public Object getAttribute(HttpServletRequest req, HttpServletResponse res, String key) {
     return req.getSession().getAttribute(key);
   }
 

@@ -11,6 +11,7 @@
 package org.eclipse.scout.rt.server.services.common.session;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.scout.service.SERVICES;
 
@@ -21,18 +22,18 @@ public final class SessionStore {
   private SessionStore() {
   }
 
-  public static void setAttribute(HttpServletRequest req, String key, Object value) {
+  public static void setAttribute(HttpServletRequest req, HttpServletResponse res, String key, Object value) {
     ISessionStoreService service = SERVICES.getService(usedServiceType);
     if (service != null) {
-      service.setAttribute(req, key, value);
+      service.setAttribute(req, res, key, value);
     }
   }
 
-  public static Object getAttribute(HttpServletRequest req, String key) {
+  public static Object getAttribute(HttpServletRequest req, HttpServletResponse res, String key) {
 
     ISessionStoreService service = SERVICES.getService(usedServiceType);
     if (service != null) {
-      return service.getAttribute(req, key);
+      return service.getAttribute(req, res, key);
     }
     else {
       return null;

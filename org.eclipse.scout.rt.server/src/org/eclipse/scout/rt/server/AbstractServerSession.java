@@ -53,7 +53,7 @@ public abstract class AbstractServerSession implements IServerSession, Serializa
   private final HashMap<String, Object> m_attributes;
   private final SharedVariableMap m_sharedVariableMap;
   private boolean m_singleThreadSession;
-  private ScoutTexts m_scoutTexts;
+  private transient ScoutTexts m_scoutTexts;
   private UserAgent m_userAgent;
 
   public AbstractServerSession(boolean autoInitConfig) {

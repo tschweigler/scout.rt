@@ -25,7 +25,7 @@ import java.util.ResourceBundle;
 public class DynamicNls implements Serializable {
 
   private static final long serialVersionUID = -3592561416786739923L;
-  private ArrayList<NlsResourceBundleCache> m_resourceBundles;
+  private transient ArrayList<NlsResourceBundleCache> m_resourceBundles;
 
   public DynamicNls() {
     m_resourceBundles = new ArrayList<NlsResourceBundleCache>();

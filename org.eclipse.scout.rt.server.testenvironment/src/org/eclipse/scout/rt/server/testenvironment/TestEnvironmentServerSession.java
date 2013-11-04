@@ -22,6 +22,7 @@ import org.eclipse.scout.rt.server.ThreadContext;
  * @author jbr
  */
 public class TestEnvironmentServerSession extends AbstractServerSession {
+  private static final long serialVersionUID = 1L;
   private static IScoutLogger logger = ScoutLogManager
       .getLogger(TestEnvironmentServerSession.class);
 

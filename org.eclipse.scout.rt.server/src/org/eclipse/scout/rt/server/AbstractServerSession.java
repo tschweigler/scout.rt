@@ -12,11 +12,16 @@ package org.eclipse.scout.rt.server;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.scout.commons.LocaleThreadLocal;
@@ -42,7 +47,7 @@ import org.osgi.framework.Bundle;
 
 public abstract class AbstractServerSession implements IServerSession, Serializable {
 
-  // Change for maven 03
+  // Change for maven 04
   private static final long serialVersionUID = 1L;
   private static final IScoutLogger LOG = ScoutLogManager.getLogger(AbstractServerSession.class);
 
@@ -55,6 +60,7 @@ public abstract class AbstractServerSession implements IServerSession, Serializa
   private boolean m_singleThreadSession;
   private transient ScoutTexts m_scoutTexts;
   private UserAgent m_userAgent;
+  private String m_clientId;
 
   public AbstractServerSession(boolean autoInitConfig) {
     m_locale = LocaleThreadLocal.get();
@@ -63,6 +69,20 @@ public abstract class AbstractServerSession implements IServerSession, Serializa
     if (autoInitConfig) {
       initConfig();
     }
+  }
+
+  private void readObject(ObjectInputStream ois)
+      throws ClassNotFoundException, IOException {
+    ois.defaultReadObject();
+    if (m_bundle == null) {
+      String symbolicName = this.getClass().getPackage().getName();
+      m_bundle = Platform.getBundle(symbolicName);
+    }
+
+    if (m_scoutTexts == null) {
+      m_scoutTexts = new ScoutTexts();
+    }
+
   }
 
   /**
@@ -183,11 +203,6 @@ public abstract class AbstractServerSession implements IServerSession, Serializa
 
   @Override
   public Bundle getBundle() {
-    //TSW: Da die Klasse Bundle nicht serialisiert und damit nicht in der HTTP-Session abgelegt werden kann, muss dieses bei Bedarf nachgeladen werden
-    if (m_bundle == null) {
-      String symbolicName = this.getClass().getPackage().getName();
-      m_bundle = Platform.getBundle(symbolicName);
-    }
     return m_bundle;
   }
 
@@ -199,7 +214,7 @@ public abstract class AbstractServerSession implements IServerSession, Serializa
     if (bundle == null) {
       throw new IllegalArgumentException("bundle must not be null");
     }
-    m_bundle = bundle;
+    //m_bundle = bundle;
     m_active = true;
     m_scoutTexts = new ScoutTexts();
     // explicitly set the just created instance to the ThreadLocal because it was not available yet, when the job was started.
@@ -249,6 +264,128 @@ public abstract class AbstractServerSession implements IServerSession, Serializa
   @Override
   public void setUserAgent(UserAgent userAgent) {
     m_userAgent = userAgent;
+  }
+
+  @Override
+  public void setClientId(String clientId) {
+    m_clientId = clientId;
+  }
+
+  @Override
+  public void setClientId(HttpServletRequest req) {
+    setClientId(getClientId(req));
+  }
+
+  public String getClientId() {
+    return m_clientId;
+  }
+
+  //TODO TSW Sollte über einen Service realisiert werden
+  private String getClientId(HttpServletRequest req) {
+    Cookie[] cookies = req.getCookies();
+    String cookieName = "clientid";
+
+    for (int i = 0; i < cookies.length; i++) {
+      Cookie cookie = cookies[i];
+
+      if (cookie.getName().equals(cookieName)) {
+        LOG.info("# ClientdId gefunden: " + cookie.getValue());
+        return cookie.getValue();
+      }
+    }
+    if (req.getAttribute(cookieName) != null) {
+      LOG.info("# Innerhalb dieses Calls wurde bereits ein Cookie gesetzt");
+      return (String) req.getAttribute(cookieName);
+    }
+
+    return null;
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    if (m_clientId != null) {
+      return m_clientId.hashCode();
+    }
+    result = prime * result + ((m_attributes == null) ? 0 : m_attributes.hashCode());
+    result = prime * result + ((m_clientId == null) ? 0 : m_clientId.hashCode());
+    result = prime * result + (m_initialized ? 1231 : 1237);
+    result = prime * result + ((m_locale == null) ? 0 : m_locale.hashCode());
+    result = prime * result + ((m_sharedVariableMap == null) ? 0 : m_sharedVariableMap.hashCode());
+    result = prime * result + (m_singleThreadSession ? 1231 : 1237);
+    result = prime * result + ((m_userAgent == null) ? 0 : m_userAgent.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    AbstractServerSession other = (AbstractServerSession) obj;
+
+    if (m_clientId.equals(other.getClientId())) {
+      return true;
+    }
+
+    if (m_active != other.m_active) {
+      return false;
+    }
+    if (m_attributes == null) {
+      if (other.m_attributes != null) {
+        return false;
+      }
+    }
+    else if (!m_attributes.equals(other.m_attributes)) {
+      return false;
+    }
+    if (m_clientId == null) {
+      if (other.m_clientId != null) {
+        return false;
+      }
+    }
+    else if (!m_clientId.equals(other.m_clientId)) {
+      return false;
+    }
+    if (m_initialized != other.m_initialized) {
+      return false;
+    }
+    if (m_locale == null) {
+      if (other.m_locale != null) {
+
+        return false;
+      }
+    }
+    else if (!m_locale.equals(other.m_locale)) {
+      return false;
+    }
+    if (m_sharedVariableMap == null) {
+      if (other.m_sharedVariableMap != null) {
+        return false;
+      }
+    }
+    else if (!m_sharedVariableMap.equals(other.m_sharedVariableMap)) {
+      return false;
+    }
+    if (m_singleThreadSession != other.m_singleThreadSession) {
+      return false;
+    }
+    if (m_userAgent == null) {
+      if (other.m_userAgent != null) {
+        return false;
+      }
+    }
+    else if (!m_userAgent.equals(other.m_userAgent)) {
+      return false;
+    }
+    return true;
   }
 
 }

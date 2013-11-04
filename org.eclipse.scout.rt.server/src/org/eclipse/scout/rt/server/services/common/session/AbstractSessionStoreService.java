@@ -13,6 +13,7 @@ package org.eclipse.scout.rt.server.services.common.session;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.eclipse.scout.http.servletfilter.session.ISessionStoreService;
 import org.eclipse.scout.service.AbstractService;
 
 public abstract class AbstractSessionStoreService extends AbstractService implements ISessionStoreService {

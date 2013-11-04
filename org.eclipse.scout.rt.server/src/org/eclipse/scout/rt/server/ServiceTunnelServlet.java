@@ -43,10 +43,10 @@ import org.eclipse.scout.commons.osgi.BundleInspector;
 import org.eclipse.scout.commons.serialization.SerializationUtility;
 import org.eclipse.scout.http.servletfilter.HttpServletEx;
 import org.eclipse.scout.http.servletfilter.helper.HttpAuthJaasFilter;
+import org.eclipse.scout.http.servletfilter.session.ISessionStoreService;
 import org.eclipse.scout.rt.server.admin.html.AdminSession;
 import org.eclipse.scout.rt.server.internal.Activator;
 import org.eclipse.scout.rt.server.services.common.session.IServerSessionRegistryService;
-import org.eclipse.scout.rt.server.services.common.session.SessionStore;
 import org.eclipse.scout.rt.shared.servicetunnel.DefaultServiceTunnelContentHandler;
 import org.eclipse.scout.rt.shared.servicetunnel.IServiceTunnelContentHandler;
 import org.eclipse.scout.rt.shared.servicetunnel.ServiceTunnelRequest;
@@ -205,31 +205,39 @@ public class ServiceTunnelServlet extends HttpServletEx {
 
   private IServerSession lookupScoutServerSessionOnHttpSession(HttpServletRequest req, HttpServletResponse res, Subject subject, UserAgent userAgent) throws ProcessingException, ServletException {
     //external request: apply locking, this is the session initialization phase
-    synchronized (req.getSession()) {
-      IServerSession serverSession = (IServerSession) SessionStore.getAttribute(req, res, IServerSession.class.getName());
+    synchronized (SERVICES.getService(ISessionStoreService.class)) {
+      IServerSession serverSession = (IServerSession) SERVICES.getService(ISessionStoreService.class).getAttribute(req, res, IServerSession.class.getName());
       if (serverSession == null) {
         serverSession = SERVICES.getService(IServerSessionRegistryService.class).newServerSession(m_serverSessionClass, subject, userAgent);
-        SessionStore.setAttribute(req, res, IServerSession.class.getName(), serverSession);
+        serverSession.setClientId(req);
+        SERVICES.getService(ISessionStoreService.class).setAttribute(req, res, IServerSession.class.getName(), serverSession);
       }
       return serverSession;
     }
   }
 
   private IServerSession lookupScoutServerSessionOnVirtualSession(HttpServletRequest req, HttpServletResponse res, String ajaxSessionId, Subject subject, UserAgent userAgent) throws ProcessingException, ServletException {
-    synchronized (m_ajaxSessionCache) {
+    synchronized (SERVICES.getService(ISessionStoreService.class)) {
       //update session timeout
-      int maxInactive = req.getSession().getMaxInactiveInterval();
+      int maxInactive = (Integer) SERVICES.getService(ISessionStoreService.class).getAttribute(req, res, "lastTouch_" + ajaxSessionId);
+      //int maxInactive = req.getSession().getMaxInactiveInterval();
       if (maxInactive < 0) {
         maxInactive = 3600;
       }
-      m_ajaxSessionCache.setSessionTimeoutMillis(Math.max(1000L, 1000L * maxInactive));
-      IServerSession serverSession = m_ajaxSessionCache.get(ajaxSessionId);
+      //m_ajaxSessionCache.setSessionTimeoutMillis(Math.max(1000L, 1000L * maxInactive));
+
+      //IServerSession serverSession = m_ajaxSessionCache.get(ajaxSessionId);
+      IServerSession serverSession = (IServerSession) SERVICES.getService(ISessionStoreService.class).getAttribute(req, res, ajaxSessionId);
       if (serverSession == null) {
         serverSession = SERVICES.getService(IServerSessionRegistryService.class).newServerSession(m_serverSessionClass, subject, userAgent);
-        m_ajaxSessionCache.put(ajaxSessionId, serverSession);
+        serverSession.setClientId(req);
+        //m_ajaxSessionCache.put(ajaxSessionId, serverSession);
+        SERVICES.getService(ISessionStoreService.class).setAttribute(req, res, ajaxSessionId, serverSession);
       }
       else {
-        m_ajaxSessionCache.touch(ajaxSessionId);
+        //m_ajaxSessionCache.touch(ajaxSessionId);
+        //TODO TSW berechnung noch irgendwann machen
+        SERVICES.getService(ISessionStoreService.class).setAttribute(req, res, "lastTouch_" + ajaxSessionId, 0);
       }
       return serverSession;
     }
@@ -323,7 +331,7 @@ public class ServiceTunnelServlet extends HttpServletEx {
         // next
         cause = cause.getCause();
       }
-      LOG.error("Session=" + req.getSession().getId() + ", Client=" + req.getRemoteUser() + "@" + req.getRemoteAddr() + "/" + req.getRemoteHost(), t);
+      //LOG.error("Session=" + req.getSession().getId() + ", Client=" + req.getRemoteUser() + "@" + req.getRemoteAddr() + "/" + req.getRemoteHost(), t);
       res.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     }
   }
@@ -437,10 +445,10 @@ public class ServiceTunnelServlet extends HttpServletEx {
     @Override
     protected IStatus runTransaction(IProgressMonitor monitor) throws Exception {
       String key = AdminSession.class.getName();
-      AdminSession as = (AdminSession) SessionStore.getAttribute(m_request, m_response, key);
+      AdminSession as = (AdminSession) SERVICES.getService(ISessionStoreService.class).getAttribute(m_request, m_response, key);
       if (as == null) {
         as = new AdminSession();
-        SessionStore.setAttribute(m_request, m_response, key, as);
+        SERVICES.getService(ISessionStoreService.class).setAttribute(m_request, m_response, key, as);
       }
       as.serviceRequest(m_request, m_response);
       return Status.OK_STATUS;

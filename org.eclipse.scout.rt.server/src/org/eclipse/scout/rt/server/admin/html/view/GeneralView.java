@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.Iterator;
 
 import javax.security.auth.Subject;
+import javax.servlet.http.HttpSession;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.scout.commons.VerboseUtility;
@@ -63,10 +64,20 @@ public class GeneralView extends DefaultView {
     p.br();
     p.print("You connect from: " + p.getRequest().getRemoteAddr() + " / " + p.getRequest().getRemoteHost());
     p.p();
+
+    HttpSession session = p.getRequest().getSession(false);
+    if (session != null) {
+      p.print("Session ID: " + session.getId());
+      p.br();
+      p.print("Session Created: " + new Date(session.getCreationTime()));
+    }
+    else {
+      p.print("There is no Session needed ");
+    }
     // show jaas context
-    p.print("Session ID: " + p.getRequest().getSession().getId());
-    p.br();
-    p.print("Session Created: " + new Date(p.getRequest().getSession().getCreationTime()));
+//    p.print("Session ID: " + p.getRequest().getSession().getId());
+//    p.br();
+//    p.print("Session Created: " + new Date(p.getRequest().getSession().getCreationTime()));
     p.br();
     p.print("JAAS Context");
     p.br();

@@ -4,7 +4,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     BSI Business Systems Integration AG - initial API and implementation
  ******************************************************************************/
@@ -49,6 +49,8 @@ public class ClientNotificationQueue {
     if (LOG.isDebugEnabled()) {
       LOG.debug("put " + notification + " for " + filter);
     }
+    LOG.info("put " + notification + " for " + filter);
+
     synchronized (m_queueLock) {
       for (Iterator<QueueElement> it = m_queue.iterator(); it.hasNext();) {
         QueueElement e = it.next();
@@ -72,6 +74,7 @@ public class ClientNotificationQueue {
     long endTime = System.currentTimeMillis() + blockingTimeout;
     ArrayList<IClientNotification> list = new ArrayList<IClientNotification>();
     synchronized (m_queueLock) {
+      LOG.info("Suche nach neuen Notifications");
       while (true) {
         if (!m_queue.isEmpty()) {
           for (Iterator<QueueElement> it = m_queue.iterator(); it.hasNext();) {
@@ -108,6 +111,8 @@ public class ClientNotificationQueue {
         }
       }
     }
+    LOG.info(list.size() + " neue Notifications gefunden");
+
     return list.toArray(new IClientNotification[list.size()]);
   }
 
@@ -146,6 +151,9 @@ public class ClientNotificationQueue {
       //
       synchronized (m_consumedBySessionsLock) {
         if (m_consumedBySessions != null) {
+
+          LOG.info("Search Session: " + session.hashCode());
+
           return m_consumedBySessions.containsKey(session);
         }
         else {
@@ -163,6 +171,7 @@ public class ClientNotificationQueue {
           if (m_consumedBySessions == null) {
             m_consumedBySessions = new WeakHashMap<IServerSession, Object>();
           }
+          LOG.info("Store Session: " + session.hashCode());
           m_consumedBySessions.put(session, null);
         }
       }

@@ -35,7 +35,8 @@ public class SessionInspector {
     m_session = session;
     m_info = new SessionInfo();
     HttpServletRequest httpReq = ThreadContext.getHttpServletRequest();
-    HttpSession httpSession = (httpReq != null ? httpReq.getSession() : null);
+    //TODO TSW Test ohne HTTP-Session
+    HttpSession httpSession = (httpReq != null ? httpReq.getSession(false) : null);
     if (httpSession != null) {
       m_info.setSessionId(httpSession.getId());
       m_info.setCreationTime(httpSession.getCreationTime());

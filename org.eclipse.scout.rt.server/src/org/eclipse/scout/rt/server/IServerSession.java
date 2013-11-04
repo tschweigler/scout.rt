@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.eclipse.scout.rt.server;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.eclipse.scout.commons.exception.ProcessingException;
 import org.eclipse.scout.rt.shared.ISession;
 import org.osgi.framework.Bundle;
@@ -22,4 +24,7 @@ public interface IServerSession extends ISession {
 
   void loadSession(Bundle bundle) throws ProcessingException;
 
+  public void setClientId(String ClientId);
+
+  public void setClientId(HttpServletRequest req);
 }

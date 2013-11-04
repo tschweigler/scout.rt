@@ -10,12 +10,9 @@
  ******************************************************************************/
 package org.eclipse.scout.rt.server.services.common.security;
 
-import javax.servlet.http.HttpSession;
-
 import org.eclipse.scout.commons.annotations.Priority;
 import org.eclipse.scout.commons.logger.IScoutLogger;
 import org.eclipse.scout.commons.logger.ScoutLogManager;
-import org.eclipse.scout.rt.server.ThreadContext;
 import org.eclipse.scout.rt.shared.services.common.security.ILogoutService;
 import org.eclipse.scout.service.AbstractService;
 
@@ -29,8 +26,9 @@ public class LogoutService extends AbstractService implements ILogoutService {
   @Override
   public void logout() {
     try {
-      HttpSession session = ThreadContext.getHttpServletRequest().getSession();
-      session.invalidate();
+      //TODO TSW Test ohne HTTPSession
+//      HttpSession session = ThreadContext.getHttpServletRequest().getSession();
+//      session.invalidate();
     }
     catch (IllegalStateException e) {
       //already invalid

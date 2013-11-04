@@ -30,7 +30,8 @@ import org.eclipse.scout.commons.logger.IScoutLogger;
 import org.eclipse.scout.commons.logger.ScoutLogManager;
 import org.eclipse.scout.commons.security.SimplePrincipal;
 import org.eclipse.scout.http.servletfilter.FilterConfigInjection;
-import org.eclipse.scout.http.servletfilter.SessionHandler;
+import org.eclipse.scout.http.servletfilter.session.ISessionStoreService;
+import org.eclipse.scout.service.SERVICES;
 
 /**
  * <h4>AbstractChainableSecurityFilter</h4> The following properties can be set
@@ -108,12 +109,16 @@ public abstract class AbstractChainableSecurityFilter implements Filter {
     final HttpServletRequest req = (HttpServletRequest) in;
     final HttpServletResponse res = (HttpServletResponse) out;
     //touch the session so it is effectively used
-    req.getSession();
+
+    //TODO TSW Test ohne HTTP-Session
+    //req.getSession();
     // check subject on session
     Subject subject = null;
-    synchronized (req.getSession()) {
-      subject = findSubjectOnSession(req, res);
-    }
+
+    //TODO TSW Test ohne HTTP-Session
+    //synchronized (req.getSession()) {
+    subject = findSubjectOnSession(req, res);
+    //}
     if (subject == null || subject.getPrincipals().size() == 0) {
       //try negotiate
       PrincipalHolder pHolder = new PrincipalHolder();
@@ -135,8 +140,9 @@ public abstract class AbstractChainableSecurityFilter implements Filter {
           }
           subject.getPrincipals().add(pHolder.getPrincipal());
           subject.setReadOnly();
-          synchronized (req.getSession()) {
-            SessionHandler.getInstance().setAttribute(req, PROP_SUBJECT, subject);
+          //TODO TSW Test ohne HTTP-Session
+          synchronized (SERVICES.getService(ISessionStoreService.class)) {
+            SERVICES.getService(ISessionStoreService.class).setAttribute(req, res, PROP_SUBJECT, subject);
           }
           break;
       }
@@ -178,7 +184,10 @@ public abstract class AbstractChainableSecurityFilter implements Filter {
   private Subject findSubjectOnSession(HttpServletRequest req, HttpServletResponse resp) {
     Object o = null;
     Subject subject = null;
-    o = SessionHandler.getInstance().getAttribute(req, PROP_SUBJECT);
+    //TODO TSW Test ohne HTTP-Session
+    //o = SessionHandler.getInstance().getAttribute(req, PROP_SUBJECT);
+    //o = Clientcache.getInstance().getAttribute(req, resp, PROP_SUBJECT);
+    o = SERVICES.getService(ISessionStoreService.class).getAttribute(req, resp, PROP_SUBJECT);
 
     if (o instanceof Subject) {
       subject = (Subject) o;
@@ -187,6 +196,9 @@ public abstract class AbstractChainableSecurityFilter implements Filter {
     if (subject == null) {
       subject = Subject.getSubject(AccessController.getContext());
     }
+
+    //TSW ergänzung zum Test ohne HTTP-Session
+    //Subject subject = Subject.getSubject(AccessController.getContext());
 
     //    Subject subject=Subject.getSubject(AccessController.getContext());
     if (subject == null) {
@@ -202,7 +214,9 @@ public abstract class AbstractChainableSecurityFilter implements Filter {
         subject = new Subject();
         subject.getPrincipals().add(principal);
         subject.setReadOnly();
-        SessionHandler.getInstance().setAttribute(req, PROP_SUBJECT, subject);
+        //SessionHandler.getInstance().setAttribute(req, PROP_SUBJECT, subject);
+        //Clientcache.getInstance().setAttribute(req, resp, PROP_SUBJECT, subject);
+        SERVICES.getService(ISessionStoreService.class).setAttribute(req, resp, PROP_SUBJECT, subject);
       }
     }
     return subject;

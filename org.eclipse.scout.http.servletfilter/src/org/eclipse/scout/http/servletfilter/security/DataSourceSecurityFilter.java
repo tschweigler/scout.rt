@@ -34,6 +34,8 @@ import org.eclipse.scout.commons.logger.IScoutLogger;
 import org.eclipse.scout.commons.logger.ScoutLogManager;
 import org.eclipse.scout.commons.security.SimplePrincipal;
 import org.eclipse.scout.http.servletfilter.FilterConfigInjection;
+import org.eclipse.scout.http.servletfilter.session.ISessionStoreService;
+import org.eclipse.scout.service.SERVICES;
 
 /**
  * <h4>DataSourceSecurityFilter</h4> The following properties can be set in the <code>config.ini</code> file:
@@ -127,28 +129,29 @@ public class DataSourceSecurityFilter extends AbstractChainableSecurityFilter {
         }
       }
     }
-    int attempts = getBasicAttempt(req);
+    int attempts = getBasicAttempt(req, resp);
     if (attempts > 2) {
       return STATUS_CONTINUE_CHAIN;
     }
     else {
-      setBasicAttept(req, attempts + 1);
+      setBasicAttept(req, resp, attempts + 1);
       resp.setHeader("WWW-Authenticate", "Basic realm=\"" + getRealm() + "\"");
       return STATUS_CONTINUE_CHAIN;
     }
   }
 
-  private int getBasicAttempt(HttpServletRequest req) {
+  private int getBasicAttempt(HttpServletRequest req, HttpServletResponse res) {
     int basicAtttempt = 0;
-    Object attribute = req.getSession().getAttribute(PROP_BASIC_ATTEMPT);
+    Object attribute = SERVICES.getService(ISessionStoreService.class).getAttribute(req, res, PROP_BASIC_ATTEMPT);
     if (attribute instanceof Integer) {
       basicAtttempt = ((Integer) attribute).intValue();
     }
     return basicAtttempt;
   }
 
-  private void setBasicAttept(HttpServletRequest req, int attempts) {
-    req.getSession().setAttribute(PROP_BASIC_ATTEMPT, attempts);
+  private void setBasicAttept(HttpServletRequest req, HttpServletResponse res, int attempts) {
+    SERVICES.getService(ISessionStoreService.class).setAttribute(req, res, PROP_BASIC_ATTEMPT, attempts);
+    //req.getSession().setAttribute(PROP_BASIC_ATTEMPT, attempts);
   }
 
   protected boolean isValidUser(String username, String password) throws ServletException {

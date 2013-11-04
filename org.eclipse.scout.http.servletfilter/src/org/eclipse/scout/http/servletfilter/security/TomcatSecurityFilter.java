@@ -27,8 +27,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.scout.commons.StringUtility;
-import org.eclipse.scout.http.servletfilter.FilterConfigInjection;
 import org.eclipse.scout.commons.security.SimplePrincipal;
+import org.eclipse.scout.http.servletfilter.FilterConfigInjection;
 
 /**
  * In Tomcat, the Subject is lost after authentication and is not passed to the servlet.
@@ -67,7 +67,7 @@ public class TomcatSecurityFilter implements Filter {
     HttpServletResponse res = (HttpServletResponse) out;
 
     // touch the session so it is effectively used
-    req.getSession();
+    //req.getSession();
 
     // check if subject that has one principal at minimum is available
     Subject subject = Subject.getSubject(AccessController.getContext());

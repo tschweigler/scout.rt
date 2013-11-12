@@ -16,7 +16,6 @@ import org.eclipse.scout.commons.EventListenerList;
 import org.eclipse.scout.commons.StringUtility;
 import org.eclipse.scout.commons.annotations.ConfigOperation;
 import org.eclipse.scout.commons.annotations.ConfigProperty;
-import org.eclipse.scout.commons.annotations.ConfigPropertyValue;
 import org.eclipse.scout.commons.annotations.Order;
 import org.eclipse.scout.commons.annotations.Replace;
 import org.eclipse.scout.commons.beans.AbstractPropertyObserver;
@@ -78,42 +77,36 @@ public abstract class AbstractAction extends AbstractPropertyObserver implements
    */
   @ConfigProperty(ConfigProperty.ICON_ID)
   @Order(30)
-  @ConfigPropertyValue("null")
   protected String getConfiguredIconId() {
     return null;
   }
 
   @ConfigProperty(ConfigProperty.TEXT)
   @Order(40)
-  @ConfigPropertyValue("null")
   protected String getConfiguredText() {
     return null;
   }
 
   @ConfigProperty(ConfigProperty.TEXT)
   @Order(50)
-  @ConfigPropertyValue("null")
   protected String getConfiguredTooltipText() {
     return null;
   }
 
   @ConfigProperty(ConfigProperty.STRING)
   @Order(55)
-  @ConfigPropertyValue("null")
   protected String getConfiguredKeyStroke() {
     return null;
   }
 
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(10)
-  @ConfigPropertyValue("true")
   protected boolean getConfiguredEnabled() {
     return true;
   }
 
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(20)
-  @ConfigPropertyValue("true")
   protected boolean getConfiguredVisible() {
     return true;
   }
@@ -127,28 +120,24 @@ public abstract class AbstractAction extends AbstractPropertyObserver implements
    */
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(22)
-  @ConfigPropertyValue("true")
   protected boolean getConfiguredInheritAccessibility() {
     return true;
   }
 
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(25)
-  @ConfigPropertyValue("false")
   protected boolean getConfiguredToggleAction() {
     return false;
   }
 
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(60)
-  @ConfigPropertyValue("true")
   protected boolean getConfiguredSingleSelectionAction() {
     return true;
   }
 
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(70)
-  @ConfigPropertyValue("false")
   protected boolean getConfiguredMultiSelectionAction() {
     return false;
   }
@@ -163,21 +152,18 @@ public abstract class AbstractAction extends AbstractPropertyObserver implements
 
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(90)
-  @ConfigPropertyValue("false")
   protected boolean getConfiguredEmptySpaceAction() {
     return false;
   }
 
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(100)
-  @ConfigPropertyValue("false")
   protected boolean getConfiguredSeparator() {
     return false;
   }
 
   @ConfigProperty(ConfigProperty.DOC)
   @Order(110)
-  @ConfigPropertyValue("null")
   protected String getConfiguredDoc() {
     return null;
   }
@@ -313,13 +299,20 @@ public abstract class AbstractAction extends AbstractPropertyObserver implements
   }
 
   @Override
+  public String getTextWithMnemonic() {
+    return propertySupport.getPropertyString(PROP_TEXT_WITH_MNEMONIC);
+  }
+
+  @Override
   public void setText(String text) {
     if (text != null) {
       propertySupport.setPropertyString(PROP_TEXT, StringUtility.removeMnemonic(text));
+      propertySupport.setPropertyString(PROP_TEXT_WITH_MNEMONIC, text);
       propertySupport.setProperty(PROP_MNEMONIC, StringUtility.getMnemonic(text));
     }
     else {
       propertySupport.setPropertyString(PROP_TEXT, null);
+      propertySupport.setPropertyString(PROP_TEXT_WITH_MNEMONIC, null);
       propertySupport.setProperty(PROP_MNEMONIC, (char) 0x0);
     }
   }

@@ -104,6 +104,10 @@ public class ServiceTunnelServlet extends HttpServletEx {
   @SuppressWarnings("unchecked")
   protected void lazyInit(HttpServletRequest req, HttpServletResponse res) throws ServletException {
     if (m_serverSessionClass == null) {
+      m_serverSessionClass = locateServerSessionClass(req, res);
+    }
+
+    if (m_serverSessionClass == null) {
       String qname = getServletConfig().getInitParameter("session");
       if (qname != null) {
         int i = qname.lastIndexOf('.');
@@ -130,6 +134,10 @@ public class ServiceTunnelServlet extends HttpServletEx {
     if (m_serverSessionClass == null) {
       throw new ServletException("Expected init-param \"session\"");
     }
+  }
+
+  protected Class<? extends IServerSession> locateServerSessionClass(HttpServletRequest req, HttpServletResponse res) {
+    return null;
   }
 
   /**
@@ -193,7 +201,7 @@ public class ServiceTunnelServlet extends HttpServletEx {
     return m_contentHandler;
   }
 
-  private Bundle[] getOrderedBundleList() {
+  protected Bundle[] getOrderedBundleList() {
     synchronized (m_orderedBundleListLock) {
       if (m_orderedBundleList == null) {
         String[] bundleOrderPrefixes = SerializationUtility.getBundleOrderPrefixes();
@@ -209,7 +217,7 @@ public class ServiceTunnelServlet extends HttpServletEx {
       IServerSession serverSession = (IServerSession) SERVICES.getService(ISessionStoreService.class).getAttribute(req, res, IServerSession.class.getName());
       if (serverSession == null) {
         serverSession = SERVICES.getService(IServerSessionRegistryService.class).newServerSession(m_serverSessionClass, subject, userAgent);
-        serverSession.setSessionId(req);
+        serverSession.setSessionId(SERVICES.getService(ISessionStoreService.class).getSessionId(req, res));
         SERVICES.getService(ISessionStoreService.class).setAttribute(req, res, IServerSession.class.getName(), serverSession);
       }
       return serverSession;
@@ -230,7 +238,7 @@ public class ServiceTunnelServlet extends HttpServletEx {
       IServerSession serverSession = (IServerSession) SERVICES.getService(ISessionStoreService.class).getAttribute(req, res, ajaxSessionId);
       if (serverSession == null) {
         serverSession = SERVICES.getService(IServerSessionRegistryService.class).newServerSession(m_serverSessionClass, subject, userAgent);
-        serverSession.setSessionId(req);
+        serverSession.setSessionId(SERVICES.getService(ISessionStoreService.class).getSessionId(req, res));
         //m_ajaxSessionCache.put(ajaxSessionId, serverSession);
         SERVICES.getService(ISessionStoreService.class).setAttribute(req, res, ajaxSessionId, serverSession);
       }
@@ -359,7 +367,6 @@ public class ServiceTunnelServlet extends HttpServletEx {
     ServiceReference ref = context.getServiceReference(IExtensionRegistry.class.getName());
     Bundle bundle = null;
     if (ref != null) {
-      @SuppressWarnings("unchecked")
       IExtensionRegistry reg = (IExtensionRegistry) context.getService(ref);
       if (reg != null) {
         IExtensionPoint xpServlet = reg.getExtensionPoint("org.eclipse.equinox.http.registry.servlets");

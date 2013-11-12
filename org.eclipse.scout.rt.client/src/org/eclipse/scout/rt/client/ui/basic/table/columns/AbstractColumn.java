@@ -25,12 +25,12 @@ import org.eclipse.scout.commons.StringUtility;
 import org.eclipse.scout.commons.TypeCastUtility;
 import org.eclipse.scout.commons.annotations.ConfigOperation;
 import org.eclipse.scout.commons.annotations.ConfigProperty;
-import org.eclipse.scout.commons.annotations.ConfigPropertyValue;
 import org.eclipse.scout.commons.annotations.Order;
 import org.eclipse.scout.commons.annotations.Replace;
 import org.eclipse.scout.commons.beans.AbstractPropertyObserver;
 import org.eclipse.scout.commons.exception.IProcessingStatus;
 import org.eclipse.scout.commons.exception.ProcessingException;
+import org.eclipse.scout.commons.exception.ProcessingStatus;
 import org.eclipse.scout.commons.logger.IScoutLogger;
 import org.eclipse.scout.commons.logger.ScoutLogManager;
 import org.eclipse.scout.rt.client.ui.ClientUIPreferences;
@@ -43,6 +43,7 @@ import org.eclipse.scout.rt.client.ui.basic.table.IHeaderCell;
 import org.eclipse.scout.rt.client.ui.basic.table.ITable;
 import org.eclipse.scout.rt.client.ui.basic.table.ITableRow;
 import org.eclipse.scout.rt.client.ui.basic.table.columnfilter.ITableColumnFilterManager;
+import org.eclipse.scout.rt.client.ui.basic.table.internal.InternalTableRow;
 import org.eclipse.scout.rt.client.ui.desktop.outline.pages.AbstractPageWithTable;
 import org.eclipse.scout.rt.client.ui.form.AbstractForm;
 import org.eclipse.scout.rt.client.ui.form.fields.AbstractValueField;
@@ -82,7 +83,8 @@ public abstract class AbstractColumn<T> extends AbstractPropertyObserver impleme
   /**
    * Used for mutable tables to keep last valid value per row and column.
    */
-  private Map<ITableRow, T> m_validatedValues;
+  // TODO: Move cache to AbstractTable with bug 414646
+  private Map<InternalTableRow, T> m_validatedValues = new HashMap<InternalTableRow, T>();
 
   public AbstractColumn() {
     m_headerCell = new HeaderCell();
@@ -99,12 +101,26 @@ public abstract class AbstractColumn<T> extends AbstractPropertyObserver impleme
         }
       }
     });
-
-    clearValidatedValues();
   }
 
   public final void clearValidatedValues() {
-    m_validatedValues = new HashMap<ITableRow, T>();
+    m_validatedValues.clear();
+  }
+
+  public final T clearValidatedValue(ITableRow row) {
+    return m_validatedValues.remove(row);
+  }
+
+  private void storeValidatedValue(ITableRow row, T validatedValue) {
+    if (row instanceof InternalTableRow) {
+      m_validatedValues.put((InternalTableRow) row, validatedValue);
+    }
+  }
+
+  private void removeValidatedValue(ITableRow row) {
+    if (row instanceof InternalTableRow) {
+      m_validatedValues.remove((InternalTableRow) row);
+    }
   }
 
   protected Map<String, Object> getPropertiesMap() {
@@ -125,7 +141,6 @@ public abstract class AbstractColumn<T> extends AbstractPropertyObserver impleme
    */
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(10)
-  @ConfigPropertyValue("true")
   protected boolean getConfiguredVisible() {
     return true;
   }
@@ -139,7 +154,6 @@ public abstract class AbstractColumn<T> extends AbstractPropertyObserver impleme
    */
   @ConfigProperty(ConfigProperty.TEXT)
   @Order(20)
-  @ConfigPropertyValue("null")
   protected String getConfiguredHeaderText() {
     return null;
   }
@@ -153,7 +167,6 @@ public abstract class AbstractColumn<T> extends AbstractPropertyObserver impleme
    */
   @ConfigProperty(ConfigProperty.TEXT)
   @Order(30)
-  @ConfigPropertyValue("null")
   protected String getConfiguredHeaderTooltipText() {
     return null;
   }
@@ -167,7 +180,6 @@ public abstract class AbstractColumn<T> extends AbstractPropertyObserver impleme
    */
   @ConfigProperty(ConfigProperty.COLOR)
   @Order(40)
-  @ConfigPropertyValue("null")
   protected String getConfiguredHeaderForegroundColor() {
     return null;
   }
@@ -181,7 +193,6 @@ public abstract class AbstractColumn<T> extends AbstractPropertyObserver impleme
    */
   @ConfigProperty(ConfigProperty.COLOR)
   @Order(50)
-  @ConfigPropertyValue("null")
   protected String getConfiguredHeaderBackgroundColor() {
     return null;
   }
@@ -195,7 +206,6 @@ public abstract class AbstractColumn<T> extends AbstractPropertyObserver impleme
    */
   @ConfigProperty(ConfigProperty.STRING)
   @Order(60)
-  @ConfigPropertyValue("null")
   protected String getConfiguredHeaderFont() {
     return null;
   }
@@ -212,7 +222,6 @@ public abstract class AbstractColumn<T> extends AbstractPropertyObserver impleme
    */
   @ConfigProperty(ConfigProperty.INTEGER)
   @Order(70)
-  @ConfigPropertyValue("60")
   protected int getConfiguredWidth() {
     return 60;
   }
@@ -225,7 +234,6 @@ public abstract class AbstractColumn<T> extends AbstractPropertyObserver impleme
    */
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(75)
-  @ConfigPropertyValue("false")
   protected boolean getConfiguredFixedWidth() {
     return false;
   }
@@ -240,7 +248,6 @@ public abstract class AbstractColumn<T> extends AbstractPropertyObserver impleme
    */
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(80)
-  @ConfigPropertyValue("true")
   protected boolean getConfiguredDisplayable() {
     return true;
   }
@@ -257,7 +264,6 @@ public abstract class AbstractColumn<T> extends AbstractPropertyObserver impleme
    */
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(90)
-  @ConfigPropertyValue("false")
   protected boolean getConfiguredPrimaryKey() {
     return false;
   }
@@ -272,7 +278,6 @@ public abstract class AbstractColumn<T> extends AbstractPropertyObserver impleme
    */
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(95)
-  @ConfigPropertyValue("false")
   protected boolean getConfiguredEditable() {
     return false;
   }
@@ -288,7 +293,6 @@ public abstract class AbstractColumn<T> extends AbstractPropertyObserver impleme
    */
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(100)
-  @ConfigPropertyValue("false")
   protected boolean getConfiguredSummary() {
     return false;
   }
@@ -303,7 +307,6 @@ public abstract class AbstractColumn<T> extends AbstractPropertyObserver impleme
    */
   @ConfigProperty(ConfigProperty.COLOR)
   @Order(110)
-  @ConfigPropertyValue("null")
   protected String getConfiguredForegroundColor() {
     return null;
   }
@@ -318,7 +321,6 @@ public abstract class AbstractColumn<T> extends AbstractPropertyObserver impleme
    */
   @ConfigProperty(ConfigProperty.COLOR)
   @Order(120)
-  @ConfigPropertyValue("null")
   protected String getConfiguredBackgroundColor() {
     return null;
   }
@@ -333,7 +335,6 @@ public abstract class AbstractColumn<T> extends AbstractPropertyObserver impleme
    */
   @ConfigProperty(ConfigProperty.STRING)
   @Order(130)
-  @ConfigPropertyValue("null")
   protected String getConfiguredFont() {
     return null;
   }
@@ -349,7 +350,6 @@ public abstract class AbstractColumn<T> extends AbstractPropertyObserver impleme
    */
   @ConfigProperty(ConfigProperty.INTEGER)
   @Order(140)
-  @ConfigPropertyValue("-1")
   protected int getConfiguredSortIndex() {
     return -1;
   }
@@ -365,7 +365,6 @@ public abstract class AbstractColumn<T> extends AbstractPropertyObserver impleme
    */
   @ConfigProperty(ConfigProperty.DOUBLE)
   @Order(145)
-  @ConfigPropertyValue("-1")
   protected double getConfiguredViewOrder() {
     return -1;
   }
@@ -380,7 +379,6 @@ public abstract class AbstractColumn<T> extends AbstractPropertyObserver impleme
    */
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(150)
-  @ConfigPropertyValue("true")
   protected boolean getConfiguredSortAscending() {
     return true;
   }
@@ -395,7 +393,6 @@ public abstract class AbstractColumn<T> extends AbstractPropertyObserver impleme
    */
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(160)
-  @ConfigPropertyValue("false")
   protected boolean getConfiguredAlwaysIncludeSortAtBegin() {
     return false;
   }
@@ -410,7 +407,6 @@ public abstract class AbstractColumn<T> extends AbstractPropertyObserver impleme
    */
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(170)
-  @ConfigPropertyValue("false")
   protected boolean getConfiguredAlwaysIncludeSortAtEnd() {
     return false;
   }
@@ -424,7 +420,6 @@ public abstract class AbstractColumn<T> extends AbstractPropertyObserver impleme
    */
   @ConfigProperty(ConfigProperty.INTEGER)
   @Order(180)
-  @ConfigPropertyValue("-1")
   protected int getConfiguredHorizontalAlignment() {
     return -1;
   }
@@ -443,7 +438,6 @@ public abstract class AbstractColumn<T> extends AbstractPropertyObserver impleme
    */
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(190)
-  @ConfigPropertyValue("false")
   protected boolean getConfiguredAutoOptimizeWidth() {
     return false;
   }
@@ -458,7 +452,6 @@ public abstract class AbstractColumn<T> extends AbstractPropertyObserver impleme
    */
   @ConfigProperty(ConfigProperty.DOC)
   @Order(200)
-  @ConfigPropertyValue("null")
   protected String getConfiguredDoc() {
     return null;
   }
@@ -473,7 +466,6 @@ public abstract class AbstractColumn<T> extends AbstractPropertyObserver impleme
    */
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(210)
-  @ConfigPropertyValue("false")
   protected boolean getConfiguredMandatory() {
     return false;
   }
@@ -883,8 +875,8 @@ public abstract class AbstractColumn<T> extends AbstractPropertyObserver impleme
     T validatedValue = m_validatedValues.get(r);
     if (validatedValue == null) {
       validatedValue = getValueInternal(r);
+      storeValidatedValue(r, validatedValue);
     }
-    m_validatedValues.put(r, validatedValue);
     return validatedValue;
   }
 
@@ -909,18 +901,20 @@ public abstract class AbstractColumn<T> extends AbstractPropertyObserver impleme
   }
 
   private void setValueInternal(ITableRow row, T value, IFormField editingField) throws ProcessingException {
+    T newValue = validateValue(row, value);
+
     /*
      * In case there is a validated value in the cache, the value passed as a parameter has to be validated.
-     * If the passed value is valid, it will be stored in the validated value cache. Otherwise, the old validated
-     * value is used.
+     * If the passed value is valid, it will be removed from the validated value cache and stored when getValue()
+     * is called next time. Otherwise, the old validated value will be left in the cache.
      */
-    validateColumnValue(row, editingField, true, value);
+    validateColumnValue(row, editingField, true, newValue);
+
+    // set newValue into the cell only if there's no error.
     ICell cell = row.getCell(this);
     if (cell instanceof Cell && ((Cell) cell).getErrorStatus() == null) {
-      m_validatedValues.put(row, value);
+      row.setCellValue(getColumnIndex(), newValue);
     }
-    T newValue = validateValue(row, value);
-    row.setCellValue(getColumnIndex(), newValue);
   }
 
   @Override
@@ -1554,15 +1548,30 @@ public abstract class AbstractColumn<T> extends AbstractPropertyObserver impleme
       LOG.error("validateColumnValue called with row=null");
       return;
     }
+    if (!(row instanceof InternalTableRow)) {
+      LOG.info("validateColumnValue called with row not of type " + InternalTableRow.class);
+      return;
+    }
+    if (m_isValidating) {
+      LOG.warn("validateColumnValue called during running validation. Value " + String.valueOf(value) + " will not be set.");
+      Cell cell = row.getCellForUpdate(this);
+      cell.setErrorStatus(new ProcessingStatus(ScoutTexts.get("RunningColumnValidation"), IProcessingStatus.ERROR));
+      return;
+    }
+
     if (isCellEditable(row)) {
       try {
         if (editor == null) {
           m_isValidating = true;
-          editor = prepareEdit(row);
-          if (editor instanceof IValueField<?>) {
-            ((IValueField<T>) editor).setValue(value);
+          try {
+            editor = prepareEdit(row);
+            if (editor instanceof IValueField<?>) {
+              ((IValueField<T>) editor).setValue(value);
+            }
           }
-          m_isValidating = false;
+          finally {
+            m_isValidating = false;
+          }
         }
         if (editor != null) {
           IProcessingStatus errorStatus = editor.getErrorStatus();
@@ -1573,16 +1582,15 @@ public abstract class AbstractColumn<T> extends AbstractPropertyObserver impleme
               //column should become visible
               setVisible(true);
             }
-            if (errorStatus != null) {
-              cell.setErrorStatus(errorStatus);
-              if (errorStatus instanceof ParsingFailedStatus) {
-                cell.setText(((ParsingFailedStatus) errorStatus).getParseInputString());
-              }
+            cell.setErrorStatus(errorStatus);
+            if (errorStatus instanceof ParsingFailedStatus) {
+              cell.setText(((ParsingFailedStatus) errorStatus).getParseInputString());
             }
             else {
-              cell.setErrorStatus(ScoutTexts.get("FormEmptyMandatoryFieldsMessage"));
+              cell.setErrorStatus(new ProcessingStatus(ScoutTexts.get("FormEmptyMandatoryFieldsMessage"), IProcessingStatus.ERROR));
               cell.setText("");
             }
+            return;
           }
           else {
             /*
@@ -1603,7 +1611,13 @@ public abstract class AbstractColumn<T> extends AbstractPropertyObserver impleme
       }
       catch (Throwable t) {
         LOG.error("validating " + getTable().getClass().getSimpleName() + " for new row for column " + getClass().getSimpleName(), t);
+        return;
       }
+    }
+
+    ICell cell = row.getCell(this);
+    if (cell instanceof Cell && ((Cell) cell).getErrorStatus() == null) {
+      removeValidatedValue(row);
     }
 
   }

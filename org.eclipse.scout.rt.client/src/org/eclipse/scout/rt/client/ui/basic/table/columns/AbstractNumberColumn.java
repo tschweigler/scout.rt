@@ -14,7 +14,6 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 import org.eclipse.scout.commons.annotations.ConfigProperty;
-import org.eclipse.scout.commons.annotations.ConfigPropertyValue;
 import org.eclipse.scout.commons.annotations.Order;
 import org.eclipse.scout.commons.exception.ProcessingException;
 import org.eclipse.scout.rt.client.ui.basic.table.ITableRow;
@@ -32,6 +31,7 @@ public abstract class AbstractNumberColumn<T extends Number> extends AbstractCol
   private NumberFormat m_fmt;
   private T m_minValue;
   private T m_maxValue;
+  private boolean m_validateOnAnyKey;
 
   public AbstractNumberColumn() {
     super();
@@ -56,7 +56,6 @@ public abstract class AbstractNumberColumn<T extends Number> extends AbstractCol
    */
   @ConfigProperty(ConfigProperty.STRING)
   @Order(140)
-  @ConfigPropertyValue("null")
   protected String getConfiguredFormat() {
     return null;
   }
@@ -71,9 +70,19 @@ public abstract class AbstractNumberColumn<T extends Number> extends AbstractCol
    */
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(150)
-  @ConfigPropertyValue("true")
   protected boolean getConfiguredGroupingUsed() {
     return true;
+  }
+
+  /**
+   * Causes the ui to send a validate event every time the text field content is changed.
+   * <p>
+   * Be careful when using this property since this can influence performance and the characteristics of text input.
+   */
+  @ConfigProperty(ConfigProperty.BOOLEAN)
+  @Order(160)
+  protected boolean getConfiguredValidateOnAnyKey() {
+    return false;
   }
 
   @Override
@@ -81,6 +90,7 @@ public abstract class AbstractNumberColumn<T extends Number> extends AbstractCol
     super.initConfig();
     setFormat(getConfiguredFormat());
     setGroupingUsed(getConfiguredGroupingUsed());
+    setValidateOnAnyKey(getConfiguredValidateOnAnyKey());
   }
 
   /*
@@ -140,6 +150,16 @@ public abstract class AbstractNumberColumn<T extends Number> extends AbstractCol
     return m_minValue;
   }
 
+  @Override
+  public void setValidateOnAnyKey(boolean b) {
+    m_validateOnAnyKey = b;
+  }
+
+  @Override
+  public boolean isValidateOnAnyKey() {
+    return m_validateOnAnyKey;
+  }
+
   protected abstract AbstractNumberField<T> getEditorField();
 
   @Override
@@ -149,6 +169,7 @@ public abstract class AbstractNumberColumn<T extends Number> extends AbstractCol
     f.setGroupingUsed(isGroupingUsed());
     f.setMinValue(getMinValue());
     f.setMaxValue(getMaxValue());
+    f.setValidateOnAnyKey(isValidateOnAnyKey());
     return f;
   }
 

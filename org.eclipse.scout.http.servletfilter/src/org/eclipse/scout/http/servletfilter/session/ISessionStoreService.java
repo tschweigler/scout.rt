@@ -20,4 +20,6 @@ public interface ISessionStoreService extends IService {
   public void setAttribute(HttpServletRequest req, HttpServletResponse res, String key, Object value);
 
   public Object getAttribute(HttpServletRequest req, HttpServletResponse res, String key);
+
+  String getSessionId(HttpServletRequest req, HttpServletResponse res);
 }

@@ -37,7 +37,6 @@ import org.eclipse.scout.commons.OptimisticLock;
 import org.eclipse.scout.commons.StringUtility;
 import org.eclipse.scout.commons.annotations.ConfigOperation;
 import org.eclipse.scout.commons.annotations.ConfigProperty;
-import org.eclipse.scout.commons.annotations.ConfigPropertyValue;
 import org.eclipse.scout.commons.annotations.Order;
 import org.eclipse.scout.commons.annotations.Replace;
 import org.eclipse.scout.commons.beans.AbstractPropertyObserver;
@@ -97,7 +96,7 @@ import org.eclipse.scout.service.SERVICES;
  * for every inner column class there is a generated getXYColumn method directly
  * on the table
  */
-public abstract class AbstractTable extends AbstractPropertyObserver implements ITable2 {
+public abstract class AbstractTable extends AbstractPropertyObserver implements ITable {
   private static final IScoutLogger LOG = ScoutLogManager.getLogger(AbstractTable.class);
 
   private boolean m_initialized;
@@ -130,7 +129,7 @@ public abstract class AbstractTable extends AbstractPropertyObserver implements 
   private final EventListenerList m_listenerList = new EventListenerList();
   //cell editing
   private P_CellEditorContext m_editContext;
-  private HashMap<ITableRow, Boolean> m_rowValidty;
+  private Set<ITableRow> m_rowValidty;
   //checkable table
   private IBooleanColumn m_checkableColumn;
   //auto filter
@@ -150,7 +149,7 @@ public abstract class AbstractTable extends AbstractPropertyObserver implements 
     if (DesktopProfiler.getInstance().isEnabled()) {
       DesktopProfiler.getInstance().registerTable(this);
     }
-    m_rowValidty = new HashMap<ITableRow, Boolean>();
+    m_rowValidty = new HashSet<ITableRow>();
     m_cachedRowsLock = new Object();
     m_cachedFilteredRowsLock = new Object();
     m_rows = Collections.synchronizedList(new ArrayList<ITableRow>(1));
@@ -184,7 +183,6 @@ public abstract class AbstractTable extends AbstractPropertyObserver implements 
    */
   @ConfigProperty(ConfigProperty.TEXT)
   @Order(10)
-  @ConfigPropertyValue("null")
   protected String getConfiguredTitle() {
     return null;
   }
@@ -199,7 +197,6 @@ public abstract class AbstractTable extends AbstractPropertyObserver implements 
    */
   @ConfigProperty(ConfigProperty.ICON_ID)
   @Order(20)
-  @ConfigPropertyValue("null")
   protected String getConfiguredDefaultIconId() {
     return null;
   }
@@ -213,7 +210,6 @@ public abstract class AbstractTable extends AbstractPropertyObserver implements 
    */
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(30)
-  @ConfigPropertyValue("true")
   protected boolean getConfiguredMultiSelect() {
     return true;
   }
@@ -228,7 +224,6 @@ public abstract class AbstractTable extends AbstractPropertyObserver implements 
    */
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(32)
-  @ConfigPropertyValue("true")
   protected boolean getConfiguredMultiCheck() {
     return true;
   }
@@ -242,7 +237,6 @@ public abstract class AbstractTable extends AbstractPropertyObserver implements 
    */
   @ConfigProperty(ConfigProperty.MENU_CLASS)
   @Order(35)
-  @ConfigPropertyValue("null")
   protected Class<? extends IMenu> getConfiguredDefaultMenu() {
     return null;
   }
@@ -266,7 +260,6 @@ public abstract class AbstractTable extends AbstractPropertyObserver implements 
    */
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(50)
-  @ConfigPropertyValue("false")
   protected boolean getConfiguredAutoDiscardOnDelete() {
     return false;
   }
@@ -282,7 +275,6 @@ public abstract class AbstractTable extends AbstractPropertyObserver implements 
    */
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(60)
-  @ConfigPropertyValue("true")
   protected boolean getConfiguredSortEnabled() {
     return true;
   }
@@ -296,7 +288,6 @@ public abstract class AbstractTable extends AbstractPropertyObserver implements 
    */
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(70)
-  @ConfigPropertyValue("true")
   protected boolean getConfiguredHeaderVisible() {
     return true;
   }
@@ -312,7 +303,6 @@ public abstract class AbstractTable extends AbstractPropertyObserver implements 
    */
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(80)
-  @ConfigPropertyValue("false")
   protected boolean getConfiguredAutoResizeColumns() {
     return false;
   }
@@ -330,7 +320,6 @@ public abstract class AbstractTable extends AbstractPropertyObserver implements 
    */
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(90)
-  @ConfigPropertyValue("false")
   protected boolean getConfiguredMultilineText() {
     return false;
   }
@@ -354,7 +343,6 @@ public abstract class AbstractTable extends AbstractPropertyObserver implements 
    */
   @ConfigProperty(ConfigProperty.INTEGER)
   @Order(92)
-  @ConfigPropertyValue("-1")
   protected int getConfiguredRowHeightHint() {
     return -1;
   }
@@ -368,7 +356,6 @@ public abstract class AbstractTable extends AbstractPropertyObserver implements 
    */
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(100)
-  @ConfigPropertyValue("false")
   protected boolean getConfiguredCheckable() {
     return false;
   }
@@ -383,7 +370,6 @@ public abstract class AbstractTable extends AbstractPropertyObserver implements 
    */
   @ConfigProperty(ConfigProperty.TABLE_COLUMN)
   @Order(102)
-  @ConfigPropertyValue("false")
   protected Class<? extends AbstractBooleanColumn> getConfiguredCheckableColumn() {
     return null;
   }
@@ -399,7 +385,6 @@ public abstract class AbstractTable extends AbstractPropertyObserver implements 
    */
   @ConfigProperty(ConfigProperty.DRAG_AND_DROP_TYPE)
   @Order(190)
-  @ConfigPropertyValue("0")
   protected int getConfiguredDropType() {
     return 0;
   }
@@ -415,7 +400,6 @@ public abstract class AbstractTable extends AbstractPropertyObserver implements 
    */
   @ConfigProperty(ConfigProperty.DRAG_AND_DROP_TYPE)
   @Order(190)
-  @ConfigPropertyValue("0")
   protected int getConfiguredDragType() {
     return 0;
   }
@@ -430,7 +414,6 @@ public abstract class AbstractTable extends AbstractPropertyObserver implements 
    */
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(200)
-  @ConfigPropertyValue("true")
   protected boolean getConfiguredKeyboardNavigation() {
     return true;
   }
@@ -445,7 +428,6 @@ public abstract class AbstractTable extends AbstractPropertyObserver implements 
    */
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(230)
-  @ConfigPropertyValue("false")
   protected boolean getConfiguredScrollToSelection() {
     return false;
   }
@@ -650,7 +632,7 @@ public abstract class AbstractTable extends AbstractPropertyObserver implements 
         SERVICES.getService(IExceptionHandlerService.class).handleException(ex);
       }
       catch (Throwable t) {
-        SERVICES.getService(IExceptionHandlerService.class).handleException(createNewUnexpectedProcessingExcpetion(t));
+        SERVICES.getService(IExceptionHandlerService.class).handleException(createNewUnexpectedProcessingException(t));
       }
     }
     else {
@@ -708,7 +690,8 @@ public abstract class AbstractTable extends AbstractPropertyObserver implements 
 
   private Class<? extends IMenu>[] getConfiguredMenus() {
     Class[] dca = ConfigurationUtility.getDeclaredPublicClasses(getClass());
-    Class<IMenu>[] foca = ConfigurationUtility.sortFilteredClassesByOrderAnnotation(dca, IMenu.class);
+    Class[] filtered = ConfigurationUtility.filterClasses(dca, IMenu.class);
+    Class<IMenu>[] foca = ConfigurationUtility.sortFilteredClassesByOrderAnnotation(filtered, IMenu.class);
     return ConfigurationUtility.removeReplacedClasses(foca);
   }
 
@@ -1493,7 +1476,9 @@ public abstract class AbstractTable extends AbstractPropertyObserver implements 
 
   @Override
   public void importFromTableBeanData(AbstractTableFieldBeanData source) throws ProcessingException {
-    clearDeletedRows();
+    discardAllDeletedRows();
+    clearValidatedValuesOnAllColumns();
+    clearAllRowsValidity();
     int deleteCount = 0;
     ArrayList<ITableRow> newRows = new ArrayList<ITableRow>();
     TableRowDataMapper mapper = execCreateTableRowDataMapper(source.getRowType());
@@ -1556,7 +1541,9 @@ public abstract class AbstractTable extends AbstractPropertyObserver implements 
   @SuppressWarnings("unchecked")
   public void updateTable(AbstractTableFieldData source) throws ProcessingException {
     if (source.isValueSet()) {
-      clearDeletedRows();
+      clearValidatedValuesOnAllColumns();
+      clearAllRowsValidity();
+      discardAllDeletedRows();
       int deleteCount = 0;
       ArrayList<ITableRow> newRows = new ArrayList<ITableRow>();
       for (int i = 0, ni = source.getRowCount(); i < ni; i++) {
@@ -1939,6 +1926,11 @@ public abstract class AbstractTable extends AbstractPropertyObserver implements 
       /*
        * do NOT use ITableRow#setRowChanging, this might cause a stack overflow
        */
+      for (IColumn<?> col : getColumns()) {
+        if (col instanceof AbstractColumn<?>) {
+          ((AbstractColumn<?>) col).validateColumnValue(row);
+        }
+      }
       enqueueDecorationTasks(row);
     }
   }
@@ -2575,11 +2567,11 @@ public abstract class AbstractTable extends AbstractPropertyObserver implements 
     wasEverValid(newIRow);
     synchronized (m_cachedRowsLock) {
       m_cachedRows = null;
+      int newIndex = m_rows.size();
+      newIRow.setRowIndex(newIndex);
+      newIRow.setTableInternal(this);
+      m_rows.add(newIRow);
     }
-    int newIndex = m_rows.size();
-    newIRow.setRowIndex(newIndex);
-    newIRow.setTableInternal(this);
-    m_rows.add(newIRow);
     enqueueDecorationTasks(newIRow);
     return newIRow;
   }
@@ -2629,9 +2621,9 @@ public abstract class AbstractTable extends AbstractPropertyObserver implements 
     if (targetIndex != sourceIndex) {
       synchronized (m_cachedRowsLock) {
         m_cachedRows = null;
+        ITableRow row = m_rows.remove(sourceIndex);
+        m_rows.add(targetIndex, row);
       }
-      ITableRow row = m_rows.remove(sourceIndex);
-      m_rows.add(targetIndex, row);
       // update row indexes
       int min = Math.min(sourceIndex, targetIndex);
       int max = Math.max(sourceIndex, targetIndex);
@@ -2701,10 +2693,12 @@ public abstract class AbstractTable extends AbstractPropertyObserver implements 
         //peformance quick-check
         if (rows == existingRows) {
           //remove all of them
-          m_rows.clear();
           synchronized (m_cachedRowsLock) {
+            m_rows.clear();
             m_cachedRows = null;
           }
+          clearValidatedValuesOnAllColumns();
+          clearAllRowsValidity();
           for (int i = deletedRows.length - 1; i >= 0; i--) {
             ITableRow candidateRow = deletedRows[i];
             if (candidateRow != null) {
@@ -2717,11 +2711,16 @@ public abstract class AbstractTable extends AbstractPropertyObserver implements 
             ITableRow candidateRow = deletedRows[i];
             if (candidateRow != null) {
               // delete regardless if index is right
-              boolean removed = m_rows.remove(candidateRow);
-              if (removed) {
-                synchronized (m_cachedRowsLock) {
+              boolean removed = false;
+              synchronized (m_cachedRowsLock) {
+                removed = m_rows.remove(candidateRow);
+                if (removed) {
                   m_cachedRows = null;
                 }
+              }
+              if (removed) {
+                clearValidatedValueOnColumns(candidateRow);
+                clearRowValidity(candidateRow);
                 deleteRowImpl(candidateRow);
               }
             }
@@ -2766,6 +2765,22 @@ public abstract class AbstractTable extends AbstractPropertyObserver implements 
     else {
       internalRow.setStatus(ITableRow.STATUS_DELETED);
       m_deletedRows.put(new CompositeObject(getRowKeys(internalRow)), internalRow);
+    }
+  }
+
+  private void clearValidatedValuesOnAllColumns() {
+    for (IColumn column : getColumnSet().getColumns()) {
+      if (column instanceof AbstractColumn<?>) {
+        ((AbstractColumn) column).clearValidatedValues();
+      }
+    }
+  }
+
+  private void clearValidatedValueOnColumns(ITableRow row) {
+    for (IColumn column : getColumnSet().getColumns()) {
+      if (column instanceof AbstractColumn<?>) {
+        ((AbstractColumn) column).clearValidatedValue(row);
+      }
     }
   }
 
@@ -3569,22 +3584,28 @@ public abstract class AbstractTable extends AbstractPropertyObserver implements 
       SERVICES.getService(IExceptionHandlerService.class).handleException(e);
     }
     catch (Throwable t) {
-      SERVICES.getService(IExceptionHandlerService.class).handleException(createNewUnexpectedProcessingExcpetion(t));
+      SERVICES.getService(IExceptionHandlerService.class).handleException(createNewUnexpectedProcessingException(t));
     }
   }
 
   public boolean wasEverValid(ITableRow row) {
-    Boolean res = BooleanUtility.nvl(m_rowValidty.get(row));
-    if (!res) {
+    if (!m_rowValidty.contains(row)) {
       for (IColumn<?> col : getColumns()) {
         if (row.getCell(col).getErrorStatus() != null) {
-          return res;
+          return false;
         }
       }
-      res = true;
-      m_rowValidty.put(row, res);
+      m_rowValidty.add(row);
     }
-    return res;
+    return true;
+  }
+
+  private void clearRowValidity(ITableRow row) {
+    m_rowValidty.remove(row);
+  }
+
+  private void clearAllRowsValidity() {
+    m_rowValidty.clear();
   }
 
   protected void decorateCellInternal(Cell view, ITableRow row, IColumn<?> col) {
@@ -3600,7 +3621,7 @@ public abstract class AbstractTable extends AbstractPropertyObserver implements 
       SERVICES.getService(IExceptionHandlerService.class).handleException(e);
     }
     catch (Throwable t) {
-      SERVICES.getService(IExceptionHandlerService.class).handleException(createNewUnexpectedProcessingExcpetion(t));
+      SERVICES.getService(IExceptionHandlerService.class).handleException(createNewUnexpectedProcessingException(t));
     }
   }
 
@@ -3719,7 +3740,7 @@ public abstract class AbstractTable extends AbstractPropertyObserver implements 
         SERVICES.getService(IExceptionHandlerService.class).handleException(ex);
       }
       catch (Throwable t) {
-        SERVICES.getService(IExceptionHandlerService.class).handleException(createNewUnexpectedProcessingExcpetion(t));
+        SERVICES.getService(IExceptionHandlerService.class).handleException(createNewUnexpectedProcessingException(t));
       }
     }
   }
@@ -3765,7 +3786,7 @@ public abstract class AbstractTable extends AbstractPropertyObserver implements 
             SERVICES.getService(IExceptionHandlerService.class).handleException(ex);
           }
           catch (Throwable t) {
-            SERVICES.getService(IExceptionHandlerService.class).handleException(createNewUnexpectedProcessingExcpetion(t));
+            SERVICES.getService(IExceptionHandlerService.class).handleException(createNewUnexpectedProcessingException(t));
           }
         }
       }
@@ -4069,7 +4090,7 @@ public abstract class AbstractTable extends AbstractPropertyObserver implements 
     return m_uiFacade;
   }
 
-  private ProcessingException createNewUnexpectedProcessingExcpetion(Throwable t) {
+  private ProcessingException createNewUnexpectedProcessingException(Throwable t) {
     return new ProcessingException("Unexpected", t);
   }
 

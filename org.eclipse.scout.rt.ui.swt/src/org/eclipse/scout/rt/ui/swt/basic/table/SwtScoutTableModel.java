@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.eclipse.scout.rt.ui.swt.basic.table;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.jface.util.SafeRunnable;
 import org.eclipse.jface.viewers.ILabelProviderListener;
@@ -25,6 +26,7 @@ import org.eclipse.scout.rt.client.ui.basic.table.ITable;
 import org.eclipse.scout.rt.client.ui.basic.table.ITableRow;
 import org.eclipse.scout.rt.client.ui.basic.table.columns.IColumn;
 import org.eclipse.scout.rt.client.ui.basic.table.columns.ISmartColumn;
+import org.eclipse.scout.rt.shared.AbstractIcons;
 import org.eclipse.scout.rt.ui.swt.ISwtEnvironment;
 import org.eclipse.scout.rt.ui.swt.SwtIcons;
 import org.eclipse.scout.rt.ui.swt.extension.UiDecorationExtensionPoint;
@@ -39,6 +41,7 @@ public class SwtScoutTableModel implements IStructuredContentProvider, ITableCol
   private final SwtScoutTable m_swtTable;
   private final TableColumnManager m_columnManager;
   private final Color m_disabledForegroundColor;
+  private final Color m_disabledBackgroundColor;
 
   public SwtScoutTableModel(ITable table, SwtScoutTable swtTable, ISwtEnvironment environment, TableColumnManager columnManager) {
     m_table = table;
@@ -46,6 +49,7 @@ public class SwtScoutTableModel implements IStructuredContentProvider, ITableCol
     m_environment = environment;
     m_columnManager = columnManager;
     m_disabledForegroundColor = m_environment.getColor(UiDecorationExtensionPoint.getLookAndFeel().getColorForegroundDisabled());
+    m_disabledBackgroundColor = m_environment.getColor(UiDecorationExtensionPoint.getLookAndFeel().getColorBackgroundDisabled());
   }
 
   public boolean isMultiline() {
@@ -68,9 +72,13 @@ public class SwtScoutTableModel implements IStructuredContentProvider, ITableCol
   @Override
   public Color getBackground(Object element, int columnIndex) {
     if (columnIndex > 0) {
-      ICell cell = getCell(element, columnIndex);
-      if (cell != null) {
-        return m_environment.getColor(cell.getBackgroundColor());
+      ICell scoutCell = getCell(element, columnIndex);
+      if (scoutCell != null) {
+        Color col = m_environment.getColor(scoutCell.getBackgroundColor());
+        if (col == null && !scoutCell.isEnabled()) {
+          col = m_disabledBackgroundColor;
+        }
+        return col;
       }
     }
     return null;
@@ -118,6 +126,9 @@ public class SwtScoutTableModel implements IStructuredContentProvider, ITableCol
         else {
           iconId = SwtIcons.CheckboxNo;
         }
+      }
+      else if (cell != null && cell.getErrorStatus() != null && cell.getErrorStatus().getSeverity() == IStatus.ERROR) {
+        iconId = AbstractIcons.StatusError;
       }
       else if (cell != null && cell.getIconId() != null) {
         iconId = cell.getIconId();

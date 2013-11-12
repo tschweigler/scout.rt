@@ -110,14 +110,18 @@ public abstract class RwtScoutFieldComposite<T extends IFormField> extends RwtSc
 
   protected void setVisibleFromScout(boolean b) {
     boolean updateLayout = false;
-    if (getUiContainer() != null && getUiContainer().getVisible() != b) {
-      updateLayout = true;
-      getUiContainer().setVisible(b);
+
+    if (getUiContainer() != null) {
+      if (getUiContainer().getVisible() != b) {
+        updateLayout = true;
+        getUiContainer().setVisible(b);
+      }
     }
     else if (getUiField() != null && getUiField().getVisible() != b) {
       updateLayout = true;
       getUiField().setVisible(b);
     }
+
     if (updateLayout && isCreated()) {
       RwtLayoutUtility.invalidateLayout(getUiEnvironment(), getUiContainer());
     }
@@ -180,7 +184,9 @@ public abstract class RwtScoutFieldComposite<T extends IFormField> extends RwtSc
       }
 
       //In case of on field labels it is necessary to recompute the label visibility if the mandatory status changes.
-      setLabelVisibleFromScout();
+      if (getScoutObject().getLabelPosition() == IFormField.LABEL_POSITION_ON_FIELD) {
+        setLabelVisibleFromScout();
+      }
     }
   }
 

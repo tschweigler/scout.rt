@@ -34,7 +34,6 @@ import org.eclipse.scout.commons.EventListenerList;
 import org.eclipse.scout.commons.TypeCastUtility;
 import org.eclipse.scout.commons.annotations.ConfigOperation;
 import org.eclipse.scout.commons.annotations.ConfigProperty;
-import org.eclipse.scout.commons.annotations.ConfigPropertyValue;
 import org.eclipse.scout.commons.annotations.Order;
 import org.eclipse.scout.commons.beans.AbstractPropertyObserver;
 import org.eclipse.scout.commons.exception.ProcessingException;
@@ -102,42 +101,36 @@ public abstract class AbstractActivityMap<RI, AI> extends AbstractPropertyObserv
 
   @ConfigProperty(ConfigProperty.INTEGER)
   @Order(20)
-  @ConfigPropertyValue("5")
   protected int getConfiguredWorkDayCount() {
     return 5;
   }
 
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(30)
-  @ConfigPropertyValue("false")
   protected boolean getConfiguredWorkDaysOnly() {
     return false;
   }
 
   @ConfigProperty(ConfigProperty.HOUR_OF_DAY)
   @Order(110)
-  @ConfigPropertyValue("8")
   protected int getConfiguredFirstHourOfDay() {
     return 8;
   }
 
   @ConfigProperty(ConfigProperty.HOUR_OF_DAY)
   @Order(130)
-  @ConfigPropertyValue("16")
   protected int getConfiguredLastHourOfDay() {
     return 16;
   }
 
   @ConfigProperty(ConfigProperty.DURATION_MINUTES)
   @Order(120)
-  @ConfigPropertyValue("1800000L")
   protected long getConfiguredIntradayInterval() {
     return 1800000L;
   }
 
   @ConfigProperty(ConfigProperty.DURATION_MINUTES)
   @Order(125)
-  @ConfigPropertyValue("1800000L")
   protected long getConfiguredMinimumActivityDuration() {
     return 1800000L;
   }
@@ -152,14 +145,14 @@ public abstract class AbstractActivityMap<RI, AI> extends AbstractPropertyObserv
    */
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(140)
-  @ConfigPropertyValue("true")
   protected boolean getConfiguredDrawSections() {
     return true;
   }
 
   private Class<? extends IMenu>[] getConfiguredMenus() {
     Class[] dca = ConfigurationUtility.getDeclaredPublicClasses(getClass());
-    Class<IMenu>[] foca = ConfigurationUtility.sortFilteredClassesByOrderAnnotation(dca, IMenu.class);
+    Class[] filtered = ConfigurationUtility.filterClasses(dca, IMenu.class);
+    Class<IMenu>[] foca = ConfigurationUtility.sortFilteredClassesByOrderAnnotation(filtered, IMenu.class);
     return ConfigurationUtility.removeReplacedClasses(foca);
   }
 

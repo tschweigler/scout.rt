@@ -2,6 +2,7 @@ package org.eclipse.scout.rt.ui.rap.basic.table;
 
 import java.util.HashMap;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ViewerCell;
@@ -13,6 +14,8 @@ import org.eclipse.scout.rt.client.ui.basic.table.ITable;
 import org.eclipse.scout.rt.client.ui.basic.table.ITableRow;
 import org.eclipse.scout.rt.client.ui.basic.table.columns.IColumn;
 import org.eclipse.scout.rt.client.ui.basic.table.columns.ISmartColumn;
+import org.eclipse.scout.rt.client.ui.basic.table.columns.IStringColumn;
+import org.eclipse.scout.rt.shared.AbstractIcons;
 import org.eclipse.scout.rt.ui.rap.RwtIcons;
 import org.eclipse.scout.rt.ui.rap.extension.UiDecorationExtensionPoint;
 import org.eclipse.scout.rt.ui.rap.util.HtmlTextUtility;
@@ -84,17 +87,37 @@ public class RwtScoutColumnModel extends ColumnLabelProvider {
       text = getUiTable().getUiEnvironment().convertLinksWithLocalUrlsInHtmlCell(getUiTable(), text);
     }
     else {
-      boolean multiline = false;
-      if (text.indexOf("\n") >= 0) {
-        multiline = getScoutTable().isMultilineText();
-        if (!multiline) {
-          text = StringUtility.replaceNewLines(text, " ");
-        }
+      boolean multiline = isMultiline(text);
+      if (!multiline) {
+        text = replaceLineBreaksInMultilineText(text);
       }
+      boolean isMultilineTable = getScoutTable().isMultilineText();
       boolean markupEnabled = Boolean.TRUE.equals(getUiTable().getUiField().getData(RWT.MARKUP_ENABLED));
+
       if (markupEnabled || multiline) {
-        text = HtmlTextUtility.transformPlainTextToHtml(text);
+        boolean replaceBreakableChars = true;
+        IColumn<?> column = m_columnManager.getColumnByModelIndex(columnIndex - 1);
+        if (column instanceof IStringColumn && isMultilineTable) {
+          IStringColumn stringColumn = (IStringColumn) column;
+          replaceBreakableChars = !stringColumn.isTextWrap();
+        }
+        text = HtmlTextUtility.transformPlainTextToHtml(text, replaceBreakableChars);
       }
+    }
+    return text;
+  }
+
+  private boolean isMultiline(String text) {
+    return isMultilineText(text) && getScoutTable().isMultilineText();
+  }
+
+  private boolean isMultilineText(String text) {
+    return text.indexOf("\n") >= 0;
+  }
+
+  private String replaceLineBreaksInMultilineText(String text) {
+    if (isMultilineText(text)) {
+      text = StringUtility.replaceNewLines(text, " ");
     }
     return text;
   }
@@ -129,9 +152,13 @@ public class RwtScoutColumnModel extends ColumnLabelProvider {
         checkBoxImage = m_imgCheckboxFalse;
       }
     }
+
     //deco
     String iconId = null;
-    if (cell != null && cell.getIconId() != null) {
+    if (cell != null && cell.getErrorStatus() != null && cell.getErrorStatus().getSeverity() == IStatus.ERROR) {
+      iconId = AbstractIcons.StatusError;
+    }
+    else if (cell != null && cell.getIconId() != null) {
       iconId = cell.getIconId();
     }
     else if (columnOrder[1] == columnIndex) {

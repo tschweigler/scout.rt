@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -170,7 +171,8 @@ public abstract class AbstractRwtEnvironment implements IRwtEnvironment {
     m_clientSessionClazz = clientSessionClazz;
     m_environmentListeners = new EventListenerList();
     m_requestInterceptor = new P_RequestInterceptor();
-    m_openForms = new HashMap<IForm, IRwtScoutPart>();
+    //Linked hash map to preserve the order of the opening
+    m_openForms = new LinkedHashMap<IForm, IRwtScoutPart>();
     m_status = RwtEnvironmentEvent.INACTIVE;
     m_desktopKeyStrokes = new ArrayList<IRwtKeyStroke>();
     m_startDesktopCalled = false;
@@ -213,8 +215,11 @@ public abstract class AbstractRwtEnvironment implements IRwtEnvironment {
       return;
     }
     List<IForm> openForms = new LinkedList<IForm>(m_openForms.keySet());
-    for (IForm form : openForms) {
-      //Close the gui part, the form itself may stay open
+    //Close the parts in reverse order as they were opened
+    //Mainly necessary for stacked dialogs to dispose them properly
+    for (int i = openForms.size() - 1; i >= 0; i--) {
+      IForm form = openForms.get(i);
+      //Close the gui part, the form itself may stay open.
       hideFormPart(form);
     }
   }
@@ -439,7 +444,9 @@ public abstract class AbstractRwtEnvironment implements IRwtEnvironment {
     HttpSession httpSession = RWT.getUISession().getHttpSession();
     IClientSession clientSession = (IClientSession) httpSession.getAttribute(IClientSession.class.getName());
     if (clientSession != null) {
-      if (!userAgent.equals(clientSession.getUserAgent())) {
+      //If the subject has changed always create a new clientSession
+      //Also create a new clientSession if the userAgent changed (f.e. switch from /web to /mobile)
+      if (!getSubject().equals(clientSession.getSubject()) || !userAgent.equals(clientSession.getUserAgent())) {
         //Force client session shutdown
         httpSession.setAttribute(P_HttpSessionInvalidationListener.class.getName(), null);
         //Make sure a new client session will be initialized
@@ -649,6 +656,14 @@ public abstract class AbstractRwtEnvironment implements IRwtEnvironment {
       return false;
     }
     return m_keyStrokeManager.removeKeyStrokes(control);
+  }
+
+  @Override
+  public boolean hasKeyStroke(Control control, IRwtKeyStroke stroke) {
+    if (m_keyStrokeManager == null) {
+      return false;
+    }
+    return m_keyStrokeManager.hasKeyStroke(control, stroke);
   }
 
   /**

@@ -20,9 +20,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.scout.commons.LocaleThreadLocal;
 import org.eclipse.scout.commons.TypeCastUtility;
@@ -46,16 +43,16 @@ import org.eclipse.scout.service.SERVICES;
 import org.osgi.framework.Bundle;
 
 public abstract class AbstractServerSession implements IServerSession, Serializable {
-
-  // Change for maven 04
-  private static final long serialVersionUID = 1L;
   private static final IScoutLogger LOG = ScoutLogManager.getLogger(AbstractServerSession.class);
 
-  private transient Bundle m_bundle; // transient
+  private static final long serialVersionUID = 1L;
+
+  private transient Bundle m_bundle;
   private boolean m_initialized;
   private boolean m_active;
   private Locale m_locale;
   private final HashMap<String, Object> m_attributes;
+  private transient Object m_attributesLock;
   private final SharedVariableMap m_sharedVariableMap;
   private boolean m_singleThreadSession;
   private transient ScoutTexts m_scoutTexts;
@@ -64,6 +61,7 @@ public abstract class AbstractServerSession implements IServerSession, Serializa
 
   public AbstractServerSession(boolean autoInitConfig) {
     m_locale = LocaleThreadLocal.get();
+    m_attributesLock = new Object();
     m_attributes = new HashMap<String, Object>();
     m_sharedVariableMap = new SharedVariableMap();
     if (autoInitConfig) {
@@ -83,6 +81,9 @@ public abstract class AbstractServerSession implements IServerSession, Serializa
       m_scoutTexts = new ScoutTexts();
     }
 
+    if (m_attributesLock == null) {
+      m_attributesLock = new Object();
+    }
   }
 
   /**
@@ -170,14 +171,14 @@ public abstract class AbstractServerSession implements IServerSession, Serializa
 
   @Override
   public Object getData(String key) {
-    synchronized (AbstractServerSession.class) {
+    synchronized (m_attributesLock) {
       return m_attributes.get(key);
     }
   }
 
   @Override
   public void setData(String key, Object value) {
-    synchronized (AbstractServerSession.class) {
+    synchronized (m_attributesLock) {
       m_attributes.put(key, value);
     }
   }
@@ -214,7 +215,7 @@ public abstract class AbstractServerSession implements IServerSession, Serializa
     if (bundle == null) {
       throw new IllegalArgumentException("bundle must not be null");
     }
-    //m_bundle = bundle;
+    m_bundle = bundle;
     m_active = true;
     m_scoutTexts = new ScoutTexts();
     // explicitly set the just created instance to the ThreadLocal because it was not available yet, when the job was started.
@@ -266,45 +267,14 @@ public abstract class AbstractServerSession implements IServerSession, Serializa
     m_userAgent = userAgent;
   }
 
-  /**
-  *
-  */
-  protected void setSessionId(String sessionId) {
-    m_sessionId = sessionId;
-  }
-
-  /**
-   * set
-   */
   @Override
-  public void setSessionId(HttpServletRequest req) {
-    setSessionId(getSessionId(req));
+  public void setSessionId(String sessionId) {
+    m_sessionId = sessionId;
   }
 
   @Override
   public String getSessionId() {
     return m_sessionId;
-  }
-
-  //TODO TSW Sollte über einen Service realisiert werden
-  private String getSessionId(HttpServletRequest req) {
-    Cookie[] cookies = req.getCookies();
-    String cookieName = "clientid";
-
-    for (int i = 0; i < cookies.length; i++) {
-      Cookie cookie = cookies[i];
-
-      if (cookie.getName().equals(cookieName)) {
-        LOG.info("# ClientdId gefunden: " + cookie.getValue());
-        return cookie.getValue();
-      }
-    }
-    if (req.getAttribute(cookieName) != null) {
-      LOG.info("# Innerhalb dieses Calls wurde bereits ein Cookie gesetzt");
-      return (String) req.getAttribute(cookieName);
-    }
-
-    return null;
   }
 
   @Override

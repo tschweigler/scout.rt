@@ -13,8 +13,6 @@ package org.eclipse.scout.rt.ui.swt.form.fields.tabbox;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import org.eclipse.scout.commons.OptimisticLock;
 import org.eclipse.scout.commons.RunnableWithData;
@@ -41,6 +39,7 @@ public class SwtScoutTabBox extends SwtScoutFieldComposite<ITabBox> implements I
   private static final IScoutLogger LOG = ScoutLogManager.getLogger(SwtScoutTabBox.class);
 
   private HashMap<CTabItem, SwtScoutTabItem> m_tabs;
+  private HashMap<IGroupBox, SwtScoutTabItem> m_scoutTabMapping;
   private Listener m_uiTabFocusListener;
   private P_TabListener m_tabListener = new P_TabListener();
   private OptimisticLock m_selectedTabLock;
@@ -73,11 +72,35 @@ public class SwtScoutTabBox extends SwtScoutFieldComposite<ITabBox> implements I
 
       @Override
       public void widgetDisposed(DisposeEvent e) {
-        if (m_tabs != null) {
-          for (Entry<CTabItem, SwtScoutTabItem> tabEntry : m_tabs.entrySet()) {
-            tabEntry.getKey().dispose();
-            tabEntry.getValue().dispose();
+        if (m_scoutTabMapping != null) {
+          IGroupBox selectedGroupBox = getScoutObject().getSelectedTab();
+          IGroupBox[] groupBoxes = getScoutObject().getGroupBoxes();
+          //reverse order to avoid flickering
+          for (int i = groupBoxes.length - 1; i >= 0; i--) {
+            IGroupBox groupBox = groupBoxes[i];
+            if (groupBox != selectedGroupBox) {
+              disposeGroupBoxWithTabs(groupBox);
+            }
           }
+          if (selectedGroupBox != null) {
+            disposeGroupBoxWithTabs(selectedGroupBox);
+          }
+          m_scoutTabMapping = null;
+          m_tabs = null;
+        }
+      }
+
+      /**
+       * Removes the group box and containing tabs from the local maps and disposes the tab items.
+       * 
+       * @param groupBox
+       */
+      private void disposeGroupBoxWithTabs(IGroupBox groupBox) {
+        SwtScoutTabItem swtScoutTabItem = m_scoutTabMapping.remove(groupBox);
+        if (swtScoutTabItem != null) {
+          m_tabs.remove(swtScoutTabItem.getTabItem());
+          swtScoutTabItem.getTabItem().dispose();
+          swtScoutTabItem.dispose();
         }
       }
     });
@@ -87,12 +110,14 @@ public class SwtScoutTabBox extends SwtScoutFieldComposite<ITabBox> implements I
     try {
       getSwtContainer().setRedraw(false);
       m_tabs = new HashMap<CTabItem, SwtScoutTabItem>();
+      m_scoutTabMapping = new HashMap<IGroupBox, SwtScoutTabItem>();
       for (IGroupBox box : getScoutObject().getGroupBoxes()) {
         if (box.isVisible()) {
           // XXX make tabitem exchangeable... extension point and provide a ITabItemInterface
           SwtScoutTabItem item = new SwtScoutTabItem();
           item.createField(getSwtField(), box, getEnvironment());
           m_tabs.put(item.getTabItem(), item);
+          m_scoutTabMapping.put(box, item);
         }
       }
       SwtScoutTabItem selectedTabItem = getTabItem(getScoutObject().getSelectedTab());
@@ -167,14 +192,11 @@ public class SwtScoutTabBox extends SwtScoutFieldComposite<ITabBox> implements I
       m_selectedTabLock.acquire();
       //
       IGroupBox selectedTab = getScoutObject().getSelectedTab();
-      CTabItem foundItem = null;
-      for (Map.Entry<CTabItem, SwtScoutTabItem> e : m_tabs.entrySet()) {
-        IGroupBox test = e.getValue().getScoutObject();
-        if (test == selectedTab) {
-          foundItem = e.getKey();
-          break;
-        }
+      SwtScoutTabItem swtScoutTabItem = m_scoutTabMapping.get(selectedTab);
+      if (swtScoutTabItem == null) {
+        return;
       }
+      CTabItem foundItem = swtScoutTabItem.getTabItem();
       if (foundItem != null) {
         getSwtField().setSelection(foundItem);
       }
@@ -268,6 +290,7 @@ public class SwtScoutTabBox extends SwtScoutFieldComposite<ITabBox> implements I
         item = new SwtScoutTabItem();
         item.createField(getSwtField(), groupBox, getEnvironment());
         m_tabs.put(item.getTabItem(), item);
+        m_scoutTabMapping.put(groupBox, item);
 
       }
     }
@@ -281,6 +304,7 @@ public class SwtScoutTabBox extends SwtScoutFieldComposite<ITabBox> implements I
       getSwtContainer().setRedraw(false);
       SwtScoutTabItem item = getTabItem(groupBox);
       m_tabs.remove(item.getTabItem());
+      m_scoutTabMapping.remove(groupBox);
       if (item != null && item.isInitialized() && !item.isDisposed()) {
         item.getTabItem().dispose();
         item.dispose();
@@ -295,12 +319,7 @@ public class SwtScoutTabBox extends SwtScoutFieldComposite<ITabBox> implements I
     if (groupBox == null) {
       return null;
     }
-    for (SwtScoutTabItem item : m_tabs.values()) {
-      if (item.getScoutObject() == groupBox) {
-        return item;
-      }
-    }
-    return null;
+    return m_scoutTabMapping.get(groupBox);
   }
 
 }

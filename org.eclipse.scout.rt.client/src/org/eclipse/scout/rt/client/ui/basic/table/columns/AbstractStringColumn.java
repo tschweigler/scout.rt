@@ -12,13 +12,13 @@ package org.eclipse.scout.rt.client.ui.basic.table.columns;
 
 import org.eclipse.scout.commons.StringUtility;
 import org.eclipse.scout.commons.annotations.ConfigProperty;
-import org.eclipse.scout.commons.annotations.ConfigPropertyValue;
 import org.eclipse.scout.commons.annotations.Order;
 import org.eclipse.scout.commons.exception.ProcessingException;
 import org.eclipse.scout.rt.client.ui.basic.cell.Cell;
 import org.eclipse.scout.rt.client.ui.basic.table.ITable;
 import org.eclipse.scout.rt.client.ui.basic.table.ITableRow;
 import org.eclipse.scout.rt.client.ui.form.fields.IFormField;
+import org.eclipse.scout.rt.client.ui.form.fields.IBasicField;
 import org.eclipse.scout.rt.client.ui.form.fields.stringfield.AbstractStringField;
 import org.eclipse.scout.rt.client.ui.form.fields.stringfield.IStringField;
 
@@ -47,7 +47,6 @@ public abstract class AbstractStringColumn extends AbstractColumn<String> implem
    */
   @ConfigProperty(ConfigProperty.INTEGER)
   @Order(130)
-  @ConfigPropertyValue("4000")
   protected int getConfiguredMaxLength() {
     return 4000;
   }
@@ -63,7 +62,6 @@ public abstract class AbstractStringColumn extends AbstractColumn<String> implem
    */
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(140)
-  @ConfigPropertyValue("false")
   protected boolean getConfiguredInputMasked() {
     return false;
   }
@@ -77,7 +75,6 @@ public abstract class AbstractStringColumn extends AbstractColumn<String> implem
    */
   @ConfigProperty(ConfigProperty.STRING)
   @Order(150)
-  @ConfigPropertyValue("null")
   protected String getConfiguredDisplayFormat() {
     return null;
   }
@@ -92,21 +89,18 @@ public abstract class AbstractStringColumn extends AbstractColumn<String> implem
    */
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(160)
-  @ConfigPropertyValue("false")
   protected boolean getConfiguredTextWrap() {
     return false;
   }
 
   @ConfigProperty(ConfigProperty.STRING)
   @Order(170)
-  @ConfigPropertyValue("null")
   protected String getConfiguredFormat() {
     return null;
   }
 
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(180)
-  @ConfigPropertyValue("true")
   protected boolean getConfiguredSelectAllOnEdit() {
     return true;
   }
@@ -114,11 +108,10 @@ public abstract class AbstractStringColumn extends AbstractColumn<String> implem
   /**
    * Causes the ui to send a validate event every time the text field content is changed.
    * <p>
-   * Be careful when using this property since this can influence performance and the charateristics of text input.
+   * Be careful when using this property since this can influence performance and the characteristics of text input.
    */
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(180)
-  @ConfigPropertyValue("false")
   protected boolean getConfiguredValidateOnAnyKey() {
     return false;
   }
@@ -179,13 +172,13 @@ public abstract class AbstractStringColumn extends AbstractColumn<String> implem
   }
 
   @Override
-  public void setValidateOnAnyKey(boolean b) {
-    propertySupport.setPropertyBool(IStringField.PROP_VALIDATE_ON_ANY_KEY, b);
+  public boolean isValidateOnAnyKey() {
+    return propertySupport.getPropertyBool(IBasicField.PROP_VALIDATE_ON_ANY_KEY);
   }
 
   @Override
-  public boolean isValidateOnAnyKey() {
-    return propertySupport.getPropertyBool(IStringField.PROP_VALIDATE_ON_ANY_KEY);
+  public void setValidateOnAnyKey(boolean b) {
+    propertySupport.setPropertyBool(IBasicField.PROP_VALIDATE_ON_ANY_KEY, b);
   }
 
   @Override

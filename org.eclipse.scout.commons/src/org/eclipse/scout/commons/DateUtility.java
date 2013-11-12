@@ -81,35 +81,57 @@ public final class DateUtility {
     }
   }
 
+  public static Date addMilliseconds(Date d, int milliseconds) {
+    return addTime(d, Calendar.MILLISECOND, milliseconds);
+  }
+
+  public static Date addSeconds(Date d, int seconds) {
+    return addTime(d, Calendar.SECOND, seconds);
+  }
+
+  public static Date addMinutes(Date d, int minutes) {
+    return addTime(d, Calendar.MINUTE, minutes);
+  }
+
   public static Date addHours(Date d, int hours) {
+    return addTime(d, Calendar.HOUR_OF_DAY, hours);
+  }
+
+  public static Date addTime(Date d, int field, int amount) {
     if (d == null) {
       return null;
     }
     Calendar cal = Calendar.getInstance();
     cal.setTime(d);
-    cal.add(Calendar.HOUR_OF_DAY, hours);
+    cal.add(field, amount);
     return cal.getTime();
   }
 
   /**
-   * add count days days is truncated to second and can be negative
+   * Adds a number of days to a date.
+   * 
+   * @param count
+   *          days is truncated to second and can be negative
+   * @param d
+   *          may be <code>null</code>
    */
   public static Date addDays(Date d, double count) {
     if (d == null) {
       return null;
     }
-    int sec = (int) (count * 3600 * 24);
     int sign = 1;
-    if (sec < 0) {
-      sec = -sec;
+    if (count < 0) {
+      count = -count;
       sign = -1;
     }
+    double roundingFactor = (sign > 0) ? 0.000004 : 0.0000017;
+    int sec = (int) ((count + roundingFactor) * 3600 * 24);
     Calendar cal = Calendar.getInstance();
     cal.setTime(d);
     cal.add(Calendar.DATE, sign * (sec / 3600 / 24));
     cal.add(Calendar.HOUR_OF_DAY, sign * ((sec / 3600) % 24));
     cal.add(Calendar.MINUTE, sign * ((sec / 60) % 60));
-    cal.add(Calendar.SECOND, sign * (sec % 60));
+    cal.add(Calendar.SECOND, (int) (sign * ((sec) % 60)));
     return cal.getTime();
   }
 

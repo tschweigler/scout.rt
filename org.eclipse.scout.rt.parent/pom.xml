@@ -34,6 +34,7 @@
     <module>../org.eclipse.scout.jaxws216</module>
     <module>../org.eclipse.scout.net</module>
 
+    <module>../org.eclipse.scout.rt.servicetunnel</module>
     <module>../org.eclipse.scout.rt.shared</module>
     <module>../org.eclipse.scout.rt.shared.legacy.texts.fragment</module>
 
@@ -60,6 +61,7 @@
     <module>../org.eclipse.scout.rt.feature.about</module>
     <module>../org.eclipse.scout.rt.core-feature</module>
     <module>../org.eclipse.scout.rt-feature</module>
+    <module>../org.eclipse.scout.rt.batik.dependency-feature</module>
   </modules>
 
   <profiles>
@@ -99,11 +101,13 @@
         <module>../org.eclipse.scout.rt.ui.swing.test</module>
         <module>../org.eclipse.scout.rt.ui.swt.test</module>
         <module>../org.eclipse.scout.service.test</module>
+        <module>../org.eclipse.scout.net.test</module>
         <module>../org.eclipse.scout.rt.testing-feature</module>
         <module>../org.eclipse.scout.rt.testing.client</module>
         <module>../org.eclipse.scout.rt.testing.client.test</module>
         <module>../org.eclipse.scout.rt.testing.common.ant.optional.junit.fragment</module>
         <module>../org.eclipse.scout.rt.testing.commons</module>
+        <module>../org.eclipse.scout.rt.testing.commons.test</module>
         <module>../org.eclipse.scout.rt.testing.server</module>
         <module>../org.eclipse.scout.rt.testing.server.test</module>
         <module>../org.eclipse.scout.rt.testing.shared</module>

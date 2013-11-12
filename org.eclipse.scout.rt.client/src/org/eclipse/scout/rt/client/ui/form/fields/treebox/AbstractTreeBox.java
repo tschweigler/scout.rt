@@ -22,7 +22,6 @@ import org.eclipse.scout.commons.ConfigurationUtility;
 import org.eclipse.scout.commons.TriState;
 import org.eclipse.scout.commons.annotations.ConfigOperation;
 import org.eclipse.scout.commons.annotations.ConfigProperty;
-import org.eclipse.scout.commons.annotations.ConfigPropertyValue;
 import org.eclipse.scout.commons.annotations.Order;
 import org.eclipse.scout.commons.exception.ProcessingException;
 import org.eclipse.scout.commons.holders.Holder;
@@ -60,6 +59,7 @@ public abstract class AbstractTreeBox<T> extends AbstractValueField<T[]> impleme
   private Class<? extends ICodeType> m_codeTypeClass;
   private boolean m_valueTreeSyncActive;
   private boolean m_autoExpandAll;
+  private boolean m_autoCheckChildNodes;
   private boolean m_loadIncremental;
   private ITreeBoxUIFacade m_uiFacade;
   private ITreeNodeFilter m_activeNodesFilter;
@@ -116,7 +116,6 @@ public abstract class AbstractTreeBox<T> extends AbstractValueField<T[]> impleme
 
   @ConfigProperty(ConfigProperty.LOOKUP_CALL)
   @Order(240)
-  @ConfigPropertyValue("null")
   @ValidationRule(ValidationRule.LOOKUP_CALL)
   protected Class<? extends LookupCall> getConfiguredLookupCall() {
     return null;
@@ -124,7 +123,6 @@ public abstract class AbstractTreeBox<T> extends AbstractValueField<T[]> impleme
 
   @ConfigProperty(ConfigProperty.CODE_TYPE)
   @Order(250)
-  @ConfigPropertyValue("null")
   @ValidationRule(ValidationRule.CODE_TYPE)
   protected Class<? extends ICodeType> getConfiguredCodeType() {
     return null;
@@ -132,28 +130,24 @@ public abstract class AbstractTreeBox<T> extends AbstractValueField<T[]> impleme
 
   @ConfigProperty(ConfigProperty.ICON_ID)
   @Order(230)
-  @ConfigPropertyValue("null")
   protected String getConfiguredIconId() {
     return null;
   }
 
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(260)
-  @ConfigPropertyValue("true")
   protected boolean getConfiguredAutoLoad() {
     return true;
   }
 
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(270)
-  @ConfigPropertyValue("false")
   protected boolean getConfiguredLoadIncremental() {
     return false;
   }
 
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(280)
-  @ConfigPropertyValue("false")
   protected boolean getConfiguredAutoExpandAll() {
     return false;
   }
@@ -165,7 +159,6 @@ public abstract class AbstractTreeBox<T> extends AbstractValueField<T[]> impleme
    */
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(290)
-  @ConfigPropertyValue("true")
   protected boolean getConfiguredFilterActiveNodes() {
     return false;
   }
@@ -177,20 +170,38 @@ public abstract class AbstractTreeBox<T> extends AbstractValueField<T[]> impleme
    */
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(300)
-  @ConfigPropertyValue("false")
   protected boolean getConfiguredFilterCheckedNodes() {
     return false;
   }
 
+  /**
+   * Checks / unchecks all visible child nodes if the parent node gets checked / unchecked.
+   * <p>
+   * Makes only sense if
+   * 
+   * <pre>
+   * {@link #getConfiguredCheckable()}
+   * </pre>
+   * 
+   * is set to true.
+   * 
+   * @since 3.10-M1 (backported to 3.8 / 3.9)
+   */
+  @ConfigProperty(ConfigProperty.BOOLEAN)
+  @Order(310)
+  protected boolean getConfiguredAutoCheckChildNodes() {
+    return false;
+  }
+
   @Override
-  @ConfigPropertyValue("1.0")
   protected double getConfiguredGridWeightY() {
     return 1.0;
   }
 
   private Class<? extends IFormField>[] getConfiguredFields() {
     Class[] dca = ConfigurationUtility.getDeclaredPublicClasses(getClass());
-    return ConfigurationUtility.sortFilteredClassesByOrderAnnotation(dca, IFormField.class);
+    Class[] filtered = ConfigurationUtility.filterClasses(dca, IFormField.class);
+    return ConfigurationUtility.sortFilteredClassesByOrderAnnotation(filtered, IFormField.class);
   }
 
   /**
@@ -259,6 +270,7 @@ public abstract class AbstractTreeBox<T> extends AbstractValueField<T[]> impleme
     setFilterCheckedNodes(getConfiguredFilterCheckedNodes());
     setFilterCheckedNodesValue(getConfiguredFilterCheckedNodes());
     setAutoExpandAll(getConfiguredAutoExpandAll());
+    setAutoCheckChildNodes(getConfiguredAutoCheckChildNodes());
     setLoadIncremental(getConfiguredLoadIncremental());
     try {
       m_tree = ConfigurationUtility.newInnerInstance(this, getConfiguredTree());
@@ -282,6 +294,11 @@ public abstract class AbstractTreeBox<T> extends AbstractValueField<T[]> impleme
                 }
                 case TreeEvent.TYPE_NODES_UPDATED: {
                   if (getTree().isCheckable()) {
+                    if (isAutoCheckChildNodes() && e.getNodes() != null) {
+                      for (ITreeNode node : e.getNodes()) {
+                        execAutoCheckChildNodes(node, node.isChecked());
+                      }
+                    }
                     syncTreeToValue();
                   }
                   break;
@@ -767,6 +784,16 @@ public abstract class AbstractTreeBox<T> extends AbstractValueField<T[]> impleme
     m_autoExpandAll = b;
   }
 
+  @Override
+  public boolean isAutoCheckChildNodes() {
+    return m_autoCheckChildNodes;
+  }
+
+  @Override
+  public void setAutoCheckChildNodes(boolean b) {
+    m_autoCheckChildNodes = b;
+  }
+
   @SuppressWarnings("unchecked")
   @Override
   public boolean isNodeActive(ITreeNode node) {
@@ -882,6 +909,15 @@ public abstract class AbstractTreeBox<T> extends AbstractValueField<T[]> impleme
     finally {
       getTree().setTreeChanging(false);
       m_valueTreeSyncActive = false;
+    }
+  }
+
+  protected void execAutoCheckChildNodes(ITreeNode node, boolean value) {
+    for (ITreeNode childNode : node.getFilteredChildNodes()) {
+      if (childNode.isEnabled() && childNode.isVisible()) {
+        childNode.setChecked(value);
+      }
+      execAutoCheckChildNodes(childNode, value);
     }
   }
 
@@ -1098,19 +1134,16 @@ public abstract class AbstractTreeBox<T> extends AbstractValueField<T[]> impleme
   @Order(10000)
   public class DefaultTreeBoxTree extends AbstractTree {
 
-    @ConfigPropertyValue("false")
     @Override
     protected boolean getConfiguredMultiSelect() {
       return false;
     }
 
-    @ConfigPropertyValue("true")
     @Override
     protected boolean getConfiguredCheckable() {
       return true;
     }
 
-    @ConfigPropertyValue("false")
     @Override
     protected boolean getConfiguredRootNodeVisible() {
       return false;

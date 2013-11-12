@@ -17,6 +17,8 @@ import static org.junit.Assert.assertTrue;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.security.auth.Subject;
+
 import org.eclipse.scout.rt.server.AbstractServerSession;
 import org.eclipse.scout.rt.shared.OfflineState;
 import org.eclipse.scout.rt.shared.services.common.clientnotification.IClientNotification;
@@ -201,6 +203,7 @@ public class OfflineStateSharedVariableNotificationTest {
    * A server session with access to a shared variable for testing purposes.
    */
   private static class TestServerSession extends AbstractServerSession {
+    private static final long serialVersionUID = 1L;
     private static final String KEY_MY_SHARED_VARIABLE = "mySharedVariable";
 
     public TestServerSession() {
@@ -214,6 +217,24 @@ public class OfflineStateSharedVariableNotificationTest {
 
     public Object getMySharedVariable() {
       return getSharedContextVariable(KEY_MY_SHARED_VARIABLE, Object.class);
+    }
+
+    @Override
+    public String getVirtualSessionId() {
+      return null;
+    }
+
+    @Override
+    public void setVirtualSessionId(String sessionId) {
+    }
+
+    @Override
+    public Subject getSubject() {
+      return null;
+    }
+
+    @Override
+    public void setSubject(Subject subject) {
     }
   }
 

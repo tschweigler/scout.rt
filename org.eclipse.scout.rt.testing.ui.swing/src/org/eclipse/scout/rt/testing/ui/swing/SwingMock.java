@@ -317,12 +317,23 @@ public class SwingMock implements IGuiMock {
 
   @Override
   public void gotoScoutField(String name) {
+    gotoScoutField(name, 0.5, 0.5);
+  }
+
+  @Override
+  public void gotoScoutField(String name, final double x, final double y) {
+    if (x < 0 || x > 1) {
+      throw new IllegalArgumentException("x should be in [0, 1] range.");
+    }
+    if (y < 0 || y > 1) {
+      throw new IllegalArgumentException("y should be in [0, 1] range.");
+    }
     final JComponent c = waitForScoutField(name);
     syncExec(new MockRunnable<Object>() {
       @Override
       public Object run() throws Throwable {
         Point p = c.getLocationOnScreen();
-        gotoPoint(p.x + c.getWidth() / 2, p.y + c.getHeight() / 2);
+        gotoPoint(p.x + (int) (x * c.getWidth()), p.y + (int) (y * c.getHeight()));
         return null;
       }
     });
@@ -724,12 +735,16 @@ public class SwingMock implements IGuiMock {
     state.scoutName = getScoutNameOf(c);
     //focus
     state.focus = c.isFocusOwner();
+    // visibility
+    state.visible = c.isShowing();
     //bounds
-    Point p = c.getLocationOnScreen();
-    state.x = p.x;
-    state.y = p.y;
-    state.width = c.getWidth();
-    state.height = c.getHeight();
+    if (c.isShowing()) {
+      Point p = c.getLocationOnScreen();
+      state.x = p.x;
+      state.y = p.y;
+      state.width = c.getWidth();
+      state.height = c.getHeight();
+    }
     //text
     if (c instanceof JLabel) {
       state.text = ((JLabel) c).getText();
@@ -740,6 +755,7 @@ public class SwingMock implements IGuiMock {
     if (c instanceof AbstractButton) {
       state.text = ((AbstractButton) c).getText();
     }
+
     return state;
   }
 
@@ -896,17 +912,7 @@ public class SwingMock implements IGuiMock {
             }
             //find heavyweight popup
             if (popupContainer == null) {
-              for (Window w : activeWindow.getOwnedWindows()) {
-                if (w.getClass().getName().equals("javax.swing.Popup$HeavyWeightWindow")) {
-                  if (w instanceof RootPaneContainer) {
-                    popupContainer = ((RootPaneContainer) w).getContentPane();
-                  }
-                  else {
-                    popupContainer = w;
-                  }
-                  break;
-                }
-              }
+              popupContainer = findHeavyweightPopup(activeWindow);
             }
             if (popupContainer != null) {
               for (AbstractButton b : SwingUtility.findChildComponents(popupContainer, AbstractButton.class)) {
@@ -917,6 +923,38 @@ public class SwingMock implements IGuiMock {
             }
             return null;
           }
+
+          /**
+           * Use {@link Window#getOwnedWindows()} recursively to find the active javax.swing.Popup$HeavyWeightWindow.
+           * 
+           * @param window
+           * @return
+           */
+          private Component findHeavyweightPopup(Window window) {
+            for (Window ownedWindow : window.getOwnedWindows()) {
+              if (ownedWindow.getClass().getName().equals("javax.swing.Popup$HeavyWeightWindow")) {
+                if (ownedWindow instanceof JWindow) {
+                  JWindow w = (JWindow) ownedWindow;
+                  if (!w.isVisible()) {
+                    continue;
+                  }
+                  Component child = findHeavyweightPopup(w);
+                  if (child != null) {
+                    return child;
+                  }
+                  return ((RootPaneContainer) ownedWindow).getContentPane();
+                }
+                else if (ownedWindow instanceof RootPaneContainer) {
+                  return ((RootPaneContainer) ownedWindow).getContentPane();
+                }
+                else {
+                  return ownedWindow;
+                }
+              }
+            }
+            return null;
+          }
+
         });
       }
     });

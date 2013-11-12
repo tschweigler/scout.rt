@@ -15,17 +15,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.scout.commons.logger.IScoutLogger;
 import org.eclipse.scout.commons.logger.ScoutLogManager;
+import org.osgi.framework.ServiceRegistration;
 
 /**
  *
  */
-public class DefaultSessionStoreService implements ISessionStoreService {
+public class DefaultSessionStoreService extends AbstractSessionStoreService {
 
   private static final IScoutLogger LOG = ScoutLogManager.getLogger(DefaultSessionStoreService.class);
-
-  @Override
-  public void initializeService() {
-  }
 
   @Override
   public void setAttribute(HttpServletRequest req, HttpServletResponse res, String key, Object value) {
@@ -37,6 +34,10 @@ public class DefaultSessionStoreService implements ISessionStoreService {
   public Object getAttribute(HttpServletRequest req, HttpServletResponse res, String key) {
     LOG.info("[DefaultSessionStoreService] getAttribute: " + key);
     return req.getAttribute(key);
+  }
+
+  @Override
+  public void initializeService(ServiceRegistration registration) {
   }
 
 }

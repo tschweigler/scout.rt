@@ -24,7 +24,6 @@ import org.eclipse.scout.commons.ConfigurationUtility;
 import org.eclipse.scout.commons.MatrixUtility;
 import org.eclipse.scout.commons.annotations.ConfigOperation;
 import org.eclipse.scout.commons.annotations.ConfigProperty;
-import org.eclipse.scout.commons.annotations.ConfigPropertyValue;
 import org.eclipse.scout.commons.annotations.Order;
 import org.eclipse.scout.commons.exception.ProcessingException;
 import org.eclipse.scout.commons.holders.IntegerHolder;
@@ -38,6 +37,7 @@ public abstract class AbstractCodeType<T> implements ICodeType<T>, Serializable 
   private static final IScoutLogger LOG = ScoutLogManager.getLogger(AbstractCodeType.class);
   private static final long serialVersionUID = 1L;
 
+  private boolean m_initialized;
   private String m_text;
   private String m_iconId;
   private boolean m_hierarchy;
@@ -46,7 +46,20 @@ public abstract class AbstractCodeType<T> implements ICodeType<T>, Serializable 
   private ArrayList<ICode> m_rootCodeList = new ArrayList<ICode>();
 
   public AbstractCodeType() {
-    initConfig();
+    this(true);
+  }
+
+  public AbstractCodeType(boolean callInitializer) {
+    if (callInitializer) {
+      callInitializer();
+    }
+  }
+
+  protected void callInitializer() {
+    if (!m_initialized) {
+      initConfig();
+      m_initialized = true;
+    }
   }
 
   public AbstractCodeType(String label, boolean hierarchy) {
@@ -56,40 +69,36 @@ public abstract class AbstractCodeType<T> implements ICodeType<T>, Serializable 
 
   private Class<? extends ICode>[] getConfiguredCodes() {
     Class[] dca = ConfigurationUtility.getDeclaredPublicClasses(getClass());
-    return ConfigurationUtility.sortFilteredClassesByOrderAnnotation(dca, ICode.class);
+    Class[] filtered = ConfigurationUtility.filterClasses(dca, ICode.class);
+    return ConfigurationUtility.sortFilteredClassesByOrderAnnotation(filtered, ICode.class);
   }
 
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(20)
-  @ConfigPropertyValue("false")
   protected boolean getConfiguredIsHierarchy() {
     return false;
   }
 
   @ConfigProperty(ConfigProperty.INTEGER)
   @Order(30)
-  @ConfigPropertyValue("Integer.MAX_VALUE")
   protected int getConfiguredMaxLevel() {
     return Integer.MAX_VALUE;
   }
 
   @ConfigProperty(ConfigProperty.TEXT)
   @Order(40)
-  @ConfigPropertyValue("null")
   protected String getConfiguredText() {
     return null;
   }
 
   @ConfigProperty(ConfigProperty.ICON_ID)
   @Order(10)
-  @ConfigPropertyValue("null")
   protected String getConfiguredIconId() {
     return null;
   }
 
   @ConfigProperty(ConfigProperty.DOC)
   @Order(110)
-  @ConfigPropertyValue("null")
   protected String getConfiguredDoc() {
     return null;
   }

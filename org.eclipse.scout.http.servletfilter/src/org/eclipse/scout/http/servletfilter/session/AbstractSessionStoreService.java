@@ -26,7 +26,7 @@ import org.eclipse.scout.service.AbstractService;
  */
 public abstract class AbstractSessionStoreService extends AbstractService implements ISessionStoreService {
 
-  private static String cookieName = "clientid";
+  private String cookieName = "clientid";
   IObjectSerializer objs;
 
   protected AbstractSessionStoreService() {
@@ -42,7 +42,8 @@ public abstract class AbstractSessionStoreService extends AbstractService implem
    *          HttpServletResponse
    * @return the session id
    */
-  protected static String getSessionId(HttpServletRequest req, HttpServletResponse res) {
+  @Override
+  public String getSessionId(HttpServletRequest req, HttpServletResponse res) {
     Cookie[] cookies = req.getCookies();
 
     for (int i = 0; i < cookies.length; i++) {
@@ -68,14 +69,13 @@ public abstract class AbstractSessionStoreService extends AbstractService implem
    *          HttpServletResponse
    * @return the new session id
    */
-  private static String getNewSessionId(HttpServletRequest req, HttpServletResponse res) {
+  private String getNewSessionId(HttpServletRequest req, HttpServletResponse res) {
     do {
       String newClientId = UUID.randomUUID().toString();
       Cookie cookie = new Cookie(cookieName, newClientId);
       req.setAttribute(cookieName, newClientId);
       res.addCookie(cookie);
       return newClientId;
-
     }
     while (true);
   }

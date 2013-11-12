@@ -19,7 +19,6 @@ import java.util.Map;
 import org.eclipse.scout.commons.ConfigurationUtility;
 import org.eclipse.scout.commons.annotations.ConfigOperation;
 import org.eclipse.scout.commons.annotations.ConfigProperty;
-import org.eclipse.scout.commons.annotations.ConfigPropertyValue;
 import org.eclipse.scout.commons.annotations.Order;
 import org.eclipse.scout.commons.beans.AbstractPropertyObserver;
 import org.eclipse.scout.commons.exception.ProcessingException;
@@ -74,28 +73,24 @@ public abstract class AbstractDataModelEntity extends AbstractPropertyObserver i
 
   @ConfigProperty(ConfigProperty.TEXT)
   @Order(20)
-  @ConfigPropertyValue("null")
   protected String getConfiguredText() {
     return null;
   }
 
   @ConfigProperty(ConfigProperty.ICON_ID)
   @Order(10)
-  @ConfigPropertyValue("null")
   protected String getConfiguredIconId() {
     return null;
   }
 
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(50)
-  @ConfigPropertyValue("true")
   protected boolean getConfiguredVisible() {
     return true;
   }
 
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(50)
-  @ConfigPropertyValue("true")
   protected boolean getConfiguredOneToMany() {
     return true;
   }
@@ -109,13 +104,15 @@ public abstract class AbstractDataModelEntity extends AbstractPropertyObserver i
   }
 
   private Class<? extends IDataModelAttribute>[] getConfiguredAttributes() {
-    Class[] c = ConfigurationUtility.getDeclaredPublicClasses(getClass());
-    return ConfigurationUtility.sortFilteredClassesByOrderAnnotation(c, IDataModelAttribute.class);
+    Class[] dca = ConfigurationUtility.getDeclaredPublicClasses(getClass());
+    Class[] filtered = ConfigurationUtility.filterClasses(dca, IDataModelAttribute.class);
+    return ConfigurationUtility.sortFilteredClassesByOrderAnnotation(filtered, IDataModelAttribute.class);
   }
 
   private Class<? extends IDataModelEntity>[] getConfiguredEntities() {
-    Class[] c = ConfigurationUtility.getDeclaredPublicClasses(getClass());
-    return ConfigurationUtility.sortFilteredClassesByOrderAnnotation(c, IDataModelEntity.class);
+    Class[] dca = ConfigurationUtility.getDeclaredPublicClasses(getClass());
+    Class[] filtered = ConfigurationUtility.filterClasses(dca, IDataModelEntity.class);
+    return ConfigurationUtility.sortFilteredClassesByOrderAnnotation(filtered, IDataModelEntity.class);
   }
 
   protected void initConfig() {
@@ -191,7 +188,7 @@ public abstract class AbstractDataModelEntity extends AbstractPropertyObserver i
 
   @Override
   public void setVisiblePermission(Permission p) {
-    m_visiblePermission = p;
+    setVisiblePermissionInternal(p);
     boolean b;
     if (p != null) {
       b = SERVICES.getService(IAccessControlService.class).checkPermission(p);
@@ -200,6 +197,10 @@ public abstract class AbstractDataModelEntity extends AbstractPropertyObserver i
       b = true;
     }
     setVisibleGranted(b);
+  }
+
+  protected void setVisiblePermissionInternal(Permission p) {
+    m_visiblePermission = p;
   }
 
   @Override
@@ -220,8 +221,16 @@ public abstract class AbstractDataModelEntity extends AbstractPropertyObserver i
 
   @Override
   public void setVisible(boolean b) {
-    m_visibleProperty = b;
+    setVisibleProperty(b);
     calculateVisible();
+  }
+
+  protected void setVisibleProperty(boolean b) {
+    m_visibleProperty = b;
+  }
+
+  protected boolean isVisibleProperty() {
+    return m_visibleProperty;
   }
 
   @Override

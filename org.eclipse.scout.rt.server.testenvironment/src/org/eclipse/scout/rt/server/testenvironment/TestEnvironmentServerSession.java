@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.eclipse.scout.rt.server.testenvironment;
 
+import javax.security.auth.Subject;
+
 import org.eclipse.scout.commons.exception.ProcessingException;
 import org.eclipse.scout.commons.logger.IScoutLogger;
 import org.eclipse.scout.commons.logger.ScoutLogManager;
@@ -40,5 +42,23 @@ public class TestEnvironmentServerSession extends AbstractServerSession {
   @Override
   protected void execLoadSession() throws ProcessingException {
     logger.info("created a new session for " + getUserId());
+  }
+
+  @Override
+  public String getVirtualSessionId() {
+    return null;
+  }
+
+  @Override
+  public void setVirtualSessionId(String sessionId) {
+  }
+
+  @Override
+  public Subject getSubject() {
+    return null;
+  }
+
+  @Override
+  public void setSubject(Subject subject) {
   }
 }

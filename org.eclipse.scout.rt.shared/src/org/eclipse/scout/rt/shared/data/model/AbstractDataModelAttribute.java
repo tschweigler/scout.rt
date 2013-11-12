@@ -22,7 +22,6 @@ import org.eclipse.scout.commons.LocaleThreadLocal;
 import org.eclipse.scout.commons.TypeCastUtility;
 import org.eclipse.scout.commons.annotations.ConfigOperation;
 import org.eclipse.scout.commons.annotations.ConfigProperty;
-import org.eclipse.scout.commons.annotations.ConfigPropertyValue;
 import org.eclipse.scout.commons.annotations.Order;
 import org.eclipse.scout.commons.beans.AbstractPropertyObserver;
 import org.eclipse.scout.commons.exception.ProcessingException;
@@ -83,70 +82,60 @@ public abstract class AbstractDataModelAttribute extends AbstractPropertyObserve
 
   @ConfigProperty(ConfigProperty.ICON_ID)
   @Order(10)
-  @ConfigPropertyValue("null")
   protected String getConfiguredIconId() {
     return null;
   }
 
   @ConfigProperty(ConfigProperty.TEXT)
   @Order(20)
-  @ConfigPropertyValue("null")
   protected String getConfiguredText() {
     return null;
   }
 
   @ConfigProperty(ConfigProperty.LOOKUP_CALL)
   @Order(30)
-  @ConfigPropertyValue("null")
   protected Class<? extends LookupCall> getConfiguredLookupCall() {
     return null;
   }
 
   @ConfigProperty(ConfigProperty.CODE_TYPE)
   @Order(40)
-  @ConfigPropertyValue("null")
   protected Class<? extends ICodeType> getConfiguredCodeType() {
     return null;
   }
 
   @ConfigProperty(ConfigProperty.COMPOSER_ATTRIBUTE_TYPE)
   @Order(70)
-  @ConfigPropertyValue("TYPE_STRING")
   protected int getConfiguredType() {
     return TYPE_STRING;
   }
 
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(90)
-  @ConfigPropertyValue("true")
   protected boolean getConfiguredNullOperatorEnabled() {
     return true;
   }
 
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(100)
-  @ConfigPropertyValue("true")
   protected boolean getConfiguredNotOperatorEnabled() {
     return true;
   }
 
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(105)
-  @ConfigPropertyValue("true")
   protected boolean getConfiguredAggregationEnabled() {
     return true;
   }
 
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(110)
-  @ConfigPropertyValue("true")
   protected boolean getConfiguredVisible() {
     return true;
   }
 
   @ConfigProperty(ConfigProperty.BOOLEAN)
   @Order(120)
-  @ConfigPropertyValue("false")
   protected boolean getConfiguredActiveFilterEnabled() {
     return false;
   }
@@ -348,7 +337,7 @@ public abstract class AbstractDataModelAttribute extends AbstractPropertyObserve
 
   @Override
   public void setVisiblePermission(Permission p) {
-    m_visiblePermission = p;
+    setVisiblePermissionInternal(p);
     boolean b;
     if (p != null) {
       b = SERVICES.getService(IAccessControlService.class).checkPermission(p);
@@ -357,6 +346,10 @@ public abstract class AbstractDataModelAttribute extends AbstractPropertyObserve
       b = true;
     }
     setVisibleGranted(b);
+  }
+
+  protected void setVisiblePermissionInternal(Permission p) {
+    m_visiblePermission = p;
   }
 
   @Override
@@ -377,8 +370,16 @@ public abstract class AbstractDataModelAttribute extends AbstractPropertyObserve
 
   @Override
   public void setVisible(boolean b) {
-    m_visibleProperty = b;
+    setVisibleProperty(b);
     calculateVisible();
+  }
+
+  protected void setVisibleProperty(boolean b) {
+    m_visibleProperty = b;
+  }
+
+  protected boolean isVisibleProperty() {
+    return m_visibleProperty;
   }
 
   @Override

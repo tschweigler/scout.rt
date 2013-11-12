@@ -60,7 +60,7 @@ public abstract class AbstractServerSession implements IServerSession, Serializa
   private boolean m_singleThreadSession;
   private transient ScoutTexts m_scoutTexts;
   private UserAgent m_userAgent;
-  private String m_clientId;
+  private String m_sessionId;
 
   public AbstractServerSession(boolean autoInitConfig) {
     m_locale = LocaleThreadLocal.get();
@@ -266,22 +266,28 @@ public abstract class AbstractServerSession implements IServerSession, Serializa
     m_userAgent = userAgent;
   }
 
+  /**
+  *
+  */
+  protected void setSessionId(String sessionId) {
+    m_sessionId = sessionId;
+  }
+
+  /**
+   * set
+   */
   @Override
-  public void setClientId(String clientId) {
-    m_clientId = clientId;
+  public void setSessionId(HttpServletRequest req) {
+    setSessionId(getSessionId(req));
   }
 
   @Override
-  public void setClientId(HttpServletRequest req) {
-    setClientId(getClientId(req));
-  }
-
-  public String getClientId() {
-    return m_clientId;
+  public String getSessionId() {
+    return m_sessionId;
   }
 
   //TODO TSW Sollte über einen Service realisiert werden
-  private String getClientId(HttpServletRequest req) {
+  private String getSessionId(HttpServletRequest req) {
     Cookie[] cookies = req.getCookies();
     String cookieName = "clientid";
 
@@ -305,11 +311,11 @@ public abstract class AbstractServerSession implements IServerSession, Serializa
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    if (m_clientId != null) {
-      return m_clientId.hashCode();
+    if (m_sessionId != null) {
+      return m_sessionId.hashCode();
     }
     result = prime * result + ((m_attributes == null) ? 0 : m_attributes.hashCode());
-    result = prime * result + ((m_clientId == null) ? 0 : m_clientId.hashCode());
+    result = prime * result + ((m_sessionId == null) ? 0 : m_sessionId.hashCode());
     result = prime * result + (m_initialized ? 1231 : 1237);
     result = prime * result + ((m_locale == null) ? 0 : m_locale.hashCode());
     result = prime * result + ((m_sharedVariableMap == null) ? 0 : m_sharedVariableMap.hashCode());
@@ -331,7 +337,7 @@ public abstract class AbstractServerSession implements IServerSession, Serializa
     }
     AbstractServerSession other = (AbstractServerSession) obj;
 
-    if (m_clientId.equals(other.getClientId())) {
+    if (m_sessionId.equals(other.getSessionId())) {
       return true;
     }
 
@@ -346,12 +352,12 @@ public abstract class AbstractServerSession implements IServerSession, Serializa
     else if (!m_attributes.equals(other.m_attributes)) {
       return false;
     }
-    if (m_clientId == null) {
-      if (other.m_clientId != null) {
+    if (m_sessionId == null) {
+      if (other.m_sessionId != null) {
         return false;
       }
     }
-    else if (!m_clientId.equals(other.m_clientId)) {
+    else if (!m_sessionId.equals(other.m_sessionId)) {
       return false;
     }
     if (m_initialized != other.m_initialized) {

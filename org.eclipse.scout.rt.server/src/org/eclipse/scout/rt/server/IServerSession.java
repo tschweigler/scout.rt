@@ -24,7 +24,7 @@ public interface IServerSession extends ISession {
 
   void loadSession(Bundle bundle) throws ProcessingException;
 
-  public void setClientId(String ClientId);
+  public void setSessionId(HttpServletRequest req);
 
-  public void setClientId(HttpServletRequest req);
+  public String getSessionId();
 }

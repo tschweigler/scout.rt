@@ -209,7 +209,7 @@ public class ServiceTunnelServlet extends HttpServletEx {
       IServerSession serverSession = (IServerSession) SERVICES.getService(ISessionStoreService.class).getAttribute(req, res, IServerSession.class.getName());
       if (serverSession == null) {
         serverSession = SERVICES.getService(IServerSessionRegistryService.class).newServerSession(m_serverSessionClass, subject, userAgent);
-        serverSession.setClientId(req);
+        serverSession.setSessionId(req);
         SERVICES.getService(ISessionStoreService.class).setAttribute(req, res, IServerSession.class.getName(), serverSession);
       }
       return serverSession;
@@ -230,7 +230,7 @@ public class ServiceTunnelServlet extends HttpServletEx {
       IServerSession serverSession = (IServerSession) SERVICES.getService(ISessionStoreService.class).getAttribute(req, res, ajaxSessionId);
       if (serverSession == null) {
         serverSession = SERVICES.getService(IServerSessionRegistryService.class).newServerSession(m_serverSessionClass, subject, userAgent);
-        serverSession.setClientId(req);
+        serverSession.setSessionId(req);
         //m_ajaxSessionCache.put(ajaxSessionId, serverSession);
         SERVICES.getService(ISessionStoreService.class).setAttribute(req, res, ajaxSessionId, serverSession);
       }

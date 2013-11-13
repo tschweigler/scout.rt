@@ -62,6 +62,9 @@
     <module>../org.eclipse.scout.rt.core-feature</module>
     <module>../org.eclipse.scout.rt-feature</module>
     <module>../org.eclipse.scout.rt.batik.dependency-feature</module>
+
+    <module>../org.eclipse.scout.cloud.clientnotification</module>
+    <module>../org.eclipse.scout.cloud.sessionstore</module>
   </modules>
 
   <profiles>

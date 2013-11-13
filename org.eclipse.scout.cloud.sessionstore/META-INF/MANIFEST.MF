@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Clientcache
+Bundle-SymbolicName: org.eclipse.scout.cloud.sessionstore;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-ClassPath: lib/spymemcached-2.8.4.jar,
+ .
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Import-Package: javax.servlet,
+ javax.servlet.http
+Export-Package: org.eclipse.scout.cloud.sessionstore
+Require-Bundle: org.eclipse.scout.http.servletfilter,
+ org.eclipse.scout.commons,
+ org.eclipse.scout.service,
+ org.eclipse.core.runtime
+Bundle-ActivationPolicy: lazy

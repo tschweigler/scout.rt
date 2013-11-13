@@ -1,0 +1,13 @@
+anifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Amazon
+Bundle-SymbolicName: org.eclipse.scout.cloud.clientnotification;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-ClassPath: lib/rabbitmq-client.jar,
+ .
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Export-Package: org.eclipse.scout.cloud.clientnotification.rabbitmq
+Require-Bundle: org.eclipse.scout.commons,
+ org.eclipse.scout.rt.server,
+ org.eclipse.core.runtime;bundle-version="[3.4.0,4.0.0)"
+Bundle-ActivationPolicy: lazy
